@@ -1,16 +1,171 @@
 /**
  * Trillion AI Tech — Main Application JavaScript
- * 
+ *
  * Features:
  * - Dark/Light mode toggle
- * - Language selector (English default)
+ * - Language selector (English default, Māori optional)
  * - Mobile navigation
- * - Product category filtering
- * - Smooth scrolling
- * 
+ * - Data-driven product catalogue with category filters
+ *
  * No MongoDB. No backend. No authentication. No subscriptions.
  * This is a static public website.
  */
+
+// ====================
+// Product Catalogue Data
+// ====================
+
+/**
+ * Product model fields:
+ * - id
+ * - name
+ * - description
+ * - category (apps | games | agents | tools | software)
+ * - image (optional, URL or path)
+ * - icon (optional, emoji or icon name)
+ * - status ("Coming Soon" | "Available" | "Maintenance")
+ * - accessType ("Free" | "Paid" | "Coming Soon")
+ * - price (optional, numeric or string)
+ * - currency (optional, e.g. "NZD")
+ * - billingType ("Free" | "One-time" | "Monthly" | "Annual")
+ * - stripeProductId (optional, for future use)
+ * - stripePriceId (optional, for future use)
+ * - trial (optional, description of any trial period)
+ * - applicationUrl (optional, external app URL)
+ * - productPageUrl (optional, internal product details URL)
+ * - featured (boolean)
+ * - platform (optional, e.g. "Web", "Desktop", "Mobile")
+ * - tags (array of strings)
+ */
+
+const products = [
+    {
+        id: 'studio-overview',
+        name: 'Trillion AI Tech Studio',
+        description: 'Central catalogue for future apps, games, agents, tools and software from Trillion AI Tech.',
+        category: 'apps',
+        image: '',
+        icon: '🚀',
+        status: 'Coming Soon',
+        accessType: 'Coming Soon',
+        price: '',
+        currency: '',
+        billingType: 'Free',
+        stripeProductId: '',
+        stripePriceId: '',
+        trial: '',
+        applicationUrl: '',
+        productPageUrl: '',
+        featured: true,
+        platform: 'Web',
+        tags: ['catalogue', 'studio', 'overview']
+    },
+    {
+        id: 'first-app',
+        name: 'Future App',
+        description: 'Placeholder for a future Trillion AI Tech application. Details will be added when the product is ready.',
+        category: 'apps',
+        image: '',
+        icon: '📱',
+        status: 'Coming Soon',
+        accessType: 'Coming Soon',
+        price: '',
+        currency: '',
+        billingType: 'Free',
+        stripeProductId: '',
+        stripePriceId: '',
+        trial: '',
+        applicationUrl: '',
+        productPageUrl: '',
+        featured: false,
+        platform: 'Web',
+        tags: ['coming-soon']
+    },
+    {
+        id: 'first-game',
+        name: 'Future Game',
+        description: 'Placeholder for a future Trillion AI Tech game experience.',
+        category: 'games',
+        image: '',
+        icon: '🎮',
+        status: 'Coming Soon',
+        accessType: 'Coming Soon',
+        price: '',
+        currency: '',
+        billingType: 'Free',
+        stripeProductId: '',
+        stripePriceId: '',
+        trial: '',
+        applicationUrl: '',
+        productPageUrl: '',
+        featured: false,
+        platform: 'Web',
+        tags: ['coming-soon']
+    },
+    {
+        id: 'first-agent',
+        name: 'Future AI Agent',
+        description: 'Placeholder for a future autonomous agent system built by Trillion AI Tech.',
+        category: 'agents',
+        image: '',
+        icon: '🤖',
+        status: 'Coming Soon',
+        accessType: 'Coming Soon',
+        price: '',
+        currency: '',
+        billingType: 'Free',
+        stripeProductId: '',
+        stripePriceId: '',
+        trial: '',
+        applicationUrl: '',
+        productPageUrl: '',
+        featured: false,
+        platform: 'Web',
+        tags: ['coming-soon']
+    },
+    {
+        id: 'first-tool',
+        name: 'Future Tool',
+        description: 'Placeholder for a future utility or developer tool.',
+        category: 'tools',
+        image: '',
+        icon: '🔧',
+        status: 'Coming Soon',
+        accessType: 'Coming Soon',
+        price: '',
+        currency: '',
+        billingType: 'Free',
+        stripeProductId: '',
+        stripePriceId: '',
+        trial: '',
+        applicationUrl: '',
+        productPageUrl: '',
+        featured: false,
+        platform: 'Web',
+        tags: ['coming-soon']
+    },
+    {
+        id: 'first-software',
+        name: 'Future Software',
+        description: 'Placeholder for a future desktop or web-based software product.',
+        category: 'software',
+        image: '',
+        icon: '💻',
+        status: 'Coming Soon',
+        accessType: 'Coming Soon',
+        price: '',
+        currency: '',
+        billingType: 'Free',
+        stripeProductId: '',
+        stripePriceId: '',
+        trial: '',
+        applicationUrl: '',
+        productPageUrl: '',
+        featured: false,
+        platform: 'Web',
+        tags: ['coming-soon']
+    }
+];
 
 // ====================
 // Language Translations
@@ -73,11 +228,11 @@ const translations = {
         footer_info: 'Information',
         legal_terms: 'Terms of Service',
         legal_privacy: 'Privacy Policy',
-        legal_acceptable: 'Acceptable Use',
+        legal_acceptable: 'Acceptable Use Policy',
         info_free: 'Free to browse',
         info_no_account: 'No account required',
         info_nz: 'Aotearoa New Zealand',
-        footer_copyright: ' © 2026 Trillion AI Tech. All rights reserved.',
+        footer_copyright: '© 2026 Trillion AI Tech. All rights reserved.',
         legal_notice: 'Legal documents are placeholders requiring human/NZ legal review.'
     },
     mi: {
@@ -140,7 +295,7 @@ const translations = {
         info_free: 'He koreutu te tirotiro',
         info_no_account: 'Kāore he pūkete e hiahiatia ana',
         info_nz: 'Aotearoa',
-        footer_copyright: ' © 2026 Trillion AI Tech. Ngā tika katoa kua tiakina.',
+        footer_copyright: '© 2026 Trillion AI Tech. Ngā tika katoa kua tiakina.',
         legal_notice: 'Ko ngā tuhinga ture he tauira e hiahia ana ki te arotake a te tangata/NZ.'
     }
 };
@@ -194,7 +349,9 @@ function updateLanguage(lang) {
 
 function initLanguage() {
     const savedLang = localStorage.getItem('language') || 'en';
-    languageSelector.value = savedLang;
+    if (languageSelector) {
+        languageSelector.value = savedLang;
+    }
     updateLanguage(savedLang);
 }
 
@@ -209,6 +366,7 @@ if (languageSelector) {
 // ====================
 
 function toggleMobileNav() {
+    if (!mobileNav || !mobileMenuToggle) return;
     mobileNav.classList.toggle('active');
     mobileMenuToggle.classList.toggle('active');
 }
@@ -216,7 +374,6 @@ function toggleMobileNav() {
 if (mobileMenuToggle && mobileNav) {
     mobileMenuToggle.addEventListener('click', toggleMobileNav);
     
-    // Close mobile nav when clicking a link
     const mobileLinks = mobileNav.querySelectorAll('a');
     mobileLinks.forEach(link => {
         link.addEventListener('click', () => {
@@ -227,19 +384,155 @@ if (mobileMenuToggle && mobileNav) {
 }
 
 // ====================
-// Product Category Filtering
+// Product Catalogue Rendering
 // ====================
 
-// Placeholder products data structure (ready for future expansion)
-const products = [];
+/**
+ * Render a single product card from a product object.
+ * This uses safe text insertion and avoids eval/innerHTML from untrusted sources.
+ */
 
-function filterProducts(category) {
-    // Currently no products, so this is ready for future implementation
-    // When products are added, this function will filter and display them
-    console.log(`Filtering products by category: ${category}`);
+function createProductCard(product) {
+    const card = document.createElement('article');
+    card.className = 'product-card';
+
+    // Icon
+    if (product.icon) {
+        const iconEl = document.createElement('div');
+        iconEl.className = 'product-icon';
+        iconEl.textContent = product.icon;
+        card.appendChild(iconEl);
+    }
+
+    // Title
+    const titleEl = document.createElement('h3');
+    titleEl.className = 'product-name';
+    titleEl.textContent = product.name;
+    card.appendChild(titleEl);
+
+    // Category & status row
+    const metaRow = document.createElement('div');
+    metaRow.className = 'product-meta-row';
+
+    const categoryEl = document.createElement('span');
+    categoryEl.className = 'product-category';
+    categoryEl.textContent = product.category.charAt(0).toUpperCase() + product.category.slice(1);
+    metaRow.appendChild(categoryEl);
+
+    const statusEl = document.createElement('span');
+    statusEl.className = 'product-status';
+    statusEl.textContent = product.status;
+    metaRow.appendChild(statusEl);
+
+    const accessEl = document.createElement('span');
+    accessEl.className = 'product-access';
+    accessEl.textContent = product.accessType;
+    metaRow.appendChild(accessEl);
+
+    card.appendChild(metaRow);
+
+    // Description
+    const descEl = document.createElement('p');
+    descEl.className = 'product-description';
+    descEl.textContent = product.description;
+    card.appendChild(descEl);
+
+    // Pricing / billing
+    if (product.accessType === 'Paid' && product.price && product.currency && product.billingType && product.billingType !== 'Free') {
+        const pricingEl = document.createElement('p');
+        pricingEl.className = 'product-pricing';
+        pricingEl.textContent = `${product.price} ${product.currency} · ${product.billingType}`;
+        card.appendChild(pricingEl);
+    }
+
+    // Platform
+    if (product.platform) {
+        const platformEl = document.createElement('p');
+        platformEl.className = 'product-platform';
+        platformEl.textContent = `Platform: ${product.platform}`;
+        card.appendChild(platformEl);
+    }
+
+    // Links
+    const linksRow = document.createElement('div');
+    linksRow.className = 'product-links';
+
+    // Application URL
+    if (product.applicationUrl) {
+        const appLink = document.createElement('a');
+        appLink.className = 'product-link primary';
+        appLink.href = product.applicationUrl;
+        appLink.target = '_blank';
+        appLink.rel = 'noopener noreferrer';
+        appLink.textContent = 'Open App';
+        linksRow.appendChild(appLink);
+    } else {
+        const comingSoonEl = document.createElement('span');
+        comingSoonEl.className = 'product-coming-soon-label';
+        comingSoonEl.textContent = 'Coming Soon';
+        linksRow.appendChild(comingSoonEl);
+    }
+
+    // Product page URL
+    if (product.productPageUrl) {
+        const detailsLink = document.createElement('a');
+        detailsLink.className = 'product-link secondary';
+        detailsLink.href = product.productPageUrl;
+        detailsLink.textContent = 'View Details';
+        linksRow.appendChild(detailsLink);
+    }
+
+    card.appendChild(linksRow);
+
+    return card;
 }
 
-if (categoryTabs) {
+function renderProducts(categoryFilter = 'all') {
+    if (!productGrid) return;
+
+    // Clear existing content
+    productGrid.innerHTML = '';
+
+    const filtered = products.filter(product => {
+        if (categoryFilter === 'all') return true;
+        return product.category === categoryFilter;
+    });
+
+    if (filtered.length === 0) {
+        // Fallback placeholder if no products match
+        const placeholder = document.createElement('div');
+        placeholder.className = 'product-placeholder';
+
+        const iconEl = document.createElement('div');
+        iconEl.className = 'placeholder-icon';
+        iconEl.textContent = '🚀';
+        placeholder.appendChild(iconEl);
+
+        const titleEl = document.createElement('h3');
+        titleEl.textContent = 'Products Coming Soon';
+        placeholder.appendChild(titleEl);
+
+        const descEl = document.createElement('p');
+        descEl.textContent = 'We\'re building innovative applications, games, AI agents, tools and software. Check back soon for our first releases.';
+        placeholder.appendChild(descEl);
+
+        productGrid.appendChild(placeholder);
+        return;
+    }
+
+    filtered.forEach(product => {
+        const card = createProductCard(product);
+        productGrid.appendChild(card);
+    });
+}
+
+// ====================
+// Category Filters
+// ====================
+
+function initCategoryFilters() {
+    if (!categoryTabs || categoryTabs.length === 0) return;
+
     categoryTabs.forEach(tab => {
         tab.addEventListener('click', () => {
             // Remove active class from all tabs
@@ -248,9 +541,12 @@ if (categoryTabs) {
             tab.classList.add('active');
             // Filter products
             const category = tab.getAttribute('data-category');
-            filterProducts(category);
+            renderProducts(category);
         });
     });
+
+    // Initial render
+    renderProducts('all');
 }
 
 // ====================
@@ -259,11 +555,11 @@ if (categoryTabs) {
 
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
-        e.preventDefault();
         const targetId = this.getAttribute('href');
         const targetElement = document.querySelector(targetId);
-        
+
         if (targetElement) {
+            e.preventDefault();
             targetElement.scrollIntoView({
                 behavior: 'smooth',
                 block: 'start'
@@ -279,32 +575,23 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 function init() {
     initTheme();
     initLanguage();
+    initCategoryFilters();
     console.log('Trillion AI Tech website initialized');
     console.log('Free public browsing · No account required · No MongoDB · No backend');
 }
 
-// Run initialization when DOM is ready
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
 } else {
     init();
 }
 
-// ====================
-// Security Notes
-// ====================
-
 /**
- * SECURITY CHECKLIST:
- * ✓ No hardcoded secrets
- * ✓ No API keys
- * ✓ No Stripe keys (client-side or server-side)
- * ✓ No authentication tokens
- * ✓ No database connections
- * ✓ No MongoDB
- * ✓ No backend code
- * ✓ No external suspicious scripts
- * ✓ Pure static HTML/CSS/JS
- * 
- * This is a static public website with no sensitive data.
+ * Security notes:
+ * - No eval or Function constructors.
+ * - No direct innerHTML injection of untrusted content.
+ * - No external redirects beyond explicit product URLs.
+ * - No credentials, tokens, or payment state stored in localStorage.
+ * - No website-wide subscription or membership logic.
+ * - Products are represented as static data; payments must be handled by separate systems in the future.
  */
