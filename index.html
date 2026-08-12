@@ -3,14 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Trillion AI Tech — AI & interactive technology studio</title>
-  <meta name="description" content="An independent studio building apps, games, agent systems and tools from Aotearoa New Zealand.">
+  <title>Trillion AI Tech — Building the Future of AI & Interactive Technology</title>
+  <meta name="description" content="An independent studio building apps, games, agent systems and tools from Aotearoa New Zealand. Premium AI technology and interactive experiences.">
   <link rel="canonical" href="https://trillionaitech.com/">
-  <meta property="og:title" content="Trillion AI Tech — AI & interactive technology studio">
+  <meta property="og:title" content="Trillion AI Tech — Building the Future of AI & Interactive Technology">
   <meta property="og:description" content="An independent studio building apps, games, agent systems and tools from Aotearoa New Zealand.">
   <meta property="og:url" content="https://trillionaitech.com/">
   <meta property="og:type" content="website">
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🔷%3C/text%3E%3C/svg%3E">
+  <meta property="og:image" content="/og-image.png">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='url(%23grad)'/%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%233b82f6'/%3E%3Cstop offset='50%25' style='stop-color:%238b5cf6'/%3E%3Cstop offset='100%25' style='stop-color:%2306b6d4'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ctext x='50' y='65' font-size='60' text-anchor='middle' fill='white' font-weight='bold'%3ET%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
@@ -19,15 +23,21 @@
   <header class="site-header">
     <div class="container header-content">
       <a href="/" class="logo" aria-label="Trillion AI Tech">
+        <div class="logo-icon">T</div>
         <span class="logo-text">Trillion AI Tech</span>
       </a>
 
       <nav class="main-nav" aria-label="Main navigation">
         <ul class="nav-list">
-          <li><a href="/" data-i18n="nav.home">Home</a></li>
-          <li><a href="/products" data-i18n="nav.products">Products</a></li>
-          <li><a href="/about" data-i18n="nav.about">About</a></li>
-          <li><a href="/contact" data-i18n="nav.contact">Contact</a></li>
+          <li><a href="/" data-i18n="nav.home" class="active">Home</a></li>
+          <li><a href="/products.html" data-i18n="nav.products">Products</a></li>
+          <li><a href="/apps.html" data-i18n="nav.apps">Apps</a></li>
+          <li><a href="/games.html" data-i18n="nav.games">Games</a></li>
+          <li><a href="/agents.html" data-i18n="nav.agents">Agents</a></li>
+          <li><a href="/tools.html" data-i18n="nav.tools">Tools</a></li>
+          <li><a href="/software.html" data-i18n="nav.software">Software</a></li>
+          <li><a href="/about.html" data-i18n="nav.about">About</a></li>
+          <li><a href="/contact.html" data-i18n="nav.contact">Contact</a></li>
         </ul>
       </nav>
 
@@ -39,8 +49,12 @@
           <option value="fr">Fran&ccedil;ais</option>
         </select>
         <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark/light mode" data-i18n="theme.toggle">
-          <span class="theme-icon">◐</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"/>
+            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+          </svg>
         </button>
+        <a href="/login.html" class="btn btn-secondary" data-i18n="nav.signIn">Sign In</a>
       </div>
 
       <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle mobile menu">
@@ -49,34 +63,189 @@
     </div>
   </header>
 
+  <div class="mobile-menu" id="mobile-menu">
+    <nav class="mobile-nav" aria-label="Mobile navigation">
+      <ul class="mobile-nav-list">
+        <li><a href="/" data-i18n="nav.home">Home</a></li>
+        <li><a href="/products.html" data-i18n="nav.products">Products</a></li>
+        <li><a href="/apps.html" data-i18n="nav.apps">Apps</a></li>
+        <li><a href="/games.html" data-i18n="nav.games">Games</a></li>
+        <li><a href="/agents.html" data-i18n="nav.agents">Agents</a></li>
+        <li><a href="/tools.html" data-i18n="nav.tools">Tools</a></li>
+        <li><a href="/software.html" data-i18n="nav.software">Software</a></li>
+        <li><a href="/about.html" data-i18n="nav.about">About</a></li>
+        <li><a href="/contact.html" data-i18n="nav.contact">Contact</a></li>
+        <li><a href="/login.html" data-i18n="nav.signIn">Sign In</a></li>
+      </ul>
+    </nav>
+  </div>
+
   <main id="main-content">
     <section class="hero">
-      <div class="container">
-        <h1 data-i18n="hero.title">Building the Future of AI & Interactive Technology</h1>
-        <p class="hero-subtitle" data-i18n="hero.subtitle">An independent studio crafting apps, games, agent systems, and tools from Aotearoa New Zealand.</p>
+      <div class="container hero-content">
+        <div class="hero-badge">
+          <span data-i18n="hero.badge">In Development</span>
+        </div>
+        <h1>
+          <span data-i18n="hero.titlePart1">Building the Future of</span><br>
+          <span class="hero-gradient" data-i18n="hero.titlePart2">AI & Interactive Technology</span>
+        </h1>
+        <p class="hero-subtitle" data-i18n="hero.subtitle">
+          An independent studio crafting premium apps, games, autonomous AI agents, and advanced tools from Aotearoa New Zealand.
+        </p>
         <div class="hero-cta">
-          <a href="/products" class="btn btn-primary" data-i18n="hero.exploreProducts">Explore Products</a>
+          <a href="/products.html" class="btn btn-primary btn-lg" data-i18n="hero.exploreProducts">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+            Explore Products
+          </a>
+          <a href="/agents.html" class="btn btn-secondary btn-lg" data-i18n="hero.exploreAgents">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42"/>
+            </svg>
+            Explore AI Agents
+          </a>
         </div>
       </div>
     </section>
 
-    <section class="products-section">
+    <section class="section" id="featured-products">
       <div class="container">
-        <h2 data-i18n="products.title">Products</h2>
-        <p class="section-description" data-i18n="products.description">Browse our catalogue of applications, games, agents, tools and software. All free to explore.</p>
-
-        <div class="category-filters">
-          <button class="filter-btn active" data-category="all" data-i18n="products.categories.all">All</button>
-          <button class="filter-btn" data-category="apps" data-i18n="products.categories.apps">Apps</button>
-          <button class="filter-btn" data-category="games" data-i18n="products.categories.games">Games</button>
-          <button class="filter-btn" data-category="agents" data-i18n="products.categories.agents">Agents</button>
-          <button class="filter-btn" data-category="tools" data-i18n="products.categories.tools">Tools</button>
-          <button class="filter-btn" data-category="software" data-i18n="products.categories.software">Software</button>
+        <div class="section-header">
+          <span class="section-label" data-i18n="products.featured">Featured Products</span>
+          <h2 class="section-title" data-i18n="products.latestTitle">Latest Innovations</h2>
+          <p class="section-description" data-i18n="products.latestDescription">
+            Discover our cutting-edge applications, games, and AI systems designed for the future.
+          </p>
         </div>
-
-        <div id="product-grid" class="product-grid">
-          <!-- Products loaded dynamically -->
+        <div id="featured-grid" class="products-grid">
+          <!-- Featured products loaded dynamically -->
         </div>
+        <div style="text-align: center; margin-top: var(--spacing-xl);">
+          <a href="/products.html" class="btn btn-secondary" data-i18n="products.viewAll">
+            View All Products
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="categories" style="background: var(--color-bg-secondary);">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label" data-i18n="categories.label">Categories</span>
+          <h2 class="section-title" data-i18n="categories.title">Explore by Category</h2>
+          <p class="section-description" data-i18n="categories.description">
+            Browse our comprehensive catalogue across five major technology domains.
+          </p>
+        </div>
+        <div class="card-grid">
+          <a href="/apps.html" class="feature-card">
+            <div class="feature-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="5" y="2" width="14" height="20" rx="2"/>
+                <path d="M12 18h.01"/>
+              </svg>
+            </div>
+            <h3 data-i18n="categories.apps.title">Apps</h3>
+            <p data-i18n="categories.apps.description">Advanced applications for productivity, creativity, and entertainment.</p>
+          </a>
+          <a href="/games.html" class="feature-card">
+            <div class="feature-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="6" width="20" height="12" rx="2"/>
+                <path d="M6 12h4M8 10v4M15 13h.01M17 11h.01"/>
+              </svg>
+            </div>
+            <h3 data-i18n="categories.games.title">Games</h3>
+            <p data-i18n="categories.games.description">Immersive interactive experiences with innovative gameplay mechanics.</p>
+          </a>
+          <a href="/agents.html" class="feature-card">
+            <div class="feature-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="3"/>
+                <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2"/>
+              </svg>
+            </div>
+            <h3 data-i18n="categories.agents.title">AI Agents</h3>
+            <p data-i18n="categories.agents.description">Autonomous AI systems designed to assist with complex workflows.</p>
+          </a>
+          <a href="/tools.html" class="feature-card">
+            <div class="feature-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+              </svg>
+            </div>
+            <h3 data-i18n="categories.tools.title">Tools</h3>
+            <p data-i18n="categories.tools.description">Developer utilities and productivity enhancers for modern workflows.</p>
+          </a>
+          <a href="/software.html" class="feature-card">
+            <div class="feature-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="3" width="20" height="14" rx="2"/>
+                <path d="M8 21h8M12 17v4"/>
+              </svg>
+            </div>
+            <h3 data-i18n="categories.software.title">Software</h3>
+            <p data-i18n="categories.software.description">Enterprise-grade software solutions for business and creative use.</p>
+          </a>
+          <a href="/about.html" class="feature-card">
+            <div class="feature-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M12 16v-4M12 8h.01"/>
+              </svg>
+            </div>
+            <h3 data-i18n="categories.about.title">About</h3>
+            <p data-i18n="categories.about.description">Learn about our vision, technology, and the team behind Trillion AI Tech.</p>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="technology">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-label" data-i18n="technology.label">Technology</span>
+          <h2 class="section-title" data-i18n="technology.title">Built for the Future</h2>
+          <p class="section-description" data-i18n="technology.description">
+            Our technology stack combines cutting-edge AI with robust engineering principles.
+          </p>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-number">16+</div>
+            <div class="stat-label" data-i18n="stats.languages">Languages</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">5</div>
+            <div class="stat-label" data-i18n="stats.categories">Categories</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">24/7</div>
+            <div class="stat-label" data-i18n="stats.availability">Availability</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">100%</div>
+            <div class="stat-label" data-i18n="stats.independent">Independent</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="cta" style="background: var(--color-bg-secondary);">
+      <div class="container" style="text-align: center;">
+        <h2 class="section-title" data-i18n="cta.title">Ready to Explore?</h2>
+        <p class="section-description" data-i18n="cta.description" style="margin-bottom: var(--spacing-lg);">
+          Browse our complete catalogue of applications, games, agents, tools, and software.
+        </p>
+        <a href="/products.html" class="btn btn-primary btn-lg" data-i18n="cta.button">
+          Browse All Products
+        </a>
       </div>
     </section>
   </main>
@@ -88,33 +257,50 @@
           <h3>Trillion AI Tech</h3>
           <p data-i18n="footer.tagline">Building the future of AI & interactive technology.</p>
           <p class="footer-location" data-i18n="footer.nz">Aotearoa New Zealand</p>
+          <div class="footer-social">
+            <a href="https://github.com/Anselm04" aria-label="GitHub" target="_blank" rel="noopener">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+              </svg>
+            </a>
+          </div>
         </div>
 
         <div class="footer-links">
           <h4 data-i18n="footer.navigation">Navigation</h4>
           <ul>
             <li><a href="/" data-i18n="nav.home">Home</a></li>
-            <li><a href="/products" data-i18n="nav.products">Products</a></li>
-            <li><a href="/about" data-i18n="nav.about">About</a></li>
-            <li><a href="/contact" data-i18n="nav.contact">Contact</a></li>
+            <li><a href="/products.html" data-i18n="nav.products">Products</a></li>
+            <li><a href="/apps.html" data-i18n="nav.apps">Apps</a></li>
+            <li><a href="/games.html" data-i18n="nav.games">Games</a></li>
+            <li><a href="/agents.html" data-i18n="nav.agents">Agents</a></li>
+            <li><a href="/tools.html" data-i18n="nav.tools">Tools</a></li>
+            <li><a href="/software.html" data-i18n="nav.software">Software</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-links">
+          <h4 data-i18n="footer.company">Company</h4>
+          <ul>
+            <li><a href="/about.html" data-i18n="nav.about">About</a></li>
+            <li><a href="/contact.html" data-i18n="nav.contact">Contact</a></li>
+            <li><a href="/login.html" data-i18n="nav.signIn">Sign In</a></li>
+            <li><a href="/register.html" data-i18n="nav.signUp">Create Account</a></li>
           </ul>
         </div>
 
         <div class="footer-links">
           <h4 data-i18n="footer.legal">Legal</h4>
           <ul>
-            <li><a href="/terms" data-i18n="legal.termsTitle">Terms of Service</a></li>
-            <li><a href="/privacy" data-i18n="legal.privacyTitle">Privacy Policy</a></li>
-            <li><a href="/acceptable-use" data-i18n="legal.aupTitle">Acceptable Use Policy</a></li>
+            <li><a href="/terms.html" data-i18n="legal.termsTitle">Terms of Service</a></li>
+            <li><a href="/privacy.html" data-i18n="legal.privacyTitle">Privacy Policy</a></li>
+            <li><a href="/acceptable-use.html" data-i18n="legal.aupTitle">Acceptable Use Policy</a></li>
           </ul>
         </div>
+      </div>
 
-        <div class="footer-info">
-          <h4 data-i18n="footer.information">Information</h4>
-          <p data-i18n="footer.free">Free to browse</p>
-          <p data-i18n="footer.noAccount">No account required</p>
-          <p class="footer-copyright" data-i18n="footer.copyright"> &copy; 2026 Trillion AI Tech. All rights reserved.</p>
-        </div>
+      <div class="footer-copyright">
+        <p data-i18n="footer.copyright">&copy; 2026 Trillion AI Tech. All rights reserved.</p>
       </div>
     </div>
   </footer>
@@ -122,5 +308,6 @@
   <script src="js/i18n.js"></script>
   <script src="js/theme.js"></script>
   <script src="js/products.js"></script>
+  <script src="js/mobile-menu.js"></script>
 </body>
 </html>
