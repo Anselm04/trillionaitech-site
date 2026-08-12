@@ -1,0 +1,184 @@
+{
+  "meta": {
+    "code": "es",
+    "name": "Spanish",
+    "nativeName": "Españłłł",
+    "direction": "ltr"
+  },
+  "nav": {
+    "home": "Inicio",
+    "products": "Productos",
+    "apps": "Aplicaciones",
+    "games": "Juegos",
+    "agents": "Agentes",
+    "tools": "Herramientas",
+    "software": "Software",
+    "about": "Acerca de",
+    "contact": "Contacto",
+    "account": "Cuenta",
+    "signIn": "Iniciar Sesiółłł",
+    "signUp": "Crear Cuenta",
+    "signOut": "Cerrar Sesiółłł",
+    "myAccount": "Mi Cuenta"
+  },
+  "hero": {
+    "title": "Construyendo el Futuro de la IA y la Tecnologíłłla Interactiva",
+    "subtitle": "Un estudio independiente creando aplicaciones, juegos, sistemas de agentes y herramientas desde Aotearoa Nueva Zelanda.",
+    "freeBrowsing": "Navegaciółłł gratuita",
+    "createAccount": "Crea una cuenta cuando estės listo para usar nuestros productos y servicios.",
+    "exploreProducts": "Explorar Productos"
+  },
+  "products": {
+    "title": "Productos",
+    "description": "Explora nuestro catáłłlogo de aplicaciones, juegos, agentes, herramientas y software. Todo gratis para explorar.",
+    "note": "Los productos individuales pueden ser gratuitos, de compra śnica o basados en suscripciółłł. El sitio web permanece gratuito para navegar.",
+    "comingSoon": "Prółłłximamente",
+    "available": "Disponible",
+    "maintenance": "Mantenimiento",
+    "free": "Gratis",
+    "paid": "De Pago",
+    "openApp": "Abrir Aplicaciółłł",
+    "viewDetails": "Ver Detalles",
+    "platform": "Plataforma",
+    "noProducts": "No se encontraron productos en esta categoríłłla.",
+    "search": "Buscar productos...",
+    "categories": {
+      "all": "Todos",
+      "apps": "Aplicaciones",
+      "games": "Juegos",
+      "agents": "Agentes",
+      "tools": "Herramientas",
+      "software": "Software"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Iniciar Sesiółłł",
+      "email": "Correo electrółłłnico",
+      "password": "Contraseńa",
+      "forgotPassword": "żOlvidaste tu contraseńa?",
+      "submit": "Iniciar Sesiółłł",
+      "noAccount": "żNo tienes una cuenta?",
+      "createAccount": "Crear una",
+      "error": "Correo electrółłłnico o contraseńa inváłłlidos.",
+      "loading": "Iniciando sesiń...",
+      "success": "żBienvenido de nuevo!"
+    },
+    "register": {
+      "title": "Crear Cuenta",
+      "firstName": "Nombre",
+      "lastName": "Apellido",
+      "email": "Correo electrółłłnico",
+      "password": "Contraseńa",
+      "confirmPassword": "Confirmar Contraseńa",
+      "language": "Idioma preferido",
+      "country": "Paíłłls/Regiółłłn",
+      "marketingConsent": "Enviarme noticias ocasionales, actualizaciones de productos, ofertas y anuncios de Trillion AI Tech.",
+      "termsAcceptance": "Acepto los",
+      "terms": "Tėrminos de Servicio",
+      "and": "y la",
+      "privacy": "Políłłltica de Privacidad",
+      "submit": "Crear Cuenta",
+      "hasAccount": "żYa tienes una cuenta?",
+      "signIn": "Iniciar sesiń",
+      "errorEmailExists": "Ya existe una cuenta con este correo electrółłłnico.",
+      "errorWeakPassword": "La contraseńa debe tener al menos 8 caracteres.",
+      "errorPasswordsMismatch": "Las contraseńas no coinciden.",
+      "errorTermsRequired": "Debes aceptar los Tėrminos y la Políłłltica de Privacidad.",
+      "loading": "Creando tu cuenta...",
+      "success": "Cuenta creada. Por favor revisa tu correo para verificar tu direcciółłłn."
+    },
+    "account": {
+      "title": "Mi Cuenta",
+      "profile": "Perfil",
+      "security": "Seguridad",
+      "myProducts": "Mis Productos",
+      "firstName": "Nombre",
+      "lastName": "Apellido",
+      "displayName": "Nombre para mostrar",
+      "email": "Correo",
+      "language": "Idioma preferido",
+      "country": "Paíłłls/Regiółłłn",
+      "memberSince": "Miembro desde",
+      "saveChanges": "Guardar Cambios",
+      "changePassword": "Cambiar Contraseńa",
+      "currentPassword": "Contraseńa actual",
+      "newPassword": "Nueva contraseńa",
+      "confirmNewPassword": "Confirmar nueva contraseńa",
+      "updatePassword": "Actualizar Contraseńa",
+      "marketingPreferences": "Preferencias de Marketing",
+      "marketingOptIn": "Quiero recibir noticias, actualizaciones de productos, ofertas y anuncios de Trillion AI Tech.",
+      "lastUpdated": "Śltima actualizaciółłłn",
+      "noProducts": "Aśn no tienes productos. Explora el catáłłlogo de Trillion AI Tech para ver lo que viene.",
+      "deleteAccount": "Eliminar Cuenta",
+      "deleteAccountWarning": "Esta acciółłłn no se puede deshacer. Todos tus datos se eliminaráłłln permanentemente.",
+      "deleteAccountConfirm": "Escribe ELIMINAR para confirmar",
+      "deleteAccountSubmit": "Eliminar Mi Cuenta",
+      "loading": "Guardando cambios...",
+      "success": "Cambios guardados exitosamente.",
+      "error": "Error al guardar cambios. Por favor intenta de nuevo."
+    },
+    "validation": {
+      "required": "Este campo es obligatorio.",
+      "invalidEmail": "Por favor ingresa un correo electrółłłnico váldo.",
+      "passwordTooShort": "La contraseńa debe tener al menos 8 caracteres.",
+      "passwordsMismatch": "Las contraseńas no coinciden.",
+      "firstNameRequired": "El nombre es obligatorio.",
+      "lastNameRequired": "El apellido es obligatorio."
+    }
+  },
+  "legal": {
+    "termsTitle": "Tėrminos de Servicio",
+    "privacyTitle": "Políłłltica de Privacidad",
+    "aupTitle": "Políłłltica de Uso Aceptable",
+    "version": "Versiółłłn",
+    "status": "Estado",
+    "effectiveDate": "Fecha de vigencia",
+    "placeholder": "Marcador de posiciółłłn: requiere revisiółłłn legal humana/NZ antes del lanzamiento comercial.",
+    "notice": "Este documento es śnicamente un marcador de posiciółłłn estructural. No constituye asesoramiento legal y debe ser revisado y actualizado por una persona calificada familiarizada con las leyes de Nueva Zelanda y cualquier otra jurisdicciółłłn aplicable antes de ser utilizado."
+  },
+  "footer": {
+    "tagline": "Construyendo el futuro de la IA y la tecnologíłłla interactiva.",
+    "navigation": "Navegaciółłłn",
+    "legal": "Legal",
+    "information": "Informaciółłłn",
+    "security": "Seguridad",
+    "free": "Navegaciółłł gratuita",
+    "noAccount": "No se requiere cuenta",
+    "nz": "Aotearoa Nueva Zelanda",
+    "copyright": " © 2026 Trillion AI Tech. Todos los derechos reservados.",
+    "legalNotice": "Los documentos legales son marcadores de posiciółłłn que requieren revisiółłłn legal humana/NZ."
+  },
+  "theme": {
+    "toggle": "Cambiar modo oscuro/claro",
+    "light": "Modo claro",
+    "dark": "Modo oscuro"
+  },
+  "language": {
+    "select": "Seleccionar idioma",
+    "detect": "Detectar del navegador"
+  },
+  "accessibility": {
+    "skipToMain": "Saltar al contenido principal",
+    "logo": "Logo de Trillion AI Tech",
+    "mobileMenu": "Cambiar menś mńvil",
+    "closeMenu": "Cerrar menś",
+    "externalLink": "Se abre en una nueva ventana"
+  },
+  "errors": {
+    "generic": "Algo saliń mal. Por favor intenta de nuevo.",
+    "network": "Error de red. Por favor verifica tu conexiółłłn.",
+    "unauthorized": "Debes iniciar sesiń para acceder a esta pá gina.",
+    "notFound": "Páłłgina no encontrada.",
+    "serverError": "Error del servidor. Por favor intenta măs tarde."
+  },
+  "loading": {
+    "default": "Cargando...",
+    "products": "Cargando productos...",
+    "account": "Cargando cuenta..."
+  },
+  "empty": {
+    "noResults": "No se encontraron resultados.",
+    "comingSoon": "Prółłłximamente"
+  }
+}
