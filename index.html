@@ -1,333 +1,126 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Trillion AI Tech — An independent studio building apps, games, agent systems and tools. In development from Aotearoa New Zealand.">
-    <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://trillionaitech.com/">
-    
-    <!-- Open Graph Metadata -->
-    <meta property="og:title" content="Trillion AI Tech">
-    <meta property="og:description" content="An independent studio building apps, games, agent systems and tools.">
-    <meta property="og:url" content="https://trillionaitech.com/">
-    <meta property="og:type" content="website">
-    
-    <title>Trillion AI Tech — AI & Interactive Technology Studio</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="base.css">
-    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trillion AI Tech — AI & interactive technology studio</title>
+  <meta name="description" content="An independent studio building apps, games, agent systems and tools from Aotearoa New Zealand.">
+  <link rel="canonical" href="https://trillionaitech.com/">
+  <meta property="og:title" content="Trillion AI Tech — AI & interactive technology studio">
+  <meta property="og:description" content="An independent studio building apps, games, agent systems and tools from Aotearoa New Zealand.">
+  <meta property="og:url" content="https://trillionaitech.com/">
+  <meta property="og:type" content="website">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🔷%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/styles.css">
 </head>
-<body class="light-mode">
-    <!-- Header -->
-    <header class="site-header">
-        <div class="container header-content">
-            <div class="logo">
-                <img src="favicon.svg" alt="Trillion AI Tech Logo" class="logo-icon">
-                <span class="logo-text">Trillion AI Tech</span>
-            </div>
-            
-            <nav class="main-nav">
-                <ul class="nav-list">
-                    <li><a href="#home" data-lang-key="nav_home">Home</a></li>
-                    <li><a href="#products" data-lang-key="nav_products">Products</a></li>
-                    <li><a href="#apps" data-lang-key="nav_apps">Apps</a></li>
-                    <li><a href="#games" data-lang-key="nav_games">Games</a></li>
-                    <li><a href="#agents" data-lang-key="nav_agents">Agents</a></li>
-                    <li><a href="#tools" data-lang-key="nav_tools">Tools</a></li>
-                    <li><a href="#software" data-lang-key="nav_software">Software</a></li>
-                    <li><a href="#about" data-lang-key="nav_about">About</a></li>
-                    <li><a href="#contact" data-lang-key="nav_contact">Contact</a></li>
-                </ul>
-            </nav>
-            
-            <div class="header-controls">
-                <!-- Language Selector -->
-                <select id="language-selector" class="language-selector" aria-label="Select language">
-                    <option value="en" selected>English</option>
-                    <option value="mi">Māori</option>
-                </select>
-                
-                <!-- Dark/Light Mode Toggle -->
-                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark/light mode">
-                    <span class="theme-icon sun">☀️</span>
-                    <span class="theme-icon moon">🌙</span>
-                </button>
-            </div>
-            
-            <button class="mobile-menu-toggle" aria-label="Toggle mobile menu">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-        </div>
-    </header>
+<body>
+  <a href="#main-content" class="skip-link" data-i18n="accessibility.skipToMain">Skip to main content</a>
 
-    <!-- Mobile Navigation -->
-    <div class="mobile-nav" id="mobile-nav">
-        <ul class="mobile-nav-list">
-            <li><a href="#home" data-lang-key="nav_home">Home</a></li>
-            <li><a href="#products" data-lang-key="nav_products">Products</a></li>
-            <li><a href="#apps" data-lang-key="nav_apps">Apps</a></li>
-            <li><a href="#games" data-lang-key="nav_games">Games</a></li>
-            <li><a href="#agents" data-lang-key="nav_agents">Agents</a></li>
-            <li><a href="#tools" data-lang-key="nav_tools">Tools</a></li>
-            <li><a href="#software" data-lang-key="nav_software">Software</a></li>
-            <li><a href="#about" data-lang-key="nav_about">About</a></li>
-            <li><a href="#contact" data-lang-key="nav_contact">Contact</a></li>
+  <header class="site-header">
+    <div class="container header-content">
+      <a href="/" class="logo" aria-label="Trillion AI Tech">
+        <span class="logo-text">Trillion AI Tech</span>
+      </a>
+
+      <nav class="main-nav" aria-label="Main navigation">
+        <ul class="nav-list">
+          <li><a href="/" data-i18n="nav.home">Home</a></li>
+          <li><a href="/products" data-i18n="nav.products">Products</a></li>
+          <li><a href="/about" data-i18n="nav.about">About</a></li>
+          <li><a href="/contact" data-i18n="nav.contact">Contact</a></li>
         </ul>
+      </nav>
+
+      <div class="header-actions">
+        <select id="language-selector" class="language-selector" aria-label="Select language">
+          <option value="en">English</option>
+          <option value="mi">Te Reo Māori</option>
+          <option value="es">Españłłł</option>
+          <option value="fr">Françłłųis</option>
+        </select>
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark/light mode" data-i18n="theme.toggle">
+          <span class="theme-icon">◐</span>
+        </button>
+      </div>
+
+      <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle mobile menu">
+        <span class="hamburger"></span>
+      </button>
     </div>
+  </header>
 
-    <main>
-        <!-- Hero Section -->
-        <section id="home" class="hero-section">
-            <div class="container">
-                <div class="hero-content">
-                    <h1 class="hero-title" data-lang-key="hero_title">
-                        Building the Future of AI & Interactive Technology
-                    </h1>
-                    <p class="hero-subtitle" data-lang-key="hero_subtitle">
-                        An independent studio crafting apps, games, agent systems, and tools from Aotearoa New Zealand.
-                    </p>
-                    <div class="hero-notice">
-                        <p data-lang-key="free_browsing"><strong>Free to browse · No account required</strong></p>
-                    </div>
-                    <a href="#products" class="cta-button" data-lang-key="explore_products">Explore Products</a>
-                </div>
-            </div>
-        </section>
-
-        <!-- Products Catalogue Section -->
-        <section id="products" class="products-section">
-            <div class="container">
-                <h2 class="section-title" data-lang-key="products_title">Products</h2>
-                <p class="section-description" data-lang-key="products_description">
-                    Browse our catalogue of applications, games, agents, tools and software. All free to explore.
-                </p>
-                
-                <!-- Product Categories -->
-                <div class="product-categories">
-                    <div class="category-tabs">
-                        <button class="category-tab active" data-category="all" data-lang-key="cat_all">All</button>
-                        <button class="category-tab" data-category="apps" data-lang-key="cat_apps">Apps</button>
-                        <button class="category-tab" data-category="games" data-lang-key="cat_games">Games</button>
-                        <button class="category-tab" data-category="agents" data-lang-key="cat_agents">Agents</button>
-                        <button class="category-tab" data-category="tools" data-lang-key="cat_tools">Tools</button>
-                        <button class="category-tab" data-category="software" data-lang-key="cat_software">Software</button>
-                    </div>
-                </div>
-                
-                <!-- Product Grid (Data-driven, rendered by app.js) -->
-                <div class="product-grid" id="product-grid">
-                    <!-- Product cards will be inserted here by JavaScript -->
-                </div>
-                
-                <!-- Note about future products -->
-                <div class="product-note">
-                    <p data-lang-key="product_note">Individual products may be free, one-time purchase, or subscription-based. The website itself remains free to browse.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Apps Section -->
-        <section id="apps" class="apps-section">
-            <div class="container">
-                <h2 class="section-title" data-lang-key="apps_title">Apps</h2>
-                <p class="section-description" data-lang-key="apps_description">
-                    Interactive applications for productivity, creativity, and entertainment.
-                </p>
-                <div class="category-placeholder">
-                    <div class="placeholder-icon">📱</div>
-                    <p data-lang-key="apps_coming_soon">Apps coming soon</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Games Section -->
-        <section id="games" class="games-section">
-            <div class="container">
-                <h2 class="section-title" data-lang-key="games_title">Games</h2>
-                <p class="section-description" data-lang-key="games_description">
-                    Engaging games built with modern technology and AI integration.
-                </p>
-                <div class="category-placeholder">
-                    <div class="placeholder-icon">🎮</div>
-                    <p data-lang-key="games_coming_soon">Games coming soon</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Agents Section -->
-        <section id="agents" class="agents-section">
-            <div class="container">
-                <h2 class="section-title" data-lang-key="agents_title">AI Agents</h2>
-                <p class="section-description" data-lang-key="agents_description">
-                    Autonomous AI systems designed to assist with specific tasks and workflows.
-                </p>
-                <div class="category-placeholder">
-                    <div class="placeholder-icon">🤖</div>
-                    <p data-lang-key="agents_coming_soon">AI agents coming soon</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Tools Section -->
-        <section id="tools" class="tools-section">
-            <div class="container">
-                <h2 class="section-title" data-lang-key="tools_title">Tools</h2>
-                <p class="section-description" data-lang-key="tools_description">
-                    Utility tools and developer resources to enhance your workflow.
-                </p>
-                <div class="category-placeholder">
-                    <div class="placeholder-icon">🔧</div>
-                    <p data-lang-key="tools_coming_soon">Tools coming soon</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Software Section -->
-        <section id="software" class="software-section">
-            <div class="container">
-                <h2 class="section-title" data-lang-key="software_title">Software</h2>
-                <p class="section-description" data-lang-key="software_description">
-                    Desktop and web-based software solutions for various use cases.
-                </p>
-                <div class="category-placeholder">
-                    <div class="placeholder-icon">💻</div>
-                    <p data-lang-key="software_coming_soon">Software coming soon</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- About Section -->
-        <section id="about" class="about-section">
-            <div class="container">
-                <h2 class="section-title" data-lang-key="about_title">About</h2>
-                <div class="about-content">
-                    <p data-lang-key="about_p1">
-                        Trillion AI Tech is an independent technology studio based in Aotearoa New Zealand.
-                    </p>
-                    <p data-lang-key="about_p2">
-                        We build applications, games, AI agent systems, tools, and software with a focus on innovation, 
-                        usability, and modern design principles.
-                    </p>
-                    <p data-lang-key="about_p3">
-                        Our mission is to create technology that empowers users and enhances their digital experiences.
-                        We believe in transparent development, ethical AI practices, and building products that 
-                        genuinely solve problems.
-                    </p>
-                    <div class="about-notice">
-                        <p data-lang-key="about_notice"><em>In development · Building the future, one product at a time.</em></p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Contact Section -->
-        <section id="contact" class="contact-section">
-            <div class="container">
-                <h2 class="section-title" data-lang-key="contact_title">Contact</h2>
-                <div class="contact-content">
-                    <p data-lang-key="contact_description">
-                        Get in touch with Trillion AI Tech using the appropriate channel below.
-                    </p>
-                    <div class="contact-grid">
-                        <div class="contact-card">
-                            <h3>General Enquiries</h3>
-                            <p>For general questions and information.</p>
-                            <a href="mailto:hello@trillionaitech.com" class="contact-email">hello@trillionaitech.com</a>
-                        </div>
-                        <div class="contact-card">
-                            <h3>Product & Technical Support</h3>
-                            <p>For support with products and applications.</p>
-                            <a href="mailto:support@trillionaitech.com" class="contact-email">support@trillionaitech.com</a>
-                        </div>
-                        <div class="contact-card">
-                            <h3>Privacy</h3>
-                            <p>For privacy-related enquiries.</p>
-                            <a href="mailto:privacy@trillionaitech.com" class="contact-email">privacy@trillionaitech.com</a>
-                        </div>
-                        <div class="contact-card">
-                            <h3>Security</h3>
-                            <p>To report security vulnerabilities.</p>
-                            <a href="mailto:security@trillionaitech.com" class="contact-email">security@trillionaitech.com</a>
-                        </div>
-                    </div>
-                    <p class="contact-note" data-lang-key="contact_note">
-                        <small>Note: We're currently configuring our email systems. If you don't receive a response within 48 hours, please try again.</small>
-                    </p>
-                    <p class="contact-location">
-                        <span class="contact-icon">📍</span>
-                        <span data-lang-key="contact_location">Aotearoa New Zealand</span>
-                    </p>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- Footer -->
-    <footer class="site-footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-brand">
-                    <div class="logo">
-                        <img src="favicon.svg" alt="Trillion AI Tech Logo" class="logo-icon">
-                        <span class="logo-text">Trillion AI Tech</span>
-                    </div>
-                    <p class="footer-tagline" data-lang-key="footer_tagline">
-                        Building the future of AI & interactive technology.
-                    </p>
-                </div>
-                
-                <div class="footer-links">
-                    <div class="footer-column">
-                        <h4 data-lang-key="footer_navigation">Navigation</h4>
-                        <ul>
-                            <li><a href="#home" data-lang-key="nav_home">Home</a></li>
-                            <li><a href="#products" data-lang-key="nav_products">Products</a></li>
-                            <li><a href="#about" data-lang-key="nav_about">About</a></li>
-                            <li><a href="#contact" data-lang-key="nav_contact">Contact</a></li>
-                        </ul>
-                    </div>
-                    
-                    <div class="footer-column">
-                        <h4 data-lang-key="footer_legal">Legal</h4>
-                        <ul>
-                            <li><a href="terms.html" data-lang-key="legal_terms">Terms of Service</a></li>
-                            <li><a href="privacy.html" data-lang-key="legal_privacy">Privacy Policy</a></li>
-                            <li><a href="acceptable-use.html" data-lang-key="legal_acceptable">Acceptable Use</a></li>
-                        </ul>
-                    </div>
-                    
-                    <div class="footer-column">
-                        <h4 data-lang-key="footer_info">Information</h4>
-                        <ul>
-                            <li><span data-lang-key="info_free">Free to browse</span></li>
-                            <li><span data-lang-key="info_no_account">No account required</span></li>
-                            <li><span data-lang-key="info_nz">Aotearoa New Zealand</span></li>
-                        </ul>
-                    </div>
-                    
-                    <div class="footer-column">
-                        <h4 data-lang-key="footer_security">Security</h4>
-                        <ul>
-                            <li><a href="mailto:security@trillionaitech.com">security@trillionaitech.com</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="footer-bottom">
-                <p class="copyright" data-lang-key="footer_copyright">
-                    © 2026 Trillion AI Tech. All rights reserved.
-                </p>
-                <p class="legal-notice" data-lang-key="legal_notice">
-                    <small>Legal documents are placeholders requiring human/NZ legal review.</small>
-                </p>
-            </div>
+  <main id="main-content">
+    <section class="hero">
+      <div class="container">
+        <h1 data-i18n="hero.title">Building the Future of AI & Interactive Technology</h1>
+        <p class="hero-subtitle" data-i18n="hero.subtitle">An independent studio crafting apps, games, agent systems, and tools from Aotearoa New Zealand.</p>
+        <div class="hero-cta">
+          <a href="/products" class="btn btn-primary" data-i18n="hero.exploreProducts">Explore Products</a>
         </div>
-    </footer>
+      </div>
+    </section>
 
-    <script src="app.js"></script>
+    <section class="products-section">
+      <div class="container">
+        <h2 data-i18n="products.title">Products</h2>
+        <p class="section-description" data-i18n="products.description">Browse our catalogue of applications, games, agents, tools and software. All free to explore.</p>
+
+        <div class="category-filters">
+          <button class="filter-btn active" data-category="all" data-i18n="products.categories.all">All</button>
+          <button class="filter-btn" data-category="apps" data-i18n="products.categories.apps">Apps</button>
+          <button class="filter-btn" data-category="games" data-i18n="products.categories.games">Games</button>
+          <button class="filter-btn" data-category="agents" data-i18n="products.categories.agents">Agents</button>
+          <button class="filter-btn" data-category="tools" data-i18n="products.categories.tools">Tools</button>
+          <button class="filter-btn" data-category="software" data-i18n="products.categories.software">Software</button>
+        </div>
+
+        <div id="product-grid" class="product-grid">
+          <!-- Products loaded dynamically -->
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h3>Trillion AI Tech</h3>
+          <p data-i18n="footer.tagline">Building the future of AI & interactive technology.</p>
+          <p class="footer-location" data-i18n="footer.nz">Aotearoa New Zealand</p>
+        </div>
+
+        <div class="footer-links">
+          <h4 data-i18n="footer.navigation">Navigation</h4>
+          <ul>
+            <li><a href="/" data-i18n="nav.home">Home</a></li>
+            <li><a href="/products" data-i18n="nav.products">Products</a></li>
+            <li><a href="/about" data-i18n="nav.about">About</a></li>
+            <li><a href="/contact" data-i18n="nav.contact">Contact</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-links">
+          <h4 data-i18n="footer.legal">Legal</h4>
+          <ul>
+            <li><a href="/terms" data-i18n="legal.termsTitle">Terms of Service</a></li>
+            <li><a href="/privacy" data-i18n="legal.privacyTitle">Privacy Policy</a></li>
+            <li><a href="/acceptable-use" data-i18n="legal.aupTitle">Acceptable Use Policy</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-info">
+          <h4 data-i18n="footer.information">Information</h4>
+          <p data-i18n="footer.free">Free to browse</p>
+          <p data-i18n="footer.noAccount">No account required</p>
+          <p class="footer-copyright" data-i18n="footer.copyright"> © 2026 Trillion AI Tech. All rights reserved.</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/i18n.js"></script>
+  <script src="js/theme.js"></script>
+  <script src="js/products.js"></script>
 </body>
 </html>
