@@ -1,13 +1,13 @@
 /**
  * Trillion AI Tech - Theme Toggle System
- * Supports dark/light mode with localStorage persistence
+ * FIXED: Properly toggles between light/dark modes
  */
 
 (function() {
   'use strict';
 
   const STORAGE_KEY = 'trillion_theme';
-  const DEFAULT_THEME = 'light';
+  const DEFAULT_THEME = 'dark';
 
   function getPreferredTheme() {
     const stored = localStorage.getItem(STORAGE_KEY);
@@ -25,16 +25,28 @@
   }
 
   function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+  }
+
+  function updateIcons(theme) {
+    const sunIcon = document.querySelector('.icon-sun');
+    const moonIcon = document.querySelector('.icon-moon');
+    
+    if (!sunIcon || !moonIcon) return;
+    
     if (theme === 'dark') {
-      document.documentElement.setAttribute('data-theme', 'dark');
+      sunIcon.style.display = 'block';
+      moonIcon.style.display = 'none';
     } else {
-      document.documentElement.removeAttribute('data-theme');
+      sunIcon.style.display = 'none';
+      moonIcon.style.display = 'block';
     }
   }
 
   function init() {
     const theme = getPreferredTheme();
     applyTheme(theme);
+    updateIcons(theme);
 
     const toggle = document.getElementById('theme-toggle');
     if (toggle) {
@@ -43,6 +55,7 @@
         const newTheme = current === 'dark' ? 'light' : 'dark';
         applyTheme(newTheme);
         saveTheme(newTheme);
+        updateIcons(newTheme);
       });
     }
   }
