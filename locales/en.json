@@ -40,7 +40,8 @@
     "openApp": "Open App",
     "viewDetails": "View Details",
     "platform": "Platform",
-    "noProducts": "No products found in this category yet.",
+    "noProducts": "No products found in this category.",
+    "search": "Search products...",
     "categories": {
       "all": "All",
       "apps": "Apps",
@@ -146,24 +147,6 @@
       "errorTermsRequired": "You must accept the Terms and Privacy Policy.",
       "loading": "Creating your account...",
       "success": "Account created. Please check your email to verify your address."
-    },
-    "forgotPassword": {
-      "title": "Reset Password",
-      "email": "Email address",
-      "submit": "Send Reset Instructions",
-      "back": "Back to Sign In",
-      "loading": "Sending instructions...",
-      "success": "Password reset instructions have been sent to your email.",
-      "error": "Failed to send reset instructions. Please try again."
-    },
-    "resetPassword": {
-      "title": "Set New Password",
-      "password": "New password",
-      "confirmPassword": "Confirm new password",
-      "submit": "Reset Password",
-      "loading": "Resetting password...",
-      "success": "Password has been reset. You can now sign in.",
-      "error": "Failed to reset password. Please try again."
     },
     "account": {
       "title": "My Account",
