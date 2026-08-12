@@ -1,0 +1,184 @@
+{
+  "meta": {
+    "code": "zh-CN",
+    "name": "Chinese Simplified",
+    "nativeName": "简体中文",
+    "direction": "ltr"
+  },
+  "nav": {
+    "home": "首页",
+    "products": "产品",
+    "apps": "应用",
+    "games": "游戏",
+    "agents": "智能体",
+    "tools": "工具",
+    "software": "软件",
+    "about": "关于",
+    "contact": "联系",
+    "account": "账户",
+    "signIn": "登录",
+    "signUp": "创建账户",
+    "signOut": "退出登录",
+    "myAccount": "我的账户"
+  },
+  "hero": {
+    "title": "构建人工智能与互动技术的未来",
+    "subtitle": "一个独立工作室，来自奥特亚罗瓦新西兰，打造应用、游戏、智能体系统和工具。",
+    "freeBrowsing": "免费浏览",
+    "createAccount": "准备好使用我们的产品和服务时创建账户。",
+    "exploreProducts": "探索产品"
+  },
+  "products": {
+    "title": "产品",
+    "description": "浏览我们的应用、游戏、智能体、工具和软件目录。全部免费探索。",
+    "note": "单个产品可能是免费的、一次性购买或基于订阅的。网站本身保持免费浏览。",
+    "comingSoon": "即将推出",
+    "available": "可用",
+    "maintenance": "维护中",
+    "free": "免费",
+    "paid": "付费",
+    "openApp": "打开应用",
+    "viewDetails": "查看详情",
+    "platform": "平台",
+    "noProducts": "此类别中暂无产品。",
+    "search": "搜索产品...",
+    "categories": {
+      "all": "全部",
+      "apps": "应用",
+      "games": "游戏",
+      "agents": "智能体",
+      "tools": "工具",
+      "software": "软件"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "登录",
+      "email": "电子邮件地址",
+      "password": "密码",
+      "forgotPassword": "忘记密码？",
+      "submit": "登录",
+      "noAccount": "没有账户？",
+      "createAccount": "创建一个",
+      "error": "电子邮件或密码无效。",
+      "loading": "正在登录...",
+      "success": "欢迎回来！"
+    },
+    "register": {
+      "title": "创建账户",
+      "firstName": "名字",
+      "lastName": "姓氏",
+      "email": "电子邮件地址",
+      "password": "密码",
+      "confirmPassword": "确认密码",
+      "language": "首选语言",
+      "country": "国家/地区",
+      "marketingConsent": "向我发送来自 Trillion AI Tech 的偶尔的新闻、产品更新、优惠和公告。",
+      "termsAcceptance": "我同意",
+      "terms": "服务条款",
+      "and": "和",
+      "privacy": "隐私政策",
+      "submit": "创建账户",
+      "hasAccount": "已经有账户？",
+      "signIn": "登录",
+      "errorEmailExists": "此电子邮件已存在账户。",
+      "errorWeakPassword": "密码必须至少 8 个字符。",
+      "errorPasswordsMismatch": "密码不匹配。",
+      "errorTermsRequired": "您必须同意服务条款和隐私政策。",
+      "loading": "正在创建您的账户...",
+      "success": "账户已创建。请检查您的电子邮件以验证您的地址。"
+    },
+    "account": {
+      "title": "我的账户",
+      "profile": "个人资料",
+      "security": "安全",
+      "myProducts": "我的产品",
+      "firstName": "名字",
+      "lastName": "姓氏",
+      "displayName": "显示名称",
+      "email": "电子邮件",
+      "language": "首选语言",
+      "country": "国家/地区",
+      "memberSince": "加入时间",
+      "saveChanges": "保存更改",
+      "changePassword": "更改密码",
+      "currentPassword": "当前密码",
+      "newPassword": "新密码",
+      "confirmNewPassword": "确认新密码",
+      "updatePassword": "更新密码",
+      "marketingPreferences": "营销偏好",
+      "marketingOptIn": "我希望接收来自 Trillion AI Tech 的新闻、产品更新、优惠和公告。",
+      "lastUpdated": "最后更新",
+      "noProducts": "您还没有任何产品。探索 Trillion AI Tech 目录以了解即将推出的内容。",
+      "deleteAccount": "删除账户",
+      "deleteAccountWarning": "此操作无法撤销。您的所有数据将被永久删除。",
+      "deleteAccountConfirm": "输入 DELETE 以确认",
+      "deleteAccountSubmit": "删除我的账户",
+      "loading": "正在保存更改...",
+      "success": "更改已成功保存。",
+      "error": "保存更改失败。请重试。"
+    },
+    "validation": {
+      "required": "此字段为必填项。",
+      "invalidEmail": "请输入有效的电子邮件地址。",
+      "passwordTooShort": "密码必须至少 8 个字符。",
+      "passwordsMismatch": "密码不匹配。",
+      "firstNameRequired": "名字为必填项。",
+      "lastNameRequired": "姓氏为必填项。"
+    }
+  },
+  "legal": {
+    "termsTitle": "服务条款",
+    "privacyTitle": "隐私政策",
+    "aupTitle": "可接受使用政策",
+    "version": "版本",
+    "status": "状态",
+    "effectiveDate": "生效日期",
+    "placeholder": "占位符 — 商业发布前需要人工/新西兰法律审查。",
+    "notice": "本文档仅为结构占位符。它不构成法律建议，必须由熟悉新西兰法律和其他适用司法管辖区的合格人员在依赖之前进行审查和更新。"
+  },
+  "footer": {
+    "tagline": "构建人工智能与互动技术的未来。",
+    "navigation": "导航",
+    "legal": "法律",
+    "information": "信息",
+    "security": "安全",
+    "free": "免费浏览",
+    "noAccount": "无需账户",
+    "nz": "奥特亚罗瓦新西兰",
+    "copyright": " © 2026 Trillion AI Tech。保留所有权利。",
+    "legalNotice": "法律文档是占位符，需要人工/新西兰法律审查。"
+  },
+  "theme": {
+    "toggle": "切换深色/浅色模式",
+    "light": "浅色模式",
+    "dark": "深色模式"
+  },
+  "language": {
+    "select": "选择语言",
+    "detect": "从浏览器检测"
+  },
+  "accessibility": {
+    "skipToMain": "跳转到主要内容",
+    "logo": "Trillion AI Tech 标志",
+    "mobileMenu": "切换移动菜单",
+    "closeMenu": "关闭菜单",
+    "externalLink": "在新窗口中打开"
+  },
+  "errors": {
+    "generic": "出错了。请重试。",
+    "network": "网络错误。请检查您的连接。",
+    "unauthorized": "您必须登录才能访问此页面。",
+    "notFound": "页面未找到。",
+    "serverError": "服务器错误。请稍后重试。"
+  },
+  "loading": {
+    "default": "加载中...",
+    "products": "正在加载产品...",
+    "account": "正在加载账户..."
+  },
+  "empty": {
+    "noResults": "未找到结果。",
+    "comingSoon": "即将推出"
+  }
+}
