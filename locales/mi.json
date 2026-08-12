@@ -1,232 +1,88 @@
 {
   "meta": {
-    "code": "mi",
-    "name": "Te Reo Māori",
-    "nativeName": "Te Reo Māori",
-    "direction": "ltr"
+    "title": "Trillion AI Tech — Studio · Aotearoa",
+    "description": "He whare rangahau motuhake e hanga ana i ngā pūmanawa, kēmu, pūnaha agent me ngā taputapu mai i Aotearoa."
+  },
+  "accessibility": {
+    "skipToMain": "Peke ki ngā ihirangi matua"
   },
   "nav": {
     "home": "Kāinga",
-    "products": "Hua",
-    "apps": "Taupānga",
-    "games": "Kēmu",
-    "agents": "Ngā Tumuaki",
-    "tools": "Taputapu",
+    "products": "Ngā Hua",
+    "apps": "Ngā Pūmanawa",
+    "games": "Ngā Kēmu",
+    "agents": "Ngā Agent AI",
+    "tools": "Ngā Taputapu",
     "software": "Pūmanawa",
+    "studio": "Studio",
     "about": "Mō Mātou",
     "contact": "Whakapā",
-    "account": "Pūkete",
     "signIn": "Takiuru",
-    "signUp": "Hangaia he Pūkete",
-    "signOut": "Tangohia",
-    "myAccount": "Tōku Pūkete"
+    "signUp": "Waihanga Pūkete"
+  },
+  "theme": {
+    "toggle": "Huri te aratau pōuri/marama"
   },
   "hero": {
-    "title": "Te Hanga i te Anamata o te AI me te Hangarau Tauwhitiwhiti",
-    "subtitle": "He whare toi motuhake e hanga ana i ngā taupānga, kēmu, pūnaha tumuaki, me ngā taputapu mai i Aotearoa.",
-    "freeBrowsing": "He kore utu ki te tirotiro",
-    "createAccount": "Hangaia he pūkete ina reri koe ki te whakamahi i ā mātou hua me ngā ratonga.",
-    "exploreProducts": "Tirohia ngā Hua"
+    "badge": "Kei te Whanaketia",
+    "titlePart1": "Te Hanga i te Heke Mai o te",
+    "titlePart2": "AI me te Hangarau Pāhekoheko",
+    "subtitle": "He whare rangahau motuhake e hanga ana i ngā pūmanawa, kēmu, agent AI motuhake, me ngā taputapu matatau mai i Aotearoa.",
+    "exploreProducts": "Tirohia ngā Hua",
+    "exploreStudio": "Tō Mātou Studio"
+  },
+  "ecosystem": {
+    "title": "Āhea ngā mea e hangaia ana e Trillion AI Tech",
+    "description": "Ka hangaia e mātou he hangarau e whakamana ana i ngā kaiwhakamahi me te whakapai ake i ō rātou wheako matihiko mā te auaha me te hoahoa atamai.",
+    "apps": "Ngā Pūmanawa",
+    "appsDesc": "Pūmanawa matatau mō te whakaputa me te auaha",
+    "games": "Ngā Kēmu",
+    "gamesDesc": "Ngā wheako pāhekoheko me te tākaro auaha",
+    "agents": "Ngā Agent AI",
+    "agentsDesc": "Ngā pūnaha motuhake mō ngā mahi uaua",
+    "tools": "Ngā Taputapu",
+    "toolsDesc": "Ngā taputapu kaiwhakawhanake me te whakapai ake i te whakaputa",
+    "software": "Pūmanawa",
+    "softwareDesc": "Ngā otinga taumata umanga mō te pakihi",
+    "studio": "Studio",
+    "studioDesc": "Tō mātou kitenga, hangarau me te rōpū"
   },
   "products": {
-    "title": "Hua",
-    "description": "Tirotirohia tā mātou rārangi o ngā taupānga, kēmu, tumuaki, taputapu me ngā pūmanawa. He kore utu katoa ki te tūhura.",
-    "note": "Ko ētahi hua takitahi he kore utu, he hoko kotahi, he ohaurunga rānei. Ko te paetukutuku anake he kore utu ki te tirotiro.",
-    "comingSoon": "E haere mai ana",
-    "available": "Kei te wātea",
-    "maintenance": "Te tiaki",
-    "free": "Kore utu",
-    "paid": "Utua",
-    "openApp": "Whakatuwhera i te Taupānga",
-    "viewDetails": "Tirohia ngā Taipitopito",
-    "platform": "Papa",
-    "noProducts": "Kāore he hua i kitea i tēnei kāwai.",
-    "search": "Rapu hua...",
-    "categories": {
-      "all": "Katoa",
-      "apps": "Taupānga",
-      "games": "Kēmu",
-      "agents": "Ngā Tumuaki",
-      "tools": "Taputapu",
-      "software": "Pūmanawa"
-    }
+    "title": "Ngā Hua O Nāianei",
+    "description": "Kei te whakakiihia tō mātou rārangi hua ki ngā hua tūturu i a rātou e oti ana te whanaketanga.",
+    "apps": "Ngā Pūmanawa",
+    "appsDesc": "Ngā pūmanawa matatau kei te whanakehia",
+    "games": "Ngā Kēmu",
+    "gamesDesc": "Ngā kēmu pāhekoheko me ngā wheako kei te whanakehia",
+    "agents": "Ngā Agent AI",
+    "agentsDesc": "Ngā pūnaha AI motuhake kei te whanakehia",
+    "comingSoon": "Hei Ākuanei",
+    "viewCategory": "Tirohia te Kāwai",
+    "browseCatalogue": "Tirohia te Rārangi Hua Katoa"
   },
-  "sections": {
-    "apps": {
-      "title": "Taupānga",
-      "description": "Ngā taupānga tauwhitiwhiti mō te whakaputa, auaha, me te whakangahau.",
-      "comingSoon": "Ngā taupānga e haere mai ana"
-    },
-    "games": {
-      "title": "Kēmu",
-      "description": "Ngā kēmu whakauru i hangaia me te hangarau hou me te whakauru AI.",
-      "comingSoon": "Ngā kēmu e haere mai ana"
-    },
-    "agents": {
-      "title": "Ngā Tumuaki AI",
-      "description": "Ngā pūnaha AI motuhake i hoahoatia hei āwhina i ngā mahi me ngā rere mahi motuhake.",
-      "comingSoon": "Ngā tumuaki AI e haere mai ana"
-    },
-    "tools": {
-      "title": "Taputapu",
-      "description": "Ngā taputapu whaihua me ngā rauemi kaiwhakawhanake hei whakapai ake i tō rere mahi.",
-      "comingSoon": "Ngā taputapu e haere mai ana"
-    },
-    "software": {
-      "title": "Pūmanawa",
-      "description": "Ngā otinga pūmanawa papamahi me te paetukutuku mō ngā whakamahi rerekē.",
-      "comingSoon": "Pūmanawa e haere mai ana"
-    }
-  },
-  "about": {
-    "title": "Mō Mātou",
-    "p1": "Ko Trillion AI Tech he whare toi hangarau motuhake kei Aotearoa.",
-    "p2": "E hanga ana mātou i ngā taupānga, kēmu, pūnaha tumuaki AI, taputapu, me ngā pūmanawa me te arotahi ki te auaha, te whakamahi, me ngā mātāpono hoahoa hou.",
-    "p3": "Ko tā mātou misioni ko te hanga hangarau e whakamana ana i ngā kaiwhakamahi me te whakapai ake i ō rātou wheako matihiko. E whakapono ana mātou ki te whanaketanga mārama, ngā tikanga AI pono, me te hanga hua e whakatau tika ana i ngā raruraru.",
-    "notice": "Kei te whanaketanga · E hanga ana i te anamata, kotahi hua i te wā."
-  },
-  "contact": {
-    "title": "Whakapā",
-    "description": "Whakapā atu ki a Trillion AI Tech mā te ara tika i raro nei.",
-    "generalEnquiries": "Ngā Pātai Whānui",
-    "generalDesc": "Mō ngā pātai me ngā mōhiohio whānui.",
-    "support": "Tautoko Hua me te Hangarau",
-    "supportDesc": "Mō te tautoko mō ngā hua me ngā taupānga.",
-    "privacy": "Te Matatapu",
-    "privacyDesc": "Mō ngā pātai e pā ana ki te matatapu.",
-    "security": "Haumarutanga",
-    "securityDesc": "Hei pūrongo i ngā ngoikoretanga haumarutanga.",
-    "note": "Whakamārama: Kei te whirihora tonu mātou i ā mātou pūnaha īmēra. Ki te kore koe e whiwhi whakautu i roto i ngā hāora 48, whakamātau anō.",
-    "location": "Aotearoa"
+  "tech": {
+    "title": "Hangarau me ngā Āheinga",
+    "description": "Ko tō mātou tūāpapa hangarau e hono ana i te AI hou me ngā mātāpono pūhanga kaha.",
+    "ai": "Atamai Artificial",
+    "aiDesc": "Ngā pūnaha AI matatau me ngā agent motuhake",
+    "engineering": "Pūhanga Pūmanawa",
+    "engineeringDesc": "Te hoahoanga pūmanawa kaha, ka taea te whakanui",
+    "infrastructure": "Tūāpapa Ao",
+    "infrastructureDesc": "Te whakawhanake kapua me te whakanui",
+    "security": "Haumaru Tuatahi",
+    "securityDesc": "I hangaia me te haumaru me te noho muna"
   },
   "footer": {
-    "tagline": "Te hanga i te anamata o te AI me te hangarau tauwhitiwhiti.",
-    "navigation": "Aratohu",
-    "legal": "Ture",
-    "information": "Mōhiohio",
-    "security": "Haumarutanga",
-    "free": "He kore utu ki te tirotiro",
-    "noAccount": "Kāore he pūkete e hiahiatia ana",
+    "tagline": "Te hanga i te heke mai o te AI me te hangarau pāhekoheko.",
     "nz": "Aotearoa",
-    "copyright": " © 2026 Trillion AI Tech. Ngā motika katoa kua tiakina.",
-    "legalNotice": "Ko ngā tuhinga ture he tauira noa e hiahia ana ki te arotake ture a te tangata/NZ."
-  },
-  "auth": {
-    "login": {
-      "title": "Takiuru",
-      "email": "Wāhitau īmēra",
-      "password": "Kupu huna",
-      "forgotPassword": "I wareware te kupu huna?",
-      "submit": "Takiuru",
-      "noAccount": "Kāore he pūkete?",
-      "createAccount": "Hangaia tētahi",
-      "error": "He īmēra, he kupu huna rānei kāore i te tika.",
-      "loading": "Kei te takiuru koe...",
-      "success": "Nau mai anō!"
-    },
-    "register": {
-      "title": "Hangaia he Pūkete",
-      "firstName": "Ingoa tuatahi",
-      "lastName": "Ingoa whakamutunga",
-      "email": "Wāhitau īmēra",
-      "password": "Kupu huna",
-      "confirmPassword": "Whakamanahia te kupu huna",
-      "language": "Reo e manakohia ana",
-      "country": "Whenua/Rohe",
-      "marketingConsent": "Tukuna mai ki ahau ētahi wā he rongo, he whakahōutanga hua, he tuku, he whakapānui hoki mai i a Trillion AI Tech.",
-      "termsAcceptance": "Ka whakaae ahau ki ngā",
-      "terms": "Ngā Tikanga Ratonga",
-      "and": "me te",
-      "privacy": "Kaupapa Here Matatapu",
-      "submit": "Hangaia he Pūkete",
-      "hasAccount": "He pūkete kē tōu?",
-      "signIn": "Takiuru",
-      "errorEmailExists": "He pūkete kei tēnei īmēra kē.",
-      "errorWeakPassword": "Me 8 ngā pū te roa o te kupu huna.",
-      "errorPasswordsMismatch": "Kāore ngā kupu huna e ōrite ana.",
-      "errorTermsRequired": "Me whakaae koe ki ngā Tikanga me te Kaupapa Here Matatapu.",
-      "loading": "Kei te hanga i tō pūkete...",
-      "success": "Kua hangaia te pūkete. Tirohia tō īmēra hei whakamana i tō wāhitau."
-    },
-    "account": {
-      "title": "Tōku Pūkete",
-      "profile": "Tōmua",
-      "security": "Haumarutanga",
-      "myProducts": "Āku Hua",
-      "firstName": "Ingoa tuatahi",
-      "lastName": "Ingoa whakamutunga",
-      "displayName": "Ingoa whakaatu",
-      "email": "Īmēra",
-      "language": "Reo e manakohia ana",
-      "country": "Whenua/Rohe",
-      "memberSince": "He mema mai i",
-      "saveChanges": "Tiakina ngā Panonitanga",
-      "changePassword": "Huri Kupu Huna",
-      "currentPassword": "Kupu huna o nāianei",
-      "newPassword": "Kupu huna hou",
-      "confirmNewPassword": "Whakamanahia te kupu huna hou",
-      "updatePassword": "Whakahou Kupu Huna",
-      "marketingPreferences": "Ngā Manakohanga Hokohoko",
-      "marketingOptIn": "E hiahia ana ahau ki te whiwhi rongo, whakahōutanga hua, tuku me ngā whakapānui mai i a Trillion AI Tech.",
-      "lastUpdated": "Whakahoutanga whakamutunga",
-      "noProducts": "Kāore ō hua i tēnei wā. Tirohia te rārangi a Trillion AI Tech kia kite he aha e haere mai ana.",
-      "deleteAccount": "Mukua te Pūkete",
-      "deleteAccountWarning": "Kāore e taea te whakakore i tēnei mahi. Ka mukua ō raraunga katoa mō tonu.",
-      "deleteAccountConfirm": "Tuhia DELETE hei whakamana",
-      "deleteAccountSubmit": "Mukua Tōku Pūkete",
-      "loading": "Kei te tiaki i ngā panonitanga...",
-      "success": "Kua tiakina ngā panonitanga.",
-      "error": "I rahua te tiaki i ngā panonitanga. Whakamātau anō."
-    },
-    "validation": {
-      "required": "Me whakakii tēnei āpure.",
-      "invalidEmail": "Tuhia he wāhitau īmēra tika.",
-      "passwordTooShort": "Me 8 ngā pū te roa o te kupu huna.",
-      "passwordsMismatch": "Kāore ngā kupu huna e ōrite ana.",
-      "firstNameRequired": "Me whakakii te ingoa tuatahi.",
-      "lastNameRequired": "Me whakakii te ingoa whakamutunga."
-    }
+    "navigation": "Ngā Whakatere",
+    "company": "Kamupene",
+    "legal": "Ture",
+    "copyright": "&copy; 2026 Trillion AI Tech. Ngā motika katoa kua tiakina."
   },
   "legal": {
     "termsTitle": "Ngā Tikanga Ratonga",
-    "privacyTitle": "Kaupapa Here Matatapu",
-    "aupTitle": "Kaupapa Here Whakamahi Tika",
-    "version": "Putanga",
-    "status": "Tūnga",
-    "effectiveDate": "Rā tōmua",
-    "placeholder": "He tauira — me arotake ture e te tangata/NZ i mua i te whakarewatanga arumoni.",
-    "notice": "He tauira hanganga noa tēnei tuhinga. Ehara i te tohutohu ture, ā, me arotake, me whakahou e te tangata tohunga e mōhio ana ki te ture o Aotearoa me ētahi atu mana whakahaere e hāngai ana i mua i te whakawhirinaki."
-  },
-  "theme": {
-    "toggle": "Huri te aratau pōuri/mārama",
-    "light": "Aratau mārama",
-    "dark": "Aratau pōuri"
-  },
-  "language": {
-    "select": "Kōwhiria te reo",
-    "detect": "Tātari mai i te pūtirotiro"
-  },
-  "accessibility": {
-    "skipToMain": "Peke ki te ihirangi matua",
-    "logo": "Tohu Trillion AI Tech",
-    "mobileMenu": "Huri te rārangi waea pūkoro",
-    "closeMenu": "Kati te rārangi",
-    "externalLink": "Ka tuwhera i tētahi matapihi hou"
-  },
-  "errors": {
-    "generic": "I puta tētahi hapa. Whakamātau anō.",
-    "network": "Hapa whatunga. Tirohia tō hononga.",
-    "unauthorized": "Me takiuru koe ki te uru ki tēnei whārangi.",
-    "notFound": "Kāore te whārangi i kitea.",
-    "serverError": "Hapa tūmau. Whakamātau anō ā muri ake."
-  },
-  "loading": {
-    "default": "Kei te utaina...",
-    "products": "Kei te utaina ngā hua...",
-    "account": "Kei te utaina te pūkete..."
-  },
-  "empty": {
-    "noResults": "Kāore he hua i kitea.",
-    "comingSoon": "E haere mai ana"
+    "privacyTitle": "Kaupapahere Noho Muna",
+    "aupTitle": "Kaupapahere Whakamahi Whakaaetia"
   }
 }

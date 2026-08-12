@@ -1,9 +1,10 @@
 {
   "meta": {
-    "code": "en",
-    "name": "English",
-    "nativeName": "English",
-    "direction": "ltr"
+    "title": "Trillion AI Tech — Studio · Aotearoa",
+    "description": "An independent studio building apps, games, agent systems and tools from Aotearoa New Zealand."
+  },
+  "accessibility": {
+    "skipToMain": "Skip to main content"
   },
   "nav": {
     "home": "Home",
@@ -13,220 +14,75 @@
     "agents": "Agents",
     "tools": "Tools",
     "software": "Software",
+    "studio": "Studio",
     "about": "About",
     "contact": "Contact",
-    "account": "Account",
     "signIn": "Sign In",
-    "signUp": "Create Account",
-    "signOut": "Sign Out",
-    "myAccount": "My Account"
+    "signUp": "Create Account"
+  },
+  "theme": {
+    "toggle": "Toggle dark/light mode"
   },
   "hero": {
-    "title": "Building the Future of AI & Interactive Technology",
-    "subtitle": "An independent studio crafting apps, games, agent systems, and tools from Aotearoa New Zealand.",
-    "freeBrowsing": "Free to browse",
-    "createAccount": "Create an account when you're ready to use our products and services.",
-    "exploreProducts": "Explore Products"
+    "badge": "In Development",
+    "titlePart1": "Building the Future of",
+    "titlePart2": "AI & Interactive Technology",
+    "subtitle": "An independent studio crafting premium apps, games, autonomous AI agents, and advanced tools from Aotearoa New Zealand.",
+    "exploreProducts": "Explore Products",
+    "exploreStudio": "Our Studio"
+  },
+  "ecosystem": {
+    "title": "What Trillion AI Tech Builds",
+    "description": "We create technology that empowers users and enhances digital experiences through innovation and intelligent design.",
+    "apps": "Applications",
+    "appsDesc": "Advanced software for productivity and creativity",
+    "games": "Games",
+    "gamesDesc": "Interactive experiences with innovative gameplay",
+    "agents": "AI Agents",
+    "agentsDesc": "Autonomous systems for complex workflows",
+    "tools": "Tools",
+    "toolsDesc": "Developer utilities and productivity enhancers",
+    "software": "Software",
+    "softwareDesc": "Enterprise-grade solutions for business",
+    "studio": "Studio",
+    "studioDesc": "Our vision, technology and team"
   },
   "products": {
-    "title": "Products",
-    "description": "Browse our catalogue of applications, games, agents, tools and software. All free to explore.",
-    "note": "Individual products may be free, one-time purchase, or subscription-based. The website itself remains free to browse.",
+    "title": "Current Products",
+    "description": "Our catalogue is being populated with real products as they complete development.",
+    "apps": "Apps",
+    "appsDesc": "Advanced applications currently in development",
+    "games": "Games",
+    "gamesDesc": "Interactive games and experiences in development",
+    "agents": "AI Agents",
+    "agentsDesc": "Autonomous AI systems being developed",
     "comingSoon": "Coming Soon",
-    "available": "Available",
-    "maintenance": "Maintenance",
-    "free": "Free",
-    "paid": "Paid",
-    "openApp": "Open App",
-    "viewDetails": "View Details",
-    "platform": "Platform",
-    "noProducts": "No products found in this category.",
-    "search": "Search products...",
-    "categories": {
-      "all": "All",
-      "apps": "Apps",
-      "games": "Games",
-      "agents": "Agents",
-      "tools": "Tools",
-      "software": "Software"
-    }
+    "viewCategory": "View Category",
+    "browseCatalogue": "Browse Full Catalogue"
   },
-  "sections": {
-    "apps": {
-      "title": "Apps",
-      "description": "Interactive applications for productivity, creativity, and entertainment.",
-      "comingSoon": "Apps coming soon"
-    },
-    "games": {
-      "title": "Games",
-      "description": "Engaging games built with modern technology and AI integration.",
-      "comingSoon": "Games coming soon"
-    },
-    "agents": {
-      "title": "AI Agents",
-      "description": "Autonomous AI systems designed to assist with specific tasks and workflows.",
-      "comingSoon": "AI agents coming soon"
-    },
-    "tools": {
-      "title": "Tools",
-      "description": "Utility tools and developer resources to enhance your workflow.",
-      "comingSoon": "Tools coming soon"
-    },
-    "software": {
-      "title": "Software",
-      "description": "Desktop and web-based software solutions for various use cases.",
-      "comingSoon": "Software coming soon"
-    }
-  },
-  "about": {
-    "title": "About",
-    "p1": "Trillion AI Tech is an independent technology studio based in Aotearoa New Zealand.",
-    "p2": "We build applications, games, AI agent systems, tools, and software with a focus on innovation, usability, and modern design principles.",
-    "p3": "Our mission is to create technology that empowers users and enhances their digital experiences. We believe in transparent development, ethical AI practices, and building products that genuinely solve problems.",
-    "notice": "In development · Building the future, one product at a time."
-  },
-  "contact": {
-    "title": "Contact",
-    "description": "Get in touch with Trillion AI Tech using the appropriate channel below.",
-    "generalEnquiries": "General Enquiries",
-    "generalDesc": "For general questions and information.",
-    "support": "Product & Technical Support",
-    "supportDesc": "For support with products and applications.",
-    "privacy": "Privacy",
-    "privacyDesc": "For privacy-related enquiries.",
-    "security": "Security",
-    "securityDesc": "To report security vulnerabilities.",
-    "note": "Note: We're currently configuring our email systems. If you don't receive a response within 48 hours, please try again.",
-    "location": "Aotearoa New Zealand"
+  "tech": {
+    "title": "Technology & Capabilities",
+    "description": "Our technical foundation combines cutting-edge AI with robust engineering principles.",
+    "ai": "Artificial Intelligence",
+    "aiDesc": "Advanced AI systems and autonomous agents",
+    "engineering": "Software Engineering",
+    "engineeringDesc": "Robust, scalable software architecture",
+    "infrastructure": "Global Infrastructure",
+    "infrastructureDesc": "Cloud-native deployment and scalability",
+    "security": "Security First",
+    "securityDesc": "Built-in security and privacy by design"
   },
   "footer": {
     "tagline": "Building the future of AI & interactive technology.",
-    "navigation": "Navigation",
-    "legal": "Legal",
-    "information": "Information",
-    "security": "Security",
-    "free": "Free to browse",
-    "noAccount": "No account required",
     "nz": "Aotearoa New Zealand",
-    "copyright": " © 2026 Trillion AI Tech. All rights reserved.",
-    "legalNotice": "Legal documents are placeholders requiring human/NZ legal review."
-  },
-  "auth": {
-    "login": {
-      "title": "Sign In",
-      "email": "Email address",
-      "password": "Password",
-      "forgotPassword": "Forgot password?",
-      "submit": "Sign In",
-      "noAccount": "Don't have an account?",
-      "createAccount": "Create one",
-      "error": "Invalid email or password.",
-      "loading": "Signing you in...",
-      "success": "Welcome back!"
-    },
-    "register": {
-      "title": "Create Account",
-      "firstName": "First name",
-      "lastName": "Last name",
-      "email": "Email address",
-      "password": "Password",
-      "confirmPassword": "Confirm password",
-      "language": "Preferred language",
-      "country": "Country/Region",
-      "marketingConsent": "Send me occasional news, product updates, offers and announcements from Trillion AI Tech.",
-      "termsAcceptance": "I agree to the",
-      "terms": "Terms of Service",
-      "and": "and",
-      "privacy": "Privacy Policy",
-      "submit": "Create Account",
-      "hasAccount": "Already have an account?",
-      "signIn": "Sign in",
-      "errorEmailExists": "An account with this email already exists.",
-      "errorWeakPassword": "Password must be at least 8 characters.",
-      "errorPasswordsMismatch": "Passwords do not match.",
-      "errorTermsRequired": "You must accept the Terms and Privacy Policy.",
-      "loading": "Creating your account...",
-      "success": "Account created. Please check your email to verify your address."
-    },
-    "account": {
-      "title": "My Account",
-      "profile": "Profile",
-      "security": "Security",
-      "myProducts": "My Products",
-      "firstName": "First name",
-      "lastName": "Last name",
-      "displayName": "Display name",
-      "email": "Email",
-      "language": "Preferred language",
-      "country": "Country/Region",
-      "memberSince": "Member since",
-      "saveChanges": "Save Changes",
-      "changePassword": "Change Password",
-      "currentPassword": "Current password",
-      "newPassword": "New password",
-      "confirmNewPassword": "Confirm new password",
-      "updatePassword": "Update Password",
-      "marketingPreferences": "Marketing Preferences",
-      "marketingOptIn": "I want to receive news, product updates, offers and announcements from Trillion AI Tech.",
-      "lastUpdated": "Last updated",
-      "noProducts": "You don't have any products yet. Explore the Trillion AI Tech catalogue to see what's coming.",
-      "deleteAccount": "Delete Account",
-      "deleteAccountWarning": "This action cannot be undone. All your data will be permanently deleted.",
-      "deleteAccountConfirm": "Type DELETE to confirm",
-      "deleteAccountSubmit": "Delete My Account",
-      "loading": "Saving changes...",
-      "success": "Changes saved successfully.",
-      "error": "Failed to save changes. Please try again."
-    },
-    "validation": {
-      "required": "This field is required.",
-      "invalidEmail": "Please enter a valid email address.",
-      "passwordTooShort": "Password must be at least 8 characters.",
-      "passwordsMismatch": "Passwords do not match.",
-      "firstNameRequired": "First name is required.",
-      "lastNameRequired": "Last name is required."
-    }
+    "navigation": "Navigation",
+    "company": "Company",
+    "legal": "Legal",
+    "copyright": "&copy; 2026 Trillion AI Tech. All rights reserved."
   },
   "legal": {
     "termsTitle": "Terms of Service",
     "privacyTitle": "Privacy Policy",
-    "aupTitle": "Acceptable Use Policy",
-    "version": "Version",
-    "status": "Status",
-    "effectiveDate": "Effective date",
-    "placeholder": "Placeholder — requires human/NZ legal review before commercial launch.",
-    "notice": "This document is a structural placeholder only. It does not constitute legal advice and must be reviewed and updated by a qualified person familiar with New Zealand law and any other applicable jurisdictions before being relied upon."
-  },
-  "theme": {
-    "toggle": "Toggle dark/light mode",
-    "light": "Light mode",
-    "dark": "Dark mode"
-  },
-  "language": {
-    "select": "Select language",
-    "detect": "Detect from browser"
-  },
-  "accessibility": {
-    "skipToMain": "Skip to main content",
-    "logo": "Trillion AI Tech Logo",
-    "mobileMenu": "Toggle mobile menu",
-    "closeMenu": "Close menu",
-    "externalLink": "Opens in new window"
-  },
-  "errors": {
-    "generic": "Something went wrong. Please try again.",
-    "network": "Network error. Please check your connection.",
-    "unauthorized": "You must be signed in to access this page.",
-    "notFound": "Page not found.",
-    "serverError": "Server error. Please try again later."
-  },
-  "loading": {
-    "default": "Loading...",
-    "products": "Loading products...",
-    "account": "Loading account..."
-  },
-  "empty": {
-    "noResults": "No results found.",
-    "comingSoon": "Coming soon"
+    "aupTitle": "Acceptable Use Policy"
   }
 }

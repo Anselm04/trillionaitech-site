@@ -1,232 +1,88 @@
 {
   "meta": {
-    "code": "es",
-    "name": "Españłłł",
-    "nativeName": "Españłłł",
-    "direction": "ltr"
+    "title": "Trillion AI Tech — Studio · Aotearoa",
+    "description": "Un estudio independiente que crea aplicaciones, juegos, sistemas de agentes y herramientas desde Aotearoa Nueva Zelanda."
+  },
+  "accessibility": {
+    "skipToMain": "Saltar al contenido principal"
   },
   "nav": {
     "home": "Inicio",
     "products": "Productos",
     "apps": "Aplicaciones",
     "games": "Juegos",
-    "agents": "Agentes",
+    "agents": "Agentes IA",
     "tools": "Herramientas",
     "software": "Software",
+    "studio": "Studio",
     "about": "Acerca de",
     "contact": "Contacto",
-    "account": "Cuenta",
-    "signIn": "Iniciar sesión",
-    "signUp": "Crear cuenta",
-    "signOut": "Cerrar sesión",
-    "myAccount": "Mi cuenta"
-  },
-  "hero": {
-    "title": "Construyendo el Futuro de la IA y la Tecnología Interactiva",
-    "subtitle": "Un estudio independiente que crea aplicaciones, juegos, sistemas de agentes y herramientas desde Aotearoa Nueva Zelanda.",
-    "freeBrowsing": "Navegaciñłłłn gratuita",
-    "createAccount": "Crea una cuenta cuando estñłłłs listo para usar nuestros productos y servicios.",
-    "exploreProducts": "Explorar Productos"
-  },
-  "products": {
-    "title": "Productos",
-    "description": "Explora nuestro catñłłłlogo de aplicaciones, juegos, agentes, herramientas y software. Todo gratuito para explorar.",
-    "note": "Los productos individuales pueden ser gratuitos, de compra ñŸnica o basados en suscripciñłłłn. El sitio web en sñłłł permanece gratuito para navegar.",
-    "comingSoon": "Prñłłłximamente",
-    "available": "Disponible",
-    "maintenance": "Mantenimiento",
-    "free": "Gratis",
-    "paid": "De pago",
-    "openApp": "Abrir aplicaciñłłłn",
-    "viewDetails": "Ver detalles",
-    "platform": "Plataforma",
-    "noProducts": "No se encontraron productos en esta categorñłłła.",
-    "search": "Buscar productos...",
-    "categories": {
-      "all": "Todos",
-      "apps": "Aplicaciones",
-      "games": "Juegos",
-      "agents": "Agentes",
-      "tools": "Herramientas",
-      "software": "Software"
-    }
-  },
-  "sections": {
-    "apps": {
-      "title": "Aplicaciones",
-      "description": "Aplicaciones interactivas para productividad, creatividad y entretenimiento.",
-      "comingSoon": "Aplicaciones próximamente"
-    },
-    "games": {
-      "title": "Juegos",
-      "description": "Juegos atractivos creados con tecnología moderna e integración de IA.",
-      "comingSoon": "Juegos próximamente"
-    },
-    "agents": {
-      "title": "Agentes de IA",
-      "description": "Sistemas autónomos de IA diseñados para ayudar con tareas y flujos de trabajo específicos.",
-      "comingSoon": "Agentes de IA próximamente"
-    },
-    "tools": {
-      "title": "Herramientas",
-      "description": "Herramientas útiles y recursos para desarrolladores para mejorar tu flujo de trabajo.",
-      "comingSoon": "Herramientas próximamente"
-    },
-    "software": {
-      "title": "Software",
-      "description": "Soluciones de software de escritorio y web para diversos casos de uso.",
-      "comingSoon": "Software próximamente"
-    }
-  },
-  "about": {
-    "title": "Acerca de",
-    "p1": "Trillion AI Tech es un estudio tecnológico independiente con sede en Aotearoa Nueva Zelanda.",
-    "p2": "Creamos aplicaciones, juegos, sistemas de agentes de IA, herramientas y software con un enfoque en la innovación, la usabilidad y los principios de diseño moderno.",
-    "p3": "Nuestra misión es crear tecnología que empodere a los usuarios y mejore sus experiencias digitales. Creemos en el desarrollo transparente, las prácticas éticas de IA y en crear productos que resuelvan problemas de manera genuina.",
-    "notice": "En desarrollo · Construyendo el futuro, un producto a la vez."
-  },
-  "contact": {
-    "title": "Contacto",
-    "description": "Ponte en contacto con Trillion AI Tech utilizando el canal apropiado a continuación.",
-    "generalEnquiries": "Consultas generales",
-    "generalDesc": "Para preguntas e información general.",
-    "support": "Soporte de productos y técnico",
-    "supportDesc": "Para soporte con productos y aplicaciones.",
-    "privacy": "Privacidad",
-    "privacyDesc": "Para consultas relacionadas con la privacidad.",
-    "security": "Seguridad",
-    "securityDesc": "Para informar vulnerabilidades de seguridad.",
-    "note": "Nota: Actualmente estamos configurando nuestros sistemas de correo electrónico. Si no recibes una respuesta en 48 horas, inténtalo de nuevo.",
-    "location": "Aotearoa Nueva Zelanda"
-  },
-  "footer": {
-    "tagline": "Construyendo el futuro de la IA y la tecnología interactiva.",
-    "navigation": "Navegaciñłłłn",
-    "legal": "Legal",
-    "information": "Informaciñłłłn",
-    "security": "Seguridad",
-    "free": "Navegaciñłłłn gratuita",
-    "noAccount": "No se requiere cuenta",
-    "nz": "Aotearoa Nueva Zelanda",
-    "copyright": " © 2026 Trillion AI Tech. Todos los derechos reservados.",
-    "legalNotice": "Los documentos legales son marcadores de posición que requieren revisión legal humana/NZ."
-  },
-  "auth": {
-    "login": {
-      "title": "Iniciar sesión",
-      "email": "Correo electrónico",
-      "password": "Contraseñłłła",
-      "forgotPassword": "ñł¿°Olvidaste tu contraseña?",
-      "submit": "Iniciar sesión",
-      "noAccount": "ñł¿°No tienes una cuenta?",
-      "createAccount": "Crea una",
-      "error": "Correo electrónico o contraseña no válidos.",
-      "loading": "Iniciando sesión...",
-      "success": "ñł¡°Bienvenido de nuevo!"
-    },
-    "register": {
-      "title": "Crear cuenta",
-      "firstName": "Nombre",
-      "lastName": "Apellido",
-      "email": "Correo electrónico",
-      "password": "Contraseñłłła",
-      "confirmPassword": "Confirmar contraseña",
-      "language": "Idioma preferido",
-      "country": "Pañłłłs/Regiñłłłn",
-      "marketingConsent": "Envñłłłame ocasionalmente noticias, actualizaciones de productos, ofertas y anuncios de Trillion AI Tech.",
-      "termsAcceptance": "Acepto los",
-      "terms": "Tñłłłrminos de servicio",
-      "and": "y la",
-      "privacy": "Polñłłłtica de privacidad",
-      "submit": "Crear cuenta",
-      "hasAccount": "ñł¿°Ya tienes una cuenta?",
-      "signIn": "Iniciar sesión",
-      "errorEmailExists": "Ya existe una cuenta con este correo electrónico.",
-      "errorWeakPassword": "La contraseña debe tener al menos 8 caracteres.",
-      "errorPasswordsMismatch": "Las contraseñłłłas no coinciden.",
-      "errorTermsRequired": "Debes aceptar los Términos y la Política de privacidad.",
-      "loading": "Creando tu cuenta...",
-      "success": "Cuenta creada. Por favor, verifica tu correo electrónico para verificar tu dirección."
-    },
-    "account": {
-      "title": "Mi cuenta",
-      "profile": "Perfil",
-      "security": "Seguridad",
-      "myProducts": "Mis productos",
-      "firstName": "Nombre",
-      "lastName": "Apellido",
-      "displayName": "Nombre para mostrar",
-      "email": "Correo electrónico",
-      "language": "Idioma preferido",
-      "country": "Pañłłłs/Regiñłłłn",
-      "memberSince": "Miembro desde",
-      "saveChanges": "Guardar cambios",
-      "changePassword": "Cambiar contraseña",
-      "currentPassword": "Contraseñłłła actual",
-      "newPassword": "Nueva contraseña",
-      "confirmNewPassword": "Confirmar nueva contraseña",
-      "updatePassword": "Actualizar contraseña",
-      "marketingPreferences": "Preferencias de marketing",
-      "marketingOptIn": "Quiero recibir noticias, actualizaciones de productos, ofertas y anuncios de Trillion AI Tech.",
-      "lastUpdated": "ñł£°ltima actualizaciñłłłn",
-      "noProducts": "Añłłłn no tienes ningún producto. Explora el catálogo de Trillion AI Tech para ver lo que viene.",
-      "deleteAccount": "Eliminar cuenta",
-      "deleteAccountWarning": "Esta acción no se puede deshacer. Todos tus datos se eliminarñłłłn permanentemente.",
-      "deleteAccountConfirm": "Escribe DELETE para confirmar",
-      "deleteAccountSubmit": "Eliminar mi cuenta",
-      "loading": "Guardando cambios...",
-      "success": "Cambios guardados con éxito.",
-      "error": "No se pudieron guardar los cambios. Por favor, inténtalo de nuevo."
-    },
-    "validation": {
-      "required": "Este campo es obligatorio.",
-      "invalidEmail": "Por favor, introduce una dirección de correo electrónico válida.",
-      "passwordTooShort": "La contraseña debe tener al menos 8 caracteres.",
-      "passwordsMismatch": "Las contraseñłłłas no coinciden.",
-      "firstNameRequired": "El nombre es obligatorio.",
-      "lastNameRequired": "El apellido es obligatorio."
-    }
-  },
-  "legal": {
-    "termsTitle": "Tñłłłrminos de servicio",
-    "privacyTitle": "Polñłłłtica de privacidad",
-    "aupTitle": "Polñłłłtica de uso aceptable",
-    "version": "Versiñłłłn",
-    "status": "Estado",
-    "effectiveDate": "Fecha de vigencia",
-    "placeholder": "Marcador de posición — requiere revisión legal humana/NZ antes del lanzamiento comercial.",
-    "notice": "Este documento es solo un marcador de posición estructural. No constituye asesoramiento legal y debe ser revisado y actualizado por una persona cualificada familiarizada con la ley de Nueva Zelanda y cualquier otra jurisdicciñłłłn aplicable antes de confiar en él."
+    "signIn": "Iniciar Sesíłłn",
+    "signUp": "Crear Cuenta"
   },
   "theme": {
-    "toggle": "Alternar modo oscuro/claro",
-    "light": "Modo claro",
-    "dark": "Modo oscuro"
+    "toggle": "Cambiar modo oscuro/claro"
   },
-  "language": {
-    "select": "Seleccionar idioma",
-    "detect": "Detectar desde el navegador"
+  "hero": {
+    "badge": "En Desarrollo",
+    "titlePart1": "Construyendo el Futuro de la",
+    "titlePart2": "IA y Tecnologíłła Interactiva",
+    "subtitle": "Un estudio independiente que crea aplicaciones, juegos, agentes de IA autśnomos y herramientas avanzadas desde Aotearoa Nueva Zelanda.",
+    "exploreProducts": "Explorar Productos",
+    "exploreStudio": "Nuestro Studio"
   },
-  "accessibility": {
-    "skipToMain": "Saltar al contenido principal",
-    "logo": "Logotipo de Trillion AI Tech",
-    "mobileMenu": "Alternar menú móvil",
-    "closeMenu": "Cerrar menú",
-    "externalLink": "Se abre en una nueva ventana"
+  "ecosystem": {
+    "title": "Qué«« Construye Trillion AI Tech",
+    "description": "Creamos tecnologíłła que empodera a los usuarios y mejora sus experiencias digitales a travé««s de la innovacíłłn y el diseño inteligente.",
+    "apps": "Aplicaciones",
+    "appsDesc": "Software avanzado para productividad y creatividad",
+    "games": "Juegos",
+    "gamesDesc": "Experiencias interactivas con jugabilidad innovadora",
+    "agents": "Agentes IA",
+    "agentsDesc": "Sistemas autśnomos para flujos de trabajo complejos",
+    "tools": "Herramientas",
+    "toolsDesc": "Utilidades para desarrolladores y mejoras de productividad",
+    "software": "Software",
+    "softwareDesc": "Soluciones de nivel empresarial para negocios",
+    "studio": "Studio",
+    "studioDesc": "Nuestra visíłłn, tecnologíłła y equipo"
   },
-  "errors": {
-    "generic": "Algo salió mal. Por favor, inténtalo de nuevo.",
-    "network": "Error de red. Por favor, verifica tu conexión.",
-    "unauthorized": "Debes iniciar sesión para acceder a esta página.",
-    "notFound": "Pñłłłgina no encontrada.",
-    "serverError": "Error del servidor. Por favor, inténtalo más tarde."
+  "products": {
+    "title": "Productos Actuales",
+    "description": "Nuestro catá««logo se está «llenando con productos reales a medida que completan su desarrollo.",
+    "apps": "Aplicaciones",
+    "appsDesc": "Aplicaciones avanzadas actualmente en desarrollo",
+    "games": "Juegos",
+    "gamesDesc": "Juegos interactivos y experiencias en desarrollo",
+    "agents": "Agentes IA",
+    "agentsDesc": "Sistemas de IA autśnomos en desarrollo",
+    "comingSoon": "Prśximamente",
+    "viewCategory": "Ver Categoríłła",
+    "browseCatalogue": "Ver Catá««logo Completo"
   },
-  "loading": {
-    "default": "Cargando...",
-    "products": "Cargando productos...",
-    "account": "Cargando cuenta..."
+  "tech": {
+    "title": "Tecnologíłła y Capacidades",
+    "description": "Nuestra base té<cnica combina IA de vanguardia con principios de ingenieríłła sślidos.",
+    "ai": "Inteligencia Artificial",
+    "aiDesc": "Sistemas de IA avanzados y agentes autśnomos",
+    "engineering": "Ingenieríłła de Software",
+    "engineeringDesc": "Arquitectura de software sślida y escalable",
+    "infrastructure": "Infraestructura Global",
+    "infrastructureDesc": "Despliegue en la nube y escalabilidad",
+    "security": "Seguridad Primero",
+    "securityDesc": "Seguridad y privacidad integradas por diseño"
   },
-  "empty": {
-    "noResults": "No se encontraron resultados.",
-    "comingSoon": "Prñłłłximamente"
+  "footer": {
+    "tagline": "Construyendo el futuro de la IA y la tecnologíłła interactiva.",
+    "nz": "Aotearoa Nueva Zelanda",
+    "navigation": "Navegacíłłn",
+    "company": "Empresa",
+    "legal": "Legal",
+    "copyright": "&copy; 2026 Trillion AI Tech. Todos los derechos reservados."
+  },
+  "legal": {
+    "termsTitle": "Té««rminos de Servicio",
+    "privacyTitle": "Políłłtica de Privacidad",
+    "aupTitle": "Políłłtica de Uso Aceptable"
   }
 }
