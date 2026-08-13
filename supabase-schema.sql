@@ -1,132 +1,101 @@
--- Trillion AI Tech — Supabase Database Schema
--- This schema defines the user profiles and marketing consent tables.
--- IMPORTANT: This must be run in your Supabase project's SQL editor.
+-- Trillion AI Tech - Supabase Database Schema
+-- This file contains all database migrations for the authentication system
 
--- Enable UUID extension
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-
--- User profiles table
--- Stores additional user information beyond Supabase auth.users
-CREATE TABLE IF NOT EXISTS public.user_profiles (
-    id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
-    first_name TEXT NOT NULL,
-    last_name TEXT NOT NULL,
-    display_name TEXT,
-    email TEXT NOT NULL,
-    preferred_language TEXT DEFAULT 'en' NOT NULL,
-    country TEXT,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW()) NOT NULL,
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW()) NOT NULL
+-- Marketing preferences table
+CREATE TABLE IF NOT EXISTS public.marketing_preferences (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id uuid NOT NULL UNIQUE REFERENCES auth.users(id) ON DELETE CASCADE,
+  email_marketing_opt_in boolean NOT NULL DEFAULT false,
+  consented_at timestamptz,
+  updated_at timestamptz NOT NULL DEFAULT now()
 );
 
--- Marketing consent table
--- Stores marketing communication preferences separately from authentication
-CREATE TABLE IF NOT EXISTS public.marketing_consent (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-    marketing_consent BOOLEAN DEFAULT FALSE NOT NULL,
-    marketing_consent_given_at TIMESTAMP WITH TIME ZONE,
-    marketing_consent_withdrawn_at TIMESTAMP WITH TIME ZONE,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW()) NOT NULL,
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW()) NOT NULL,
-    UNIQUE(user_id)
+-- User roles table
+CREATE TABLE IF NOT EXISTS public.user_roles (
+  user_id uuid PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+  role text NOT NULL DEFAULT 'user' CHECK (role IN ('user','admin')),
+  created_at timestamptz NOT NULL DEFAULT now()
 );
+
+-- Analytics events table
+CREATE TABLE IF NOT EXISTS public.analytics_events (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id uuid REFERENCES auth.users(id) ON DELETE SET NULL,
+  event_name text NOT NULL CHECK (event_name IN ('page_view','sign_up','sign_in','sign_out','marketing_opt_in','marketing_opt_out','navigation_interaction','product_interaction')),
+  page_path text NOT NULL CHECK (char_length(page_path) <= 500),
+  metadata jsonb NOT NULL DEFAULT '{}'::jsonb,
+  created_at timestamptz NOT NULL DEFAULT now()
+);
+
+-- Add updated_at to profiles if not exists
+ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS updated_at timestamptz NOT NULL DEFAULT now();
 
 -- Enable Row Level Security
-ALTER TABLE public.user_profiles ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.marketing_consent ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.marketing_preferences ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.user_roles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.analytics_events ENABLE ROW LEVEL SECURITY;
 
--- RLS Policies for user_profiles
--- Users can only view and update their own profile
-CREATE POLICY "Users can view own profile"
-    ON public.user_profiles
-    FOR SELECT
-    USING (auth.uid() = id);
+-- Admin check function
+CREATE OR REPLACE FUNCTION public.is_trillion_admin()
+RETURNS boolean LANGUAGE sql STABLE SECURITY DEFINER SET search_path = public AS $$
+  SELECT EXISTS (SELECT 1 FROM public.user_roles WHERE user_id = auth.uid() AND role = 'admin');
+$$;
 
-CREATE POLICY "Users can update own profile"
-    ON public.user_profiles
-    FOR UPDATE
-    USING (auth.uid() = id);
-
-CREATE POLICY "Users can insert own profile"
-    ON public.user_profiles
-    FOR INSERT
-    WITH CHECK (auth.uid() = id);
-
--- RLS Policies for marketing_consent
--- Users can only view and update their own marketing consent
-CREATE POLICY "Users can view own marketing consent"
-    ON public.marketing_consent
-    FOR SELECT
-    USING (auth.uid() = user_id);
-
-CREATE POLICY "Users can update own marketing consent"
-    ON public.marketing_consent
-    FOR UPDATE
-    USING (auth.uid() = user_id);
-
-CREATE POLICY "Users can insert own marketing consent"
-    ON public.marketing_consent
-    FOR INSERT
-    WITH CHECK (auth.uid() = user_id);
-
--- Function to automatically create user profile on signup
-CREATE OR REPLACE FUNCTION public.handle_new_user()
-RETURNS TRIGGER AS $$
+-- Handle new user creation
+CREATE OR REPLACE FUNCTION public.handle_trillion_auth_user()
+RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER SET search_path = public AS $$
 BEGIN
-    -- Create user profile
-    INSERT INTO public.user_profiles (id, email, first_name, last_name, preferred_language)
-    VALUES (
-        NEW.id,
-        NEW.email,
-        NEW.raw_user_meta_data->>'first_name',
-        NEW.raw_user_meta_data->>'last_name',
-        COALESCE(NEW.raw_user_meta_data->>'preferred_language', 'en')
-    );
-    
-    -- Create marketing consent record (default: no consent)
-    INSERT INTO public.marketing_consent (user_id, marketing_consent)
-    VALUES (NEW.id, FALSE);
-    
-    RETURN NEW;
+  INSERT INTO public.profiles (id, email, display_name, created_at, updated_at)
+  VALUES (NEW.id, NEW.email, COALESCE(NULLIF(trim(COALESCE(NEW.raw_user_meta_data->>'display_name','')), ''), split_part(NEW.email, '@', 1)), now(), now())
+  ON CONFLICT (id) DO UPDATE SET email = EXCLUDED.email, updated_at = now();
+  INSERT INTO public.marketing_preferences (user_id, email_marketing_opt_in, consented_at, updated_at)
+  VALUES (NEW.id, COALESCE((NEW.raw_user_meta_data->>'marketing_opt_in')::boolean, false), CASE WHEN COALESCE((NEW.raw_user_meta_data->>'marketing_opt_in')::boolean, false) THEN now() ELSE NULL END, now())
+  ON CONFLICT (user_id) DO NOTHING;
+  INSERT INTO public.user_roles (user_id, role)
+  VALUES (NEW.id, CASE WHEN lower(NEW.email) = 'anselm.perkins@gmail.com' THEN 'admin' ELSE 'user' END)
+  ON CONFLICT (user_id) DO NOTHING;
+  RETURN NEW;
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+$$;
 
--- Trigger to call handle_new_user on signup
-DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
-CREATE TRIGGER on_auth_user_created
-    AFTER INSERT ON auth.users
-    FOR EACH ROW
-    EXECUTE FUNCTION public.handle_new_user();
+-- Trigger for new user creation
+DROP TRIGGER IF EXISTS on_trillion_auth_user_created ON auth.users;
+CREATE TRIGGER on_trillion_auth_user_created AFTER INSERT ON auth.users FOR EACH ROW EXECUTE FUNCTION public.handle_trillion_auth_user();
 
--- Function to update updated_at timestamp
-CREATE OR REPLACE FUNCTION public.handle_updated_at()
-RETURNS TRIGGER AS $$
+-- Updated_at trigger
+CREATE OR REPLACE FUNCTION public.set_trillion_updated_at()
+RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER SET search_path = public AS $$
+BEGIN NEW.updated_at = now(); RETURN NEW; END;
+$$;
+DROP TRIGGER IF EXISTS profiles_set_updated_at ON public.profiles;
+CREATE TRIGGER profiles_set_updated_at BEFORE UPDATE ON public.profiles FOR EACH ROW EXECUTE FUNCTION public.set_trillion_updated_at();
+DROP TRIGGER IF EXISTS marketing_preferences_set_updated_at ON public.marketing_preferences;
+CREATE TRIGGER marketing_preferences_set_updated_at BEFORE UPDATE ON public.marketing_preferences FOR EACH ROW EXECUTE FUNCTION public.set_trillion_updated_at();
+
+-- RLS Policies
+CREATE POLICY "profiles_select_own" ON public.profiles FOR SELECT TO authenticated USING (id = auth.uid());
+CREATE POLICY "profiles_update_own" ON public.profiles FOR UPDATE TO authenticated USING (id = auth.uid()) WITH CHECK (id = auth.uid());
+CREATE POLICY "marketing_select_own" ON public.marketing_preferences FOR SELECT TO authenticated USING (user_id = auth.uid());
+CREATE POLICY "marketing_update_own" ON public.marketing_preferences FOR UPDATE TO authenticated USING (user_id = auth.uid()) WITH CHECK (user_id = auth.uid());
+CREATE POLICY "analytics_insert_safe" ON public.analytics_events FOR INSERT TO anon, authenticated WITH CHECK (user_id IS NULL OR user_id = auth.uid());
+CREATE POLICY "analytics_select_admin" ON public.analytics_events FOR SELECT TO authenticated USING (public.is_trillion_admin());
+CREATE POLICY "roles_select_own" ON public.user_roles FOR SELECT TO authenticated USING (user_id = auth.uid());
+
+-- Admin stats function
+CREATE OR REPLACE FUNCTION public.get_trillion_admin_stats()
+RETURNS jsonb LANGUAGE plpgsql STABLE SECURITY DEFINER SET search_path = public AS $$
 BEGIN
-    NEW.updated_at = TIMEZONE('utc', NOW());
-    RETURN NEW;
+  IF NOT public.is_trillion_admin() THEN RAISE EXCEPTION 'not authorized'; END IF;
+  RETURN jsonb_build_object(
+    'total_users', (SELECT count(*) FROM public.profiles),
+    'new_users_30_days', (SELECT count(*) FROM public.profiles WHERE created_at >= now() - interval '30 days'),
+    'marketing_opt_ins', (SELECT count(*) FROM public.marketing_preferences WHERE email_marketing_opt_in),
+    'marketing_opt_outs', (SELECT count(*) FROM public.marketing_preferences WHERE NOT email_marketing_opt_in),
+    'page_views', (SELECT count(*) FROM public.analytics_events WHERE event_name = 'page_view'),
+    'sign_ins', (SELECT count(*) FROM public.analytics_events WHERE event_name = 'sign_in'),
+    'sign_ups', (SELECT count(*) FROM public.analytics_events WHERE event_name = 'sign_up')
+  );
 END;
-$$ LANGUAGE plpgsql;
-
--- Triggers for updated_at
-CREATE TRIGGER user_profiles_updated_at
-    BEFORE UPDATE ON public.user_profiles
-    FOR EACH ROW
-    EXECUTE FUNCTION public.handle_updated_at();
-
-CREATE TRIGGER marketing_consent_updated_at
-    BEFORE UPDATE ON public.marketing_consent
-    FOR EACH ROW
-    EXECUTE FUNCTION public.handle_updated_at();
-
--- Indexes for performance
-CREATE INDEX IF NOT EXISTS idx_user_profiles_email ON public.user_profiles(email);
-CREATE INDEX IF NOT EXISTS idx_marketing_consent_user_id ON public.marketing_consent(user_id);
-CREATE INDEX IF NOT EXISTS idx_marketing_consent_consent ON public.marketing_consent(marketing_consent);
-
--- Grant necessary permissions
-GRANT USAGE ON SCHEMA public TO anon, authenticated;
-GRANT ALL ON public.user_profiles TO authenticated;
-GRANT ALL ON public.marketing_consent TO authenticated;
-GRANT EXECUTE ON FUNCTION public.handle_new_user TO authenticated;
-GRANT EXECUTE ON FUNCTION public.handle_updated_at TO authenticated;
+$$;
+REVOKE ALL ON FUNCTION public.get_trillion_admin_stats() FROM PUBLIC;
+GRANT EXECUTE ON FUNCTION public.get_trillion_admin_stats() TO authenticated;
