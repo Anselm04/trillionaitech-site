@@ -55,6 +55,7 @@
       </nav>
 
       <div class="header-actions">
+        <a href="/register.html" class="btn btn-secondary btn-sm" data-i18n="nav.signUp">Sign Up</a>
         <select id="language-selector" class="language-selector" aria-label="Select language">
           <option value="en">English</option>
           <option value="mi">Te Reo Māori</option>
@@ -78,6 +79,45 @@
       </button>
     </div>
   </header>
+
+  <!-- Mobile Secondary Controls Bar -->
+  <div class="mobile-controls-bar" id="mobile-controls-bar">
+    <div class="container mobile-controls-content">
+      <a href="/register.html" class="mobile-control-btn mobile-control-signup" data-i18n="nav.signUp">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="8.5" cy="7" r="4"/>
+          <line x1="20" y1="8" x2="20" y2="14"/>
+          <line x1="23" y1="11" x2="17" y2="11"/>
+        </svg>
+        <span>Sign Up</span>
+      </a>
+      <select id="language-selector-mobile" class="mobile-control-btn mobile-control-language" aria-label="Select language">
+        <option value="en">English</option>
+        <option value="mi">Te Reo Māori</option>
+        <option value="es">Españłłł</option>
+        <option value="fr">Françłłųis</option>
+      </select>
+      <button class="mobile-control-btn mobile-control-theme" id="theme-toggle-mobile" aria-label="Toggle dark/light mode">
+        <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="5"/>
+          <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+        </svg>
+        <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+        <span class="theme-label">Theme</span>
+      </button>
+      <button class="mobile-control-btn mobile-control-menu" id="mobile-menu-toggle-secondary" aria-label="Open menu">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+        <span>Menu</span>
+      </button>
+    </div>
+  </div>
 
   <div class="mobile-menu" id="mobile-menu">
     <nav class="mobile-nav" aria-label="Mobile navigation">
@@ -369,5 +409,6 @@
   <script src="js/i18n.js"></script>
   <script src="js/theme.js"></script>
   <script src="js/mobile-menu.js"></script>
+  <script src="js/mobile-controls.js"></script>
 </body>
 </html>
