@@ -17,7 +17,7 @@
     "studio": "Studio",
     "about": "Acerca de",
     "contact": "Contacto",
-    "signIn": "Iniciar Sesíłłn",
+    "signIn": "Iniciar Ses\u00f3n",
     "signUp": "Crear Cuenta"
   },
   "theme": {
@@ -26,63 +26,63 @@
   "hero": {
     "badge": "En Desarrollo",
     "titlePart1": "Construyendo el Futuro de la",
-    "titlePart2": "IA y Tecnologíłła Interactiva",
-    "subtitle": "Un estudio independiente que crea aplicaciones, juegos, agentes de IA autśnomos y herramientas avanzadas desde Aotearoa Nueva Zelanda.",
+    "titlePart2": "IA y Tecnolog\u00eda Interactiva",
+    "subtitle": "Un estudio independiente que crea aplicaciones, juegos, agentes de IA aut\u00f3nomos y herramientas avanzadas desde Aotearoa Nueva Zelanda.",
     "exploreProducts": "Explorar Productos",
     "exploreStudio": "Nuestro Studio"
   },
   "ecosystem": {
-    "title": "Qué«« Construye Trillion AI Tech",
-    "description": "Creamos tecnologíłła que empodera a los usuarios y mejora sus experiencias digitales a travé««s de la innovacíłłn y el diseño inteligente.",
+    "title": "Qu\u00e9 Construye Trillion AI Tech",
+    "description": "Creamos tecnolog\u00eda que empodera a los usuarios y mejora sus experiencias digitales a trav\u00e9s de la innovaci\u00f3n y el dise\u00f1o inteligente.",
     "apps": "Aplicaciones",
     "appsDesc": "Software avanzado para productividad y creatividad",
     "games": "Juegos",
     "gamesDesc": "Experiencias interactivas con jugabilidad innovadora",
     "agents": "Agentes IA",
-    "agentsDesc": "Sistemas autśnomos para flujos de trabajo complejos",
+    "agentsDesc": "Sistemas aut\u00f3nomos para flujos de trabajo complejos",
     "tools": "Herramientas",
     "toolsDesc": "Utilidades para desarrolladores y mejoras de productividad",
     "software": "Software",
     "softwareDesc": "Soluciones de nivel empresarial para negocios",
     "studio": "Studio",
-    "studioDesc": "Nuestra visíłłn, tecnologíłła y equipo"
+    "studioDesc": "Nuestra visi\u00f3n, tecnolog\u00eda y equipo"
   },
   "products": {
     "title": "Productos Actuales",
-    "description": "Nuestro catá««logo se está «llenando con productos reales a medida que completan su desarrollo.",
+    "description": "Nuestro cat\u00e1logo se est\u00e1 llenando con productos reales a medida que completan su desarrollo.",
     "apps": "Aplicaciones",
     "appsDesc": "Aplicaciones avanzadas actualmente en desarrollo",
     "games": "Juegos",
     "gamesDesc": "Juegos interactivos y experiencias en desarrollo",
     "agents": "Agentes IA",
-    "agentsDesc": "Sistemas de IA autśnomos en desarrollo",
-    "comingSoon": "Prśximamente",
-    "viewCategory": "Ver Categoríłła",
-    "browseCatalogue": "Ver Catá««logo Completo"
+    "agentsDesc": "Sistemas de IA aut\u00f3nomos en desarrollo",
+    "comingSoon": "Pr\u00f3ximamente",
+    "viewCategory": "Ver Categor\u00eda",
+    "browseCatalogue": "Ver Cat\u00e1logo Completo"
   },
   "tech": {
-    "title": "Tecnologíłła y Capacidades",
-    "description": "Nuestra base té<cnica combina IA de vanguardia con principios de ingenieríłła sślidos.",
+    "title": "Tecnolog\u00eda y Capacidades",
+    "description": "Nuestra base t\u00e9cnica combina IA de vanguardia con principios de ingenier\u00eda s\u00f3lidos.",
     "ai": "Inteligencia Artificial",
-    "aiDesc": "Sistemas de IA avanzados y agentes autśnomos",
-    "engineering": "Ingenieríłła de Software",
-    "engineeringDesc": "Arquitectura de software sślida y escalable",
+    "aiDesc": "Sistemas de IA avanzados y agentes aut\u00f3nomos",
+    "engineering": "Ingenier\u00eda de Software",
+    "engineeringDesc": "Arquitectura de software s\u00f3lida y escalable",
     "infrastructure": "Infraestructura Global",
     "infrastructureDesc": "Despliegue en la nube y escalabilidad",
     "security": "Seguridad Primero",
-    "securityDesc": "Seguridad y privacidad integradas por diseño"
+    "securityDesc": "Seguridad y privacidad integradas por dise\u00f1o"
   },
   "footer": {
-    "tagline": "Construyendo el futuro de la IA y la tecnologíłła interactiva.",
+    "tagline": "Construyendo el futuro de la IA y la tecnolog\u00eda interactiva.",
     "nz": "Aotearoa Nueva Zelanda",
-    "navigation": "Navegacíłłn",
+    "navigation": "Navegaci\u00f3n",
     "company": "Empresa",
     "legal": "Legal",
     "copyright": "&copy; 2026 Trillion AI Tech. Todos los derechos reservados."
   },
   "legal": {
-    "termsTitle": "Té««rminos de Servicio",
-    "privacyTitle": "Políłłtica de Privacidad",
-    "aupTitle": "Políłłtica de Uso Aceptable"
+    "termsTitle": "T\u00e9rminos de Servicio",
+    "privacyTitle": "Pol\u00edtica de Privacidad",
+    "aupTitle": "Pol\u00edtica de Uso Aceptable"
   }
 }
