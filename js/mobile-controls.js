@@ -35,15 +35,4 @@
       themeToggle.click();
     });
   }
-
-  // Sync menu toggles
-  const menuToggle = document.getElementById('mobile-menu-toggle');
-  const menuToggleSecondary = document.getElementById('mobile-menu-toggle-secondary');
-
-  if (menuToggle && menuToggleSecondary) {
-    // Sync click events
-    menuToggleSecondary.addEventListener('click', function() {
-      menuToggle.click();
-    });
-  }
 })();
