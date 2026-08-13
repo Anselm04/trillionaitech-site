@@ -509,6 +509,11 @@ body::after {
   font-size: 1rem;
 }
 
+.btn-sm {
+  padding: 0.5rem 1rem;
+  font-size: 0.75rem;
+}
+
 /* Hero */
 .hero {
   padding: 5rem 0;
@@ -900,6 +905,99 @@ body::after {
   font-size: 0.875rem;
 }
 
+/* Mobile Controls Bar */
+.mobile-controls-bar {
+  display: none;
+  background: var(--color-bg-secondary);
+  border-bottom: 1px solid var(--color-border);
+  padding: 0.75rem 0;
+  position: sticky;
+  top: 73px;
+  z-index: 99;
+}
+
+.mobile-controls-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 0.5rem;
+  padding: 0 1rem;
+}
+
+.mobile-control-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  padding: 0.5rem 0.75rem;
+  border: none;
+  border-radius: 0.5rem;
+  background: var(--color-card-bg);
+  color: var(--color-text-primary);
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-decoration: none;
+  min-width: 60px;
+}
+
+.mobile-control-btn svg {
+  flex-shrink: 0;
+}
+
+.mobile-control-btn span {
+  font-size: 0.625rem;
+  white-space: nowrap;
+}
+
+.mobile-control-signup {
+  background: rgba(249, 115, 22, 0.15);
+  border: 1px solid rgba(249, 115, 22, 0.3);
+  color: #f97316;
+}
+
+.mobile-control-signup:hover {
+  background: rgba(249, 115, 22, 0.25);
+  transform: translateY(-2px);
+}
+
+.mobile-control-language {
+  background: rgba(59, 130, 246, 0.15);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  color: var(--color-text-primary);
+  text-align: center;
+  padding: 0.5rem 0.5rem;
+}
+
+.mobile-control-language:hover {
+  background: rgba(59, 130, 246, 0.25);
+  transform: translateY(-2px);
+}
+
+.mobile-control-theme {
+  background: rgba(139, 92, 246, 0.15);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  color: var(--color-text-primary);
+}
+
+.mobile-control-theme:hover {
+  background: rgba(139, 92, 246, 0.25);
+  transform: translateY(-2px);
+}
+
+.mobile-control-menu {
+  background: rgba(6, 182, 212, 0.15);
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  color: var(--color-text-primary);
+}
+
+.mobile-control-menu:hover {
+  background: rgba(6, 182, 212, 0.25);
+  transform: translateY(-2px);
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .hero {
@@ -965,6 +1063,18 @@ body::after {
   .hamburger::after {
     width: 22px;
     height: 2px;
+  }
+  
+  /* Show mobile controls bar */
+  .mobile-controls-bar {
+    display: block;
+  }
+  
+  /* Hide desktop controls in header on mobile */
+  .header-actions .btn-secondary,
+  .header-actions .language-selector,
+  .header-actions .theme-toggle {
+    display: none;
   }
 }
 
