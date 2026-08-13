@@ -1,6 +1,6 @@
 /**
  * Trillion AI Tech - i18n System
- * FIXED: Properly loads and applies translations
+ * FIXED: Properly loads and applies translations with correct encoding
  */
 
 (function() {
@@ -30,7 +30,8 @@
       if (!response.ok) {
         throw new Error(`Failed to load locale: ${lang}`);
       }
-      return await response.json();
+      const data = await response.json();
+      return data;
     } catch (error) {
       console.error('Error loading locale:', error);
       return {};
@@ -38,6 +39,7 @@
   }
 
   function getNestedValue(obj, path) {
+    if (!obj || !path) return undefined;
     return path.split('.').reduce((current, key) => {
       return current && current[key] !== undefined ? current[key] : undefined;
     }, obj);
@@ -50,9 +52,9 @@
       const key = el.getAttribute('data-i18n');
       const value = getNestedValue(locale, key);
       
-      if (value !== undefined) {
+      if (value !== undefined && value !== null) {
         if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
-          el.placeholder = value;
+          el.value = value;
         } else if (el.tagName === 'META') {
           el.setAttribute('content', value);
         } else {
@@ -77,10 +79,15 @@
       translatePage(currentLocale);
       saveLanguage(lang);
       
-      // Update selector
+      // Update all selectors
       const selector = document.getElementById('language-selector');
+      const selectorMobile = document.getElementById('language-selector-mobile');
+      
       if (selector) {
         selector.value = lang;
+      }
+      if (selectorMobile) {
+        selectorMobile.value = lang;
       }
     }
   }
@@ -89,10 +96,20 @@
     const lang = getPreferredLanguage();
     setLanguage(lang);
 
+    // Setup header selector
     const selector = document.getElementById('language-selector');
     if (selector) {
       selector.value = lang;
       selector.addEventListener('change', (e) => {
+        setLanguage(e.target.value);
+      });
+    }
+
+    // Setup mobile bar selector
+    const selectorMobile = document.getElementById('language-selector-mobile');
+    if (selectorMobile) {
+      selectorMobile.value = lang;
+      selectorMobile.addEventListener('change', (e) => {
         setLanguage(e.target.value);
       });
     }
