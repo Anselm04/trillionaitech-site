@@ -1,7 +1,7 @@
 {
   "meta": {
-    "title": "Trillion AI Tech — Studio · Aotearoa",
-    "description": "Un studio indėpendant crėant des applications, jeux, systèmes d'agents et outils depuis Aotearoa Nouvelle-Zėlande."
+    "title": "Trillion AI Tech \u2014 Studio \u00b7 Aotearoa",
+    "description": "Un studio ind\u00e9pendant cr\u00e9ant des applications, jeux, syst\u00e8mes d'agents et outils depuis Aotearoa Nouvelle-Z\u00e9lande."
   },
   "accessibility": {
     "skipToMain": "Aller au contenu principal"
@@ -15,74 +15,74 @@
     "tools": "Outils",
     "software": "Logiciels",
     "studio": "Studio",
-    "about": "À« propos",
+    "about": "\u00c0 propos",
     "contact": "Contact",
     "signIn": "Se Connecter",
-    "signUp": "Crėer un Compte"
+    "signUp": "Cr\u00e9er un Compte"
   },
   "theme": {
     "toggle": "Basculer mode sombre/clair"
   },
   "hero": {
-    "badge": "En Dėveloppement",
+    "badge": "En D\u00e9veloppement",
     "titlePart1": "Construire l'Avenir de l'",
     "titlePart2": "IA et des Technologies Interactives",
-    "subtitle": "Un studio indėpendant crėant des applications, jeux, agents IA autonomes et outils avancės depuis Aotearoa Nouvelle-Zėlande.",
+    "subtitle": "Un studio ind\u00e9pendant cr\u00e9ant des applications, jeux, agents IA autonomes et outils avanc\u00e9s depuis Aotearoa Nouvelle-Z\u00e9lande.",
     "exploreProducts": "Explorer les Produits",
     "exploreStudio": "Notre Studio"
   },
   "ecosystem": {
-    "title": "Ce que Crėe Trillion AI Tech",
-    "description": "Nous crėons des technologies qui donnent du pouvoir aux utilisateurs et amėliorent leurs expėriences numėriques grâce à l'innovation et à la conception intelligente.",
+    "title": "Ce que Cr\u00e9e Trillion AI Tech",
+    "description": "Nous cr\u00e9ons des technologies qui donnent du pouvoir aux utilisateurs et am\u00e9liorent leurs exp\u00e9riences num\u00e9riques gr\u00e2ce \u00e0 l'innovation et \u00e0 la conception intelligente.",
     "apps": "Applications",
-    "appsDesc": "Logiciels avancės pour productivitė et crėativitė",
+    "appsDesc": "Logiciels avanc\u00e9s pour productivit\u00e9 et cr\u00e9ativit\u00e9",
     "games": "Jeux",
-    "gamesDesc": "Expėriences interactives avec gameplay innovant",
+    "gamesDesc": "Exp\u00e9riences interactives avec gameplay innovant",
     "agents": "Agents IA",
-    "agentsDesc": "Systčmes autonomes pour workflows complexes",
+    "agentsDesc": "Syst\u00e8mes autonomes pour workflows complexes",
     "tools": "Outils",
-    "toolsDesc": "Utilitaires dėveloppeur et ameliorations productivitė",
+    "toolsDesc": "Utilitaires d\u00e9veloppeur et am\u00e9liorations productivit\u00e9",
     "software": "Logiciels",
     "softwareDesc": "Solutions niveau entreprise pour affaires",
     "studio": "Studio",
-    "studioDesc": "Notre vision, technologie et ėquipe"
+    "studioDesc": "Notre vision, technologie et \u00e9quipe"
   },
   "products": {
     "title": "Produits Actuels",
-    "description": "Notre catalogue est rempli de vrais produits au fur et à mesure qu'ils terminent leur dėveloppement.",
+    "description": "Notre catalogue est rempli de vrais produits au fur et \u00e0 mesure qu'ils terminent leur d\u00e9veloppement.",
     "apps": "Applications",
-    "appsDesc": "Applications avancėes actuellement en dėveloppement",
+    "appsDesc": "Applications avanc\u00e9es actuellement en d\u00e9veloppement",
     "games": "Jeux",
-    "gamesDesc": "Jeux interactifs et expėriences en dėveloppement",
+    "gamesDesc": "Jeux interactifs et exp\u00e9riences en d\u00e9veloppement",
     "agents": "Agents IA",
-    "agentsDesc": "Systčmes IA autonomes en dėveloppement",
-    "comingSoon": "Bientśt",
-    "viewCategory": "Voir la Catėgorie",
+    "agentsDesc": "Syst\u00e8mes IA autonomes en d\u00e9veloppement",
+    "comingSoon": "Bient\u00f4t",
+    "viewCategory": "Voir la Cat\u00e9gorie",
     "browseCatalogue": "Parcourir le Catalogue Complet"
   },
   "tech": {
-    "title": "Technologie et Capacitės",
-    "description": "Notre fondation technique combine l'IA de pointe avec des principes d'ingėnierie robustes.",
+    "title": "Technologie et Capacit\u00e9s",
+    "description": "Notre fondation technique combine l'IA de pointe avec des principes d'ing\u00e9nierie robustes.",
     "ai": "Intelligence Artificielle",
-    "aiDesc": "Systčmes IA avancės et agents autonomes",
-    "engineering": "Ingėnierie Logicielle",
-    "engineeringDesc": "Architecture logicielle robuste et ėvolutive",
+    "aiDesc": "Syst\u00e8mes IA avanc\u00e9s et agents autonomes",
+    "engineering": "Ing\u00e9nierie Logicielle",
+    "engineeringDesc": "Architecture logicielle robuste et \u00e9volutive",
     "infrastructure": "Infrastructure Mondiale",
-    "infrastructureDesc": "Dėploiement cloud-native et ėvolutivitė",
-    "security": "Sėcuritė d'Abord",
-    "securityDesc": "Sėcuritė et confidentialitė intėgrėes par conception"
+    "infrastructureDesc": "D\u00e9ploiement cloud-native et \u00e9volutivit\u00e9",
+    "security": "S\u00e9curit\u00e9 d'Abord",
+    "securityDesc": "S\u00e9curit\u00e9 et confidentialit\u00e9 int\u00e9gr\u00e9es par conception"
   },
   "footer": {
     "tagline": "Construire l'avenir de l'IA et des technologies interactives.",
-    "nz": "Aotearoa Nouvelle-Zėlande",
+    "nz": "Aotearoa Nouvelle-Z\u00e9lande",
     "navigation": "Navigation",
     "company": "Entreprise",
     "legal": "Juridique",
-    "copyright": "&copy; 2026 Trillion AI Tech. Tous droits rėservės."
+    "copyright": "&copy; 2026 Trillion AI Tech. Tous droits r\u00e9serv\u00e9s."
   },
   "legal": {
     "termsTitle": "Conditions d'Utilisation",
-    "privacyTitle": "Politique de Confidentialitė",
+    "privacyTitle": "Politique de Confidentialit\u00e9",
     "aupTitle": "Politique d'Utilisation Acceptable"
   }
 }
