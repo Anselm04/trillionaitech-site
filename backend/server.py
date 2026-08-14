@@ -145,6 +145,10 @@ class ResetPassword(BaseModel):
     token: str
     password: str = Field(min_length=8, max_length=128)
 
+class ChangePassword(BaseModel):
+    current_password: str = Field(min_length=1, max_length=128)
+    new_password: str = Field(min_length=8, max_length=128)
+
 class ProductIn(BaseModel):
     slug: str = Field(min_length=2, max_length=80)
     name: str = Field(min_length=1, max_length=120)
@@ -519,10 +523,11 @@ app.add_middleware(
 @app.middleware("http")
 async def security_headers(request: Request, call_next):
     resp = await call_next(request)
-    resp.headers["X-Content-Type-Options"] = "nosniff"
-    resp.headers["X-Frame-Options"] = "DENY"
-    resp.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
-    resp.headers["Permissions-Policy"] = "geolocation=(), microphone=(), camera=()"
+    # setdefault so route handlers can override (e.g. /appforge/preview needs SAMEORIGIN for iframes)
+    resp.headers.setdefault("X-Content-Type-Options", "nosniff")
+    resp.headers.setdefault("X-Frame-Options", "DENY")
+    resp.headers.setdefault("Referrer-Policy", "strict-origin-when-cross-origin")
+    resp.headers.setdefault("Permissions-Policy", "geolocation=(), microphone=(), camera=()")
     return resp
 
 import logging
@@ -658,6 +663,20 @@ async def reset_password(payload: ResetPassword):
     await db.users.update_one({"_id": ObjectId(doc["user_id"])}, {"$set": {"password_hash": hash_password(payload.password)}})
     await db.password_reset_tokens.update_one({"_id": doc["_id"]}, {"$set": {"used": True}})
     await audit(doc["user_id"], "user.reset_password", doc["user_id"])
+    return {"ok": True}
+
+@api.post("/auth/change-password")
+async def change_password(payload: ChangePassword, user: dict = Depends(get_current_user)):
+    doc = await db.users.find_one({"_id": ObjectId(user["id"])})
+    if not doc or not verify_password(payload.current_password, doc["password_hash"]):
+        raise HTTPException(status_code=401, detail="Current password is incorrect")
+    if payload.current_password == payload.new_password:
+        raise HTTPException(status_code=400, detail="New password must differ from current password")
+    await db.users.update_one(
+        {"_id": doc["_id"]},
+        {"$set": {"password_hash": hash_password(payload.new_password)}},
+    )
+    await audit(user["id"], "user.change_password", user["id"])
     return {"ok": True}
 
 # ------------------------------------------------------------

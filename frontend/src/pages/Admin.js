@@ -635,12 +635,12 @@ function AuditAdmin() {
 function SettingsAdmin() {
   const [current, setCurrent] = useState(null);
   const [form, setForm] = useState({});
+  const [testing, setTesting] = useState(null); // 'email' | 'stripe' | null
   const load = () => api.get('/admin/settings').then(r => { setCurrent(r.data); });
   useEffect(() => { load(); }, []);
   const set = (k) => (e) => setForm(f => ({ ...f, [k]: e.target.value }));
   const save = async (e) => {
     e.preventDefault();
-    // Filter out empty strings so we don't overwrite existing values with blanks
     const clean = Object.fromEntries(Object.entries(form).filter(([, v]) => v !== '' && v !== undefined && v !== null));
     if (Object.keys(clean).length === 0) { toast.error('Nothing to save'); return; }
     try {
@@ -649,19 +649,49 @@ function SettingsAdmin() {
       setForm({}); load();
     } catch (er) { toast.error(formatApiError(er)); }
   };
+  const testEmail = async () => {
+    setTesting('email');
+    try {
+      const { data } = await api.post('/admin/test-email');
+      if (data.ok) toast.success(`Test email sent to ${data.sent_to} via ${data.provider}`);
+      else toast.error('Test email failed — check backend logs');
+    } catch (e) { toast.error(formatApiError(e)); }
+    finally { setTesting(null); }
+  };
+  const testStripe = async () => {
+    setTesting('stripe');
+    try {
+      const { data } = await api.post('/admin/test-stripe');
+      if (data.ok) toast.success(`Stripe OK · ${data.mode} · ${data.country} · charges: ${data.charges_enabled ? '✓' : '✗'} · payouts: ${data.payouts_enabled ? '✓' : '✗'}`, { duration: 8000 });
+      else toast.error(`Stripe error: ${data.error}`);
+    } catch (e) { toast.error(formatApiError(e)); }
+    finally { setTesting(null); }
+  };
   return (
     <div>
       <PageTitle title="Settings" blurb="Rotate Stripe keys and email provider on the fly — no restart required." />
       {current && (
-        <div className="border border-border p-6 mb-8" data-testid="settings-current">
-          <div className="overline">Current configuration</div>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4 text-xs">
-            <div><div className="text-muted-foreground">Stripe mode</div><div className={`mt-1 font-mono ${current.stripe_mode === 'live' ? 'text-emerald-400' : 'text-amber-400'}`}>{current.stripe_mode}</div></div>
-            <div><div className="text-muted-foreground">Secret key</div><div className="mt-1 font-mono">{current.stripe_secret_key_masked || '—'}</div></div>
-            <div><div className="text-muted-foreground">Webhook secret</div><div className="mt-1 font-mono">{current.stripe_webhook_secret_masked || '—'}</div></div>
-            <div><div className="text-muted-foreground">Tax mode</div><div className="mt-1 font-mono">{current.stripe_tax_mode || 'full'}</div></div>
-            <div><div className="text-muted-foreground">Email provider</div><div className="mt-1 font-mono">{current.email_provider || 'console'}</div></div>
-            <div><div className="text-muted-foreground">Email from</div><div className="mt-1 font-mono">{current.email_from || '—'}</div></div>
+        <div className="border border-border p-6 mb-6" data-testid="settings-current">
+          <div className="flex items-start justify-between gap-4 flex-wrap">
+            <div>
+              <div className="overline">Current configuration</div>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4 text-xs">
+                <div><div className="text-muted-foreground">Stripe mode</div><div className={`mt-1 font-mono ${current.stripe_mode === 'live' ? 'text-emerald-400' : 'text-amber-400'}`}>{current.stripe_mode}</div></div>
+                <div><div className="text-muted-foreground">Secret key</div><div className="mt-1 font-mono">{current.stripe_secret_key_masked || '—'}</div></div>
+                <div><div className="text-muted-foreground">Webhook secret</div><div className="mt-1 font-mono">{current.stripe_webhook_secret_masked || '—'}</div></div>
+                <div><div className="text-muted-foreground">Tax mode</div><div className="mt-1 font-mono">{current.stripe_tax_mode || 'full'}</div></div>
+                <div><div className="text-muted-foreground">Email provider</div><div className="mt-1 font-mono">{current.email_provider || 'console'}</div></div>
+                <div><div className="text-muted-foreground">Email from</div><div className="mt-1 font-mono">{current.email_from || '—'}</div></div>
+              </div>
+            </div>
+            <div className="flex flex-col gap-2">
+              <button onClick={testStripe} disabled={testing === 'stripe'} className="btn-ghost text-xs !py-1.5" data-testid="settings-test-stripe">
+                {testing === 'stripe' ? 'Testing…' : 'Test Stripe connection'}
+              </button>
+              <button onClick={testEmail} disabled={testing === 'email'} className="btn-ghost text-xs !py-1.5" data-testid="settings-test-email">
+                {testing === 'email' ? 'Sending…' : 'Send test email to me'}
+              </button>
+            </div>
           </div>
         </div>
       )}

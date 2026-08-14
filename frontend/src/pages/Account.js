@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { api, formatApiError } from '../lib/api';
 import { toast } from 'sonner';
+import ChangePassword from '../components/ChangePassword';
 
 export default function Account() {
   const { user, logout } = useAuth();
@@ -101,6 +102,8 @@ export default function Account() {
           <button className="btn-primary" disabled={redeeming || code.length < 4} data-testid="redeem-code-submit">{redeeming ? 'Redeeming…' : 'Redeem'}</button>
         </form>
       </div>
+
+      <ChangePassword />
 
       <div className="mt-10 flex gap-3">
         {user.role === 'admin' && <Link to="/admin" className="btn-primary" data-testid="account-admin-link">Open admin</Link>}

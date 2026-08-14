@@ -1,0 +1,49 @@
+{
+  "summary": "Session-4 verification of 4 new features on top of session-3. Backend: 19/19 pytest tests PASS. Frontend: change-password E2E PASS (admin password restored to Trillion@Master2026), admin Settings test-stripe + test-email buttons PASS, AppForge workbench tabs+editor+save+refine UI PASS. CRITICAL frontend regression: AppForge Preview iframe cannot render because global security_headers middleware in server.py:527 forces X-Frame-Options: DENY on every response, clobbering the SAMEORIGIN header set inside the /appforge/preview/{gen_id} handler. Secondary issue: preview endpoint requires Authorization header via get_current_user, but iframes never send Authorization; the src URL cannot authenticate → 401 for logged-in users too when hit from the iframe context (browser only sends cookies, not custom Auth headers).",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "POST /api/appforge/refine", "issue": "Response body does not include the parent_gen_id / 'parent' field even though it is stored in the DB. Spec says 'Response includes parent link' — currently only download_url is returned. Frontend/API consumers cannot show parent linkage without extra GET."},
+      {"endpoint": "middleware security_headers (server.py:523)", "issue": "Global X-Frame-Options: DENY overrides per-response headers. Route-level overrides (e.g. /appforge/preview → SAMEORIGIN) are lost. Middleware should only set the header if the route did not already."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "AppForge ProjectWorkbench (Preview tab)", "issue": "iframe fails with 'Refused to display ... X-Frame-Options: DENY'. Root cause is global security_headers middleware (backend). Fix: in server.py middleware, do NOT overwrite X-Frame-Options if the response already has it (`resp.headers.setdefault(...)`). Also the endpoint's CSP is fine, but Cache-Control: no-store is being kept.", "selector": "[data-testid=workbench-preview]", "priority": "HIGH"},
+      {"component": "AppForge ProjectWorkbench (Preview iframe auth)", "issue": "Preview endpoint uses get_current_user which reads Authorization header. iframe src cannot carry an Authorization header (browsers only send cookies to iframes). Even after fixing X-Frame-Options, an unauthenticated iframe request will return 401 and the iframe will still be blank. Fix options: (a) accept a short-lived signed token in the URL query, (b) accept auth from httpOnly cookie, or (c) make preview public-readable behind an unguessable gen_id.", "selector": "[data-testid=workbench-preview]", "priority": "HIGH"}
+    ],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_session4.py",
+    "/app/test_reports/pytest/session4.xml"
+  ],
+  "action_items": [
+    "server.py security_headers middleware: use resp.headers.setdefault('X-Frame-Options','DENY') so /appforge/preview can keep its SAMEORIGIN value; or exempt /appforge/preview by path prefix.",
+    "Redesign /api/appforge/preview/{gen_id} auth so an <iframe src=...> can actually load: add a short-lived signed preview token query param (?t=...) or accept the existing JWT via a cookie in addition to the Authorization header.",
+    "Include parent_gen_id in the POST /api/appforge/refine response body (spec: 'Response includes parent link')."
+  ],
+  "critical_code_review_comments": [
+    "Preview iframe integration is broken end-to-end even though the backend /appforge/preview endpoint itself works (verified 200 + text/html via curl with Authorization header). Two independent bugs stack: (1) middleware clobbers X-Frame-Options; (2) iframe cannot pass Authorization header. Must fix both.",
+    "server.py:672 correctly rejects new==current in change-password; server.py:670-671 uses generic 401 for wrong current password — good.",
+    "admin_endpoints.test_stripe swallows exceptions and returns 200 {ok:false, error:...}. Consider returning 502 on stripe errors so the UI can display distinct failure state; currently a wrong key still returns 200.",
+    "appforge.update_file correctly rejects '..' path traversal and 413s on MAX_FILES overflow. Good.",
+    "appforge.preview endpoint sets Content-Security-Policy with 'default-src unsafe-inline unsafe-eval data: blob: https:' — very permissive but acceptable for demo-only preview.",
+    "AppForge V2 refine correctly denies non-owner (403) and no-access (402); refine stored with parent_gen_id but not returned to caller — minor.",
+    "Ingress capping requests around 60s means AppForge generate/refine hitting Cloudflare-fronted URL will 502 for prompts that exceed ~55s. Backend code has a proper 90s/120s asyncio timeout with 504 response, but the ingress fires first. Consider streaming a heartbeat, or exposing a background-job style API (POST → job_id → poll)."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_session4.py (new — 19 tests for session-4 features)"
+  ],
+  "success_rate": {
+    "backend": "100% (19/19 pass)",
+    "frontend": "88% — change-password + admin Settings + workbench (Files/Editor/Save/Refine UI) all pass. Preview iframe integration broken (see critical bugs)."
+  },
+  "test_credentials": "Master admin: anselm.perkins@gmail.com / Trillion@Master2026 — VERIFIED working after test (password was temporarily changed to TempPass@123, then RESTORED to Trillion@Master2026 at end of test). /app/memory/test_credentials.md remains valid.",
+  "seed_data_creation": "TEST_s4_* fresh customers, several AppForge generations from admin (small landing/refine prompts). All ephemeral.",
+  "retest_needed": true,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Run: `pytest /app/backend/tests/test_session4.py -v` (uses http://localhost:8001 for AppForge generate/refine to sidestep 60s ingress cap; uses REACT_APP_BACKEND_URL for everything else). Admin login response field is `access_token` (not `token`). The workbench Preview iframe is currently broken by 2 stacking bugs — see action_items. When main agent fixes middleware + preview auth, re-run frontend workbench test to confirm the iframe renders the generated index.html.",
+  "rca of the issue": "Symptom: workbench Preview iframe is blank; browser console: 'Refused to display ... in a frame because it set X-Frame-Options to deny'. RCA #1: /app/backend/server.py:523-530 registers a global HTTP middleware that unconditionally sets X-Frame-Options: DENY on every response, running AFTER the endpoint handler. The /appforge/preview endpoint (appforge.py:432) tries to set X-Frame-Options: SAMEORIGIN, but the outer middleware overwrites it. Fix: `resp.headers.setdefault('X-Frame-Options', 'DENY')`. RCA #2: Even after fixing frame headers, the iframe src '/api/appforge/preview/{gen_id}' still fails because it requires Authorization: Bearer <jwt> via Depends(get_current_user), and iframes cannot send Authorization headers (no JS control over subresource requests). Fix: accept auth from either (a) query-string signed token, or (b) a cookie set at login. Verified locally: `curl -H 'Authorization: Bearer <jwt>' /api/appforge/preview/<gen_id>` returns 200 text/html correctly, so the endpoint logic itself is fine."
+}

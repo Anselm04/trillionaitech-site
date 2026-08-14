@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { api, formatApiError, API_BASE } from '../lib/api';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'sonner';
-import { Sparkles, Download, ArrowRight, Check, Zap, Loader2, Package, Code2, Layers } from 'lucide-react';
+import { Sparkles, Download, ArrowRight, Check, Zap, Loader2, Package, Code2, Layers, Eye, Save, Wand2, FileCode2 } from 'lucide-react';
 import { track } from '../lib/analytics';
 
 const TIERS = [
@@ -56,11 +56,12 @@ export default function AppForge() {
     } finally { setGenerating(false); }
   };
 
-  const download = (url, name) => {
-    const a = document.createElement('a');
-    a.href = `${API_BASE}${url}`;
-    a.download = `${name}.zip`;
-    document.body.appendChild(a); a.click(); a.remove();
+  const openFromHistory = async (gen_id) => {
+    try {
+      const { data } = await api.get(`/appforge/generations/${gen_id}`);
+      setResult({ ...data, download_url: `/api/appforge/download/${gen_id}`, file_count: data.files.length });
+      window.scrollTo({ top: document.getElementById('builder').offsetTop - 80, behavior: 'smooth' });
+    } catch (e) { toast.error(formatApiError(e)); }
   };
 
   const isAdmin = user?.role === 'admin';
@@ -81,14 +82,14 @@ export default function AppForge() {
               Describe an app.<br /><span className="text-primary">Get a real one back.</span>
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mt-8 leading-relaxed">
-              AppForge is our AI-native scaffolding engine. Tell it what you want to build — an app, a game, an API, an agent, a landing page — and get downloadable, runnable code in seconds.
+              AppForge is our AI-native scaffolding engine. Tell it what to build — get downloadable, runnable code in seconds. Then refine, edit and preview it right here.
             </p>
             <div className="flex flex-wrap items-center gap-3 mt-10">
               <a href="#builder" className="btn-primary" data-testid="appforge-try">Try the builder <ArrowRight className="w-4 h-4" /></a>
               <a href="#pricing" className="btn-ghost">See pricing</a>
             </div>
             <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-px bg-border border border-border max-w-3xl">
-              {[['6','Project kinds'],['<60s','Time to zip'],['7 days','Free trial'],['0','Cards to try (as admin)']].map(([k,v]) => (
+              {[['6','Project kinds'],['<60s','Time to zip'],['7 days','Free trial'],['0','Cards to try (as admin)']].map(([k, v]) => (
                 <div key={v} className="card-flat p-4"><div className="font-display font-bold text-xl">{k}</div><div className="text-[10px] uppercase tracking-wider text-muted-foreground mt-1">{v}</div></div>
               ))}
             </div>
@@ -150,36 +151,7 @@ export default function AppForge() {
               </form>
             )}
 
-            {result && (
-              <div className="mt-8 border border-primary p-6 md:p-8 animate-fade-up" data-testid="appforge-result">
-                <div className="flex items-start justify-between gap-4 flex-wrap">
-                  <div>
-                    <div className="overline">Generated</div>
-                    <h3 className="font-display font-bold text-3xl mt-2">{result.name}</h3>
-                    <p className="text-muted-foreground mt-2">{result.summary}</p>
-                    <div className="text-xs text-muted-foreground mt-2 font-mono">{result.stack} · {result.file_count} files</div>
-                  </div>
-                  <button onClick={() => download(result.download_url, result.name)} className="btn-primary" data-testid="appforge-download">
-                    <Download className="w-4 h-4" /> Download ZIP
-                  </button>
-                </div>
-                <div className="mt-6 border border-border bg-secondary/40 p-4 max-h-56 overflow-auto">
-                  <div className="text-xs font-mono space-y-1">
-                    {result.files.map(f => (
-                      <div key={f.path} className="flex justify-between text-muted-foreground">
-                        <span>{f.path}</span><span className="opacity-60">{f.size.toLocaleString()} b</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                {result.run_instructions && (
-                  <details className="mt-4">
-                    <summary className="text-sm cursor-pointer text-primary">Run instructions</summary>
-                    <pre className="text-xs mt-2 whitespace-pre-wrap text-muted-foreground">{result.run_instructions}</pre>
-                  </details>
-                )}
-              </div>
-            )}
+            {result && <ProjectWorkbench result={result} setResult={setResult} />}
           </div>
 
           <aside>
@@ -188,13 +160,11 @@ export default function AppForge() {
               <p className="text-sm text-muted-foreground mt-3">Nothing yet. Your generations will appear here.</p>
             ) : (
               <ul className="mt-4 space-y-3" data-testid="appforge-history">
-                {history.slice(0, 8).map(g => (
-                  <li key={g.gen_id} className="border border-border p-3">
+                {history.slice(0, 12).map(g => (
+                  <li key={g.gen_id} className="border border-border p-3 hover:border-primary transition-colors cursor-pointer" onClick={() => openFromHistory(g.gen_id)}>
                     <div className="text-sm font-semibold truncate">{g.name}</div>
                     <div className="text-[10px] text-muted-foreground mt-0.5 font-mono">{g.kind} · {g.file_count} files</div>
-                    <button onClick={() => download(g.download_url, g.name)} className="text-xs text-primary hover:underline mt-2 flex items-center gap-1">
-                      <Download className="w-3 h-3" /> Download
-                    </button>
+                    <div className="text-[10px] text-muted-foreground mt-1">{new Date(g.created_at).toLocaleDateString()}</div>
                   </li>
                 ))}
               </ul>
@@ -203,7 +173,7 @@ export default function AppForge() {
         </div>
       </section>
 
-      {/* What it builds */}
+      {/* Capabilities */}
       <section className="border-y border-border">
         <div className="container-x py-16 md:py-24">
           <div className="overline">Capabilities</div>
@@ -211,11 +181,11 @@ export default function AppForge() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-border border border-border mt-12">
             {[
               { Icon: Zap, t: 'Fast', b: 'From prompt to zip in under a minute. No build servers required.' },
-              { Icon: Code2, t: 'Opinionated', b: 'Elegant, production-shaped code — not TODO stubs.' },
+              { Icon: Code2, t: 'Editable', b: 'Every file is inspectable and editable inside the browser.' },
               { Icon: Package, t: 'Portable', b: 'Downloadable zip you own. Deploy anywhere.' },
               { Icon: Layers, t: 'Multi-kind', b: 'Webapps, landing pages, APIs, games, CLIs, agents.' },
-              { Icon: Sparkles, t: 'AI-native', b: 'Powered by Claude Sonnet 4.6, prompt-tuned for real code.' },
-              { Icon: Check, t: 'Iterable', b: 'Every generation is saved to your account. Refine and re-run.' },
+              { Icon: Wand2, t: 'Refinable', b: 'Ask the AI to change something — iterate as many times as you like.' },
+              { Icon: Eye, t: 'Previewable', b: 'Landing pages, games, and single-file webapps render live in-browser.' },
             ].map(({ Icon, t, b }) => (
               <div key={t} className="card-flat p-6"><Icon className="w-5 h-5 text-primary" /><h3 className="font-display font-bold text-xl mt-4">{t}</h3><p className="text-sm text-muted-foreground mt-2">{b}</p></div>
             ))}
@@ -252,6 +222,170 @@ export default function AppForge() {
           Payments are handled by Stripe. Prices in USD (plus tax where applicable). Cancel anytime from your account.
         </p>
       </section>
+    </div>
+  );
+}
+
+
+/* ==================== WORKBENCH ==================== */
+function ProjectWorkbench({ result, setResult }) {
+  const [tab, setTab] = useState('files'); // files | preview | refine
+  const [activeFile, setActiveFile] = useState(result.files?.[0]?.path || null);
+  const [drafts, setDrafts] = useState({}); // path -> draft content
+  const [saving, setSaving] = useState(null);
+  const [refineText, setRefineText] = useState('');
+  const [refining, setRefining] = useState(false);
+
+  const files = result.files || [];
+  const active = files.find(f => f.path === activeFile);
+  const draftedContent = drafts[activeFile] !== undefined ? drafts[activeFile] : (active?.content || '');
+  const isDirty = active && drafts[activeFile] !== undefined && drafts[activeFile] !== active.content;
+
+  const download = () => {
+    const a = document.createElement('a');
+    a.href = `${API_BASE}${result.download_url}`;
+    a.download = `${result.name}.zip`;
+    document.body.appendChild(a); a.click(); a.remove();
+  };
+
+  const saveFile = async () => {
+    if (!active || !isDirty) return;
+    setSaving(activeFile);
+    try {
+      await api.put(`/appforge/generations/${result.gen_id}/files`, { path: activeFile, content: drafts[activeFile] });
+      // Update result state
+      setResult(r => ({
+        ...r,
+        files: r.files.map(f => f.path === activeFile ? { ...f, content: drafts[activeFile] } : f),
+      }));
+      setDrafts(d => { const c = { ...d }; delete c[activeFile]; return c; });
+      toast.success('Saved');
+    } catch (e) { toast.error(formatApiError(e)); }
+    finally { setSaving(null); }
+  };
+
+  const refine = async () => {
+    if (refineText.trim().length < 4) { toast.error('Describe the change in at least a few words.'); return; }
+    setRefining(true);
+    try {
+      const { data } = await api.post('/appforge/refine', { gen_id: result.gen_id, instructions: refineText.trim() });
+      setResult(data);
+      setActiveFile(data.files?.[0]?.path || null);
+      setDrafts({});
+      setRefineText('');
+      setTab('files');
+      toast.success(`Refined into ${data.name}`);
+    } catch (e) { toast.error(formatApiError(e)); }
+    finally { setRefining(false); }
+  };
+
+  return (
+    <div className="mt-8 border border-primary animate-fade-up" data-testid="appforge-result">
+      <div className="flex items-start justify-between gap-4 flex-wrap p-6 border-b border-border">
+        <div>
+          <div className="overline">Generated</div>
+          <h3 className="font-display font-bold text-3xl mt-2">{result.name}</h3>
+          <p className="text-muted-foreground mt-2 text-sm">{result.summary}</p>
+          <div className="text-xs text-muted-foreground mt-2 font-mono">{result.stack} · {result.file_count || files.length} files</div>
+        </div>
+        <button onClick={download} className="btn-primary" data-testid="appforge-download">
+          <Download className="w-4 h-4" /> Download ZIP
+        </button>
+      </div>
+
+      <div className="flex items-center gap-1 border-b border-border px-4 py-2 overflow-x-auto">
+        {[
+          { key: 'files', label: 'Files', Icon: FileCode2 },
+          { key: 'preview', label: 'Preview', Icon: Eye, disabled: !result.preview_available },
+          { key: 'refine', label: 'Refine with AI', Icon: Wand2 },
+        ].map(t => (
+          <button key={t.key} onClick={() => !t.disabled && setTab(t.key)} disabled={t.disabled}
+            className={`text-xs px-3 py-1.5 rounded-md flex items-center gap-1.5 whitespace-nowrap transition-colors ${tab === t.key ? 'bg-secondary text-foreground' : 'text-muted-foreground hover:text-foreground'} ${t.disabled ? 'opacity-40 cursor-not-allowed' : ''}`}
+            title={t.disabled ? 'Preview unavailable for this project kind' : ''}
+            data-testid={`workbench-tab-${t.key}`}>
+            <t.Icon className="w-3.5 h-3.5" /> {t.label}
+          </button>
+        ))}
+      </div>
+
+      {tab === 'files' && (
+        <div className="grid grid-cols-1 md:grid-cols-[240px_1fr] min-h-[420px]">
+          <ul className="border-r border-border max-h-[600px] overflow-auto" data-testid="workbench-file-list">
+            {files.map(f => (
+              <li key={f.path}>
+                <button onClick={() => setActiveFile(f.path)}
+                  className={`w-full text-left px-4 py-2 text-xs font-mono truncate border-b border-border ${activeFile === f.path ? 'bg-secondary text-foreground' : 'text-muted-foreground hover:bg-secondary/50'} ${drafts[f.path] !== undefined ? 'italic' : ''}`}
+                  data-testid={`workbench-file-${f.path.replace(/[^a-z0-9]/gi, '-')}`}>
+                  {f.path}{drafts[f.path] !== undefined ? ' •' : ''}
+                </button>
+              </li>
+            ))}
+          </ul>
+          <div className="flex flex-col">
+            {active ? (
+              <>
+                <div className="flex items-center justify-between px-4 py-2 border-b border-border text-xs">
+                  <span className="font-mono text-muted-foreground">{active.path}</span>
+                  <button onClick={saveFile} disabled={!isDirty || saving === active.path}
+                    className={`text-xs px-3 py-1 rounded-full border ${isDirty ? 'border-primary text-primary' : 'border-border text-muted-foreground'}`}
+                    data-testid="workbench-save">
+                    <Save className="w-3 h-3 inline mr-1" />{saving === active.path ? 'Saving…' : (isDirty ? 'Save changes' : 'Saved')}
+                  </button>
+                </div>
+                <textarea
+                  value={draftedContent}
+                  onChange={e => setDrafts(d => ({ ...d, [active.path]: e.target.value }))}
+                  className="flex-1 min-h-[400px] w-full bg-secondary/30 border-0 p-4 font-mono text-xs text-foreground outline-none resize-none"
+                  spellCheck={false}
+                  data-testid="workbench-editor"
+                />
+              </>
+            ) : (
+              <div className="p-8 text-muted-foreground text-sm">Select a file to view or edit.</div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {tab === 'preview' && (
+        <div className="p-4">
+          {result.preview_available ? (
+            <iframe
+              key={`${result.gen_id}-${Object.keys(drafts).length}`}
+              src={`${API_BASE}/api/appforge/preview/${result.gen_id}`}
+              title="Preview"
+              sandbox="allow-scripts allow-forms"
+              className="w-full h-[600px] border border-border rounded-md bg-white"
+              data-testid="workbench-preview"
+            />
+          ) : (
+            <div className="p-8 text-muted-foreground text-sm">Live preview isn't available for this project kind. Download and run locally.</div>
+          )}
+          <p className="text-[10px] text-muted-foreground mt-2">Preview reflects the last saved version — save file edits above before reloading.</p>
+        </div>
+      )}
+
+      {tab === 'refine' && (
+        <div className="p-6">
+          <div className="overline flex items-center gap-2"><Wand2 className="w-4 h-4 text-primary" /> Refine with AI</div>
+          <p className="text-sm text-muted-foreground mt-2">Tell AppForge what to change. It will regenerate the project keeping unchanged files intact.</p>
+          <textarea rows={4} maxLength={1000} value={refineText} onChange={e => setRefineText(e.target.value)}
+            placeholder="e.g. Add a dark-mode toggle in the header and a settings modal to change the timer duration."
+            className="w-full mt-4 bg-transparent border border-border rounded-md px-3 py-2.5 outline-none focus:border-primary text-sm"
+            data-testid="workbench-refine-input" />
+          <button onClick={refine} disabled={refining} className="btn-primary mt-3" data-testid="workbench-refine-submit">
+            {refining ? <><Loader2 className="w-4 h-4 animate-spin" /> Refining…</> : <><Sparkles className="w-4 h-4" /> Refine project</>}
+          </button>
+          <p className="text-[10px] text-muted-foreground mt-3">Each refinement is saved as a new generation linked to the parent.</p>
+        </div>
+      )}
+
+      {result.run_instructions && (
+        <details className="p-4 border-t border-border">
+          <summary className="text-sm cursor-pointer text-primary">Run instructions</summary>
+          <pre className="text-xs mt-2 whitespace-pre-wrap text-muted-foreground">{result.run_instructions}</pre>
+        </details>
+      )}
     </div>
   );
 }

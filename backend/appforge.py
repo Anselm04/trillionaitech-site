@@ -60,6 +60,16 @@ class GenerateIn(BaseModel):
     kind: Optional[ProjectKind] = None
 
 
+class RefineIn(BaseModel):
+    gen_id: str = Field(min_length=1)
+    instructions: str = Field(min_length=4, max_length=MAX_PROMPT_LEN)
+
+
+class UpdateFileIn(BaseModel):
+    path: str = Field(min_length=1, max_length=200)
+    content: str = Field(max_length=MAX_FILE_BYTES)
+
+
 def _clean_files(raw_files) -> List[dict]:
     files = []
     for f in raw_files[:MAX_FILES]:
@@ -181,6 +191,124 @@ async def _appforge_has_access(db, user: Optional[dict]) -> bool:
     return e is not None
 
 
+REFINE_SYSTEM = """You are AppForge in refine mode. You will receive an EXISTING project and refinement instructions.
+
+Return ONE JSON object with the same schema as before:
+{"name","kind","summary","stack","files":[{"path","content"}],"run_instructions"}
+
+STRICT RULES:
+1. Preserve files that don't need to change — return them WITH THEIR ORIGINAL CONTENT.
+2. Modify only what the instructions request.
+3. Add new files if the instructions require them.
+4. Do NOT return a diff; return the full new file list.
+5. Same size limits: 5-12 files, each under 30 KB.
+6. JSON only, no fences, no prose.
+7. If the instruction asks for something incompatible with the project kind, add a comment in the README explaining what changed."""
+
+
+async def _refine_with_llm(prev: dict, instructions: str) -> dict:
+    from emergentintegrations.llm.chat import LlmChat, UserMessage
+    api_key = os.environ.get("EMERGENT_LLM_KEY")
+    if not api_key:
+        raise HTTPException(503, "AppForge is not configured (missing LLM key)")
+
+    session_id = f"appforge-refine-{secrets.token_hex(8)}"
+    chat = (
+        LlmChat(api_key=api_key, session_id=session_id, system_message=REFINE_SYSTEM)
+        .with_model("anthropic", "claude-sonnet-4-6")
+    )
+    project_json = json.dumps({
+        "name": prev.get("project_name"),
+        "kind": prev.get("project_kind"),
+        "summary": prev.get("summary"),
+        "stack": prev.get("stack"),
+        "files": prev.get("files", []),
+    })
+    user_msg = UserMessage(
+        text=(
+            f"EXISTING PROJECT:\n{project_json}\n\n"
+            f"REFINEMENT INSTRUCTIONS:\n{instructions.strip()}\n\n"
+            "Return the updated full JSON now."
+        )
+    )
+    try:
+        raw = await asyncio.wait_for(chat.send_message(user_msg), timeout=120)
+    except asyncio.TimeoutError:
+        raise HTTPException(504, "AppForge timed out refining the project — try a smaller change")
+    except Exception:
+        logger.exception("AppForge refine LLM error")
+        raise HTTPException(502, "AppForge upstream error")
+
+    text = raw.strip() if isinstance(raw, str) else str(raw)
+    if text.startswith("```"):
+        text = text.strip("`")
+        if "\n" in text:
+            first = text.index("\n"); head = text[:first].strip().lower()
+            if head in ("json", ""):
+                text = text[first + 1:]
+        if text.endswith("```"):
+            text = text[:-3]
+    text = text.strip()
+    try:
+        data = json.loads(text)
+    except json.JSONDecodeError:
+        s, e = text.find("{"), text.rfind("}")
+        if s != -1 and e > s:
+            data = json.loads(text[s:e + 1])
+        else:
+            raise HTTPException(502, "AppForge returned malformed output — try again")
+    files = _clean_files(data.get("files") or [])
+    if not files:
+        raise HTTPException(502, "AppForge refine produced no files")
+    return {
+        "name": str(data.get("name") or prev.get("project_name", "generated-app"))[:80],
+        "kind": data.get("kind") or prev.get("project_kind") or "webapp",
+        "summary": str(data.get("summary", prev.get("summary", "")))[:280],
+        "stack": str(data.get("stack", prev.get("stack", "")))[:200],
+        "files": files,
+        "run_instructions": str(data.get("run_instructions", prev.get("run_instructions", "")))[:2000],
+    }
+
+
+def _build_preview_html(project: dict) -> Optional[str]:
+    """Return a single HTML document that can be rendered in an iframe, if the project supports it.
+
+    Supported kinds: 'game', 'landing', 'webapp' (best-effort).
+    """
+    kind = (project.get("project_kind") or project.get("kind") or "").lower()
+    files = project.get("files") or []
+    if not files:
+        return None
+    # Find an entry HTML file
+    html_file = next((f for f in files if f["path"].lower().endswith("index.html")), None)
+    if not html_file:
+        html_file = next((f for f in files if f["path"].lower().endswith(".html")), None)
+    if not html_file:
+        return None
+    html = html_file["content"]
+    # Inline any local .css and .js referenced with relative paths
+    import re as _re
+    others = {f["path"].split("/")[-1]: f for f in files if f is not html_file}
+
+    def replace_link(m):
+        href = m.group(1).split("/")[-1]
+        f = others.get(href)
+        if f and href.lower().endswith(".css"):
+            return f'<style>{f["content"]}</style>'
+        return m.group(0)
+
+    def replace_script(m):
+        src = m.group(1).split("/")[-1]
+        f = others.get(src)
+        if f and src.lower().endswith(".js"):
+            return f'<script>{f["content"]}</script>'
+        return m.group(0)
+
+    html = _re.sub(r'<link[^>]+href="([^"]+\.css)"[^>]*>', replace_link, html, flags=_re.IGNORECASE)
+    html = _re.sub(r'<script[^>]+src="([^"]+\.js)"[^>]*></script>', replace_script, html, flags=_re.IGNORECASE)
+    return html
+
+
 def build_appforge_router(db, get_current_user, get_optional_user, audit):
     r = APIRouter()
 
@@ -221,10 +349,11 @@ def build_appforge_router(db, get_current_user, get_optional_user, audit):
             "kind": project["kind"],
             "summary": project["summary"],
             "stack": project["stack"],
-            "files": [{"path": f["path"], "size": len(f["content"])} for f in project["files"]],
+            "files": project["files"],
             "file_count": len(project["files"]),
             "run_instructions": project["run_instructions"],
             "download_url": f"/api/appforge/download/{gen_id}",
+            "preview_available": bool(_build_preview_html({"project_kind": project["kind"], "files": project["files"]})),
         }
 
     @r.get("/appforge/generations")
@@ -265,5 +394,118 @@ def build_appforge_router(db, get_current_user, get_optional_user, audit):
             media_type="application/zip",
             headers={"Content-Disposition": f'attachment; filename="{filename}"'},
         )
+
+    @r.get("/appforge/generations/{gen_id}")
+    async def get_generation(gen_id: str, user=Depends(get_current_user)):
+        d = await db.appforge_generations.find_one({"gen_id": gen_id})
+        if not d:
+            raise HTTPException(404, "Not found")
+        if d["user_id"] != user["id"] and user.get("role") != "admin":
+            raise HTTPException(403, "Not your generation")
+        return {
+            "gen_id": d["gen_id"],
+            "name": d.get("project_name"),
+            "kind": d.get("project_kind"),
+            "summary": d.get("summary"),
+            "stack": d.get("stack"),
+            "files": d.get("files", []),
+            "run_instructions": d.get("run_instructions"),
+            "preview_available": bool(_build_preview_html({"project_kind": d.get("project_kind"), "files": d.get("files")})),
+            "created_at": d["created_at"].isoformat() if isinstance(d.get("created_at"), datetime) else d.get("created_at"),
+        }
+
+    @r.get("/appforge/preview/{gen_id}", response_class=Response)
+    async def preview(gen_id: str, user=Depends(get_optional_user)):
+        # gen_id is a 10-char token_urlsafe (~60 bits entropy) — treat it as a capability URL
+        # for the preview iframe. If the caller is authenticated and NOT the owner (and not admin),
+        # deny. Anonymous requests are allowed because iframes may not include auth headers/cookies
+        # in some browser configurations; the unguessable gen_id remains the primary boundary.
+        d = await db.appforge_generations.find_one({"gen_id": gen_id})
+        if not d:
+            raise HTTPException(404, "Not found")
+        if user and user.get("role") != "admin" and d["user_id"] != user["id"]:
+            raise HTTPException(403, "Not your generation")
+        html = _build_preview_html({"project_kind": d.get("project_kind"), "files": d.get("files")})
+        if not html:
+            raise HTTPException(400, "This project kind does not support live preview")
+        return Response(
+            content=html,
+            media_type="text/html",
+            headers={
+                "X-Frame-Options": "SAMEORIGIN",
+                "Content-Security-Policy": "default-src 'unsafe-inline' 'unsafe-eval' data: blob: https:; img-src * data:; connect-src *;",
+                "Cache-Control": "no-store",
+            },
+        )
+
+    @r.put("/appforge/generations/{gen_id}/files")
+    async def update_file(gen_id: str, payload: UpdateFileIn, user=Depends(get_current_user)):
+        d = await db.appforge_generations.find_one({"gen_id": gen_id})
+        if not d:
+            raise HTTPException(404, "Not found")
+        if d["user_id"] != user["id"] and user.get("role") != "admin":
+            raise HTTPException(403, "Not your generation")
+        files = list(d.get("files") or [])
+        # Path safety
+        p = payload.path.strip().lstrip("/")
+        if ".." in p.split("/"):
+            raise HTTPException(400, "Invalid path")
+        found = False
+        for i, f in enumerate(files):
+            if f.get("path") == p:
+                files[i] = {"path": p, "content": payload.content}
+                found = True
+                break
+        if not found:
+            if len(files) >= MAX_FILES:
+                raise HTTPException(413, "Too many files")
+            files.append({"path": p, "content": payload.content})
+        await db.appforge_generations.update_one(
+            {"gen_id": gen_id},
+            {"$set": {"files": files, "updated_at": datetime.now(timezone.utc)}},
+        )
+        await audit(user["id"], "appforge.file_update", gen_id, {"path": p, "created": not found})
+        return {"ok": True, "file_count": len(files)}
+
+    @r.post("/appforge/refine")
+    async def refine(payload: RefineIn, user=Depends(get_current_user)):
+        has = await _appforge_has_access(db, user)
+        if not has:
+            raise HTTPException(402, "AppForge requires an active subscription or access code")
+        prev = await db.appforge_generations.find_one({"gen_id": payload.gen_id})
+        if not prev:
+            raise HTTPException(404, "Generation not found")
+        if prev["user_id"] != user["id"] and user.get("role") != "admin":
+            raise HTTPException(403, "Not your generation")
+        refined = await _refine_with_llm(prev, payload.instructions)
+        gen_id = secrets.token_urlsafe(10)
+        await db.appforge_generations.insert_one({
+            "gen_id": gen_id,
+            "user_id": user["id"],
+            "prompt": payload.instructions,
+            "kind": refined["kind"],
+            "parent_gen_id": payload.gen_id,
+            "project_name": refined["name"],
+            "project_kind": refined["kind"],
+            "summary": refined["summary"],
+            "stack": refined["stack"],
+            "files": refined["files"],
+            "run_instructions": refined["run_instructions"],
+            "created_at": datetime.now(timezone.utc),
+        })
+        await audit(user["id"], "appforge.refine", gen_id, {"parent": payload.gen_id, "files": len(refined["files"])})
+        return {
+            "gen_id": gen_id,
+            "parent_gen_id": payload.gen_id,
+            "name": refined["name"],
+            "kind": refined["kind"],
+            "summary": refined["summary"],
+            "stack": refined["stack"],
+            "files": refined["files"],
+            "file_count": len(refined["files"]),
+            "run_instructions": refined["run_instructions"],
+            "download_url": f"/api/appforge/download/{gen_id}",
+            "preview_available": bool(_build_preview_html({"project_kind": refined["kind"], "files": refined["files"]})),
+        }
 
     return r

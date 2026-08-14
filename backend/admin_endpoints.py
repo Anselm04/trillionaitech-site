@@ -285,6 +285,42 @@ def build_admin_router(db, require_admin, audit):
         await audit(user["id"], "settings.update", "singleton", {"keys": list(data.keys())})
         return {"ok": True}
 
+    # ---------------- Diagnostics ----------------
+    @r.post("/admin/test-email")
+    async def test_email(user=Depends(require_admin)):
+        from email_service import send_email, render_email, _provider
+        target = user["email"]
+        html = render_email(
+            heading="Email is working",
+            body_html=f"This is a test email from your Trillion AI Tech admin panel — via <strong>{_provider()}</strong> provider. If you can read this in a real inbox, your email delivery is fully wired up.",
+        )
+        ok = send_email(target, "Trillion AI Tech — test email", html, "Email is working.")
+        return {"ok": ok, "provider": _provider(), "sent_to": target}
+
+    @r.post("/admin/test-stripe")
+    async def test_stripe(user=Depends(require_admin)):
+        import os
+        import stripe as stripe_sdk
+        key = os.environ.get("STRIPE_SECRET_KEY")
+        if not key:
+            return {"ok": False, "error": "No STRIPE_SECRET_KEY configured"}
+        try:
+            stripe_sdk.api_key = key
+            acct = stripe_sdk.Account.retrieve()
+            return {
+                "ok": True,
+                "mode": "live" if key.startswith("sk_live_") else "test",
+                "account_id": acct.id,
+                "country": acct.country,
+                "charges_enabled": acct.charges_enabled,
+                "payouts_enabled": acct.payouts_enabled,
+                "business_profile": {
+                    "name": acct.business_profile.name if acct.business_profile else None,
+                },
+            }
+        except Exception as e:
+            return {"ok": False, "error": str(e)[:200]}
+
     return r
 
 

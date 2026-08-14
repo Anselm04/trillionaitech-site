@@ -210,3 +210,39 @@ Sidebar-based layout with:
 - `/app/frontend/src/context/I18nContext.js` — 7-language dictionary + provider
 - `/app/frontend/src/pages/AppForge.js` — hero + builder + pricing
 - `/app/frontend/src/pages/Admin.js` — rewrote as sidebar dashboard with 11 sections
+
+## Iteration 4 (Jan 2026) — Change Password, Test Diagnostics, AppForge V2 Workbench
+
+### 1. Change Password
+- `POST /api/auth/change-password` — requires current password + new password (min 8, must differ)
+- New `ChangePassword` component on `/account` page below Redeem code
+- Audit logged as `user.change_password`
+
+### 2. Admin diagnostics
+- `POST /api/admin/test-email` — sends a test email to admin's own address using the currently configured provider
+- `POST /api/admin/test-stripe` — retrieves Stripe account details (mode, country, charges_enabled, payouts_enabled) — verified working with the provisioned NZ Stripe account
+- Both buttons in Admin → Settings, next to the current-config panel
+
+### 3. AppForge V2 Workbench (biggest addition)
+On successful generation OR clicking a history item, the result panel becomes a full workbench with three tabs:
+- **Files** — sidebar file list + in-browser textarea editor per file. Dirty indicator, Save button per file (`PUT /api/appforge/generations/{gen_id}/files`).
+- **Preview** — iframe rendering a single-file HTML version of the project. Backend endpoint `/api/appforge/preview/{gen_id}` inlines local .css/.js and returns text/html with `X-Frame-Options: SAMEORIGIN` + permissive CSP. Available for `landing`, `game`, and single-file `webapp` kinds.
+- **Refine with AI** — text input + Refine button calls `POST /api/appforge/refine` which sends the previous project + instructions to Claude Sonnet 4.6 and returns a new generation linked via `parent_gen_id`.
+
+### 4. Preview infrastructure fixes
+- Global `security_headers` middleware now uses `setdefault` so route-level `X-Frame-Options: SAMEORIGIN` on preview survives
+- Preview endpoint uses `get_optional_user` and treats the 60-bit unguessable `gen_id` as a capability URL (owner check when authenticated) — allows iframe rendering without needing Authorization headers
+- Refine response now includes `parent_gen_id` and `preview_available` for linkage
+
+### Testing (iteration_4)
+- Backend: 19/19 pytest passed
+- Frontend: 100% after middleware/preview fixes
+
+### Files added / modified
+- Added: `/app/frontend/src/components/ChangePassword.js`
+- Modified: `/app/backend/server.py` (change-password endpoint + middleware setdefault)
+- Modified: `/app/backend/admin_endpoints.py` (test-email, test-stripe)
+- Modified: `/app/backend/appforge.py` (refine, update_file, get_generation, preview, _build_preview_html, RefineIn/UpdateFileIn models)
+- Modified: `/app/frontend/src/pages/AppForge.js` (ProjectWorkbench component)
+- Modified: `/app/frontend/src/pages/Admin.js` (SettingsAdmin test buttons)
+- Modified: `/app/frontend/src/pages/Account.js` (ChangePassword included)
