@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { ArrowUpRight, ExternalLink, Play, Check, Sparkles, ChevronLeft } from 'lucide-react';
+import { ArrowUpRight, ExternalLink, Play, Check, Sparkles, ChevronLeft, CreditCard } from 'lucide-react';
 import { api, formatApiError } from '../lib/api';
 import { CATEGORY_META, STATUS_META, formatPrice } from '../lib/utils';
 import { toast } from 'sonner';
+import { track } from '../lib/analytics';
 
 export default function ProductDetail() {
   const { slug } = useParams();
@@ -11,10 +12,14 @@ export default function ProductDetail() {
   const [err, setErr] = useState(null);
   const [email, setEmail] = useState('');
   const [joined, setJoined] = useState(false);
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
 
   useEffect(() => {
     setP(null); setErr(null); setJoined(false);
-    api.get(`/products/${slug}`).then(r => setP(r.data)).catch(e => setErr(e?.response?.status === 404 ? '404' : 'Failed to load product'));
+    api.get(`/products/${slug}`).then(r => {
+      setP(r.data);
+      track('product_view', { slug: r.data.slug, category: r.data.category, status: r.data.status });
+    }).catch(e => setErr(e?.response?.status === 404 ? '404' : 'Failed to load product'));
   }, [slug]);
 
   useEffect(() => {
@@ -44,9 +49,25 @@ export default function ProductDetail() {
       await api.post('/waitlist', { email, product_slug: p.slug, source: 'product_page' });
       setJoined(true);
       setEmail('');
+      track('waitlist_join', { slug: p.slug });
       toast.success("You're on the list. We'll email you when it's ready.");
     } catch (er) {
       toast.error(formatApiError(er));
+    }
+  };
+
+  const startCheckout = async () => {
+    setCheckoutLoading(true);
+    try {
+      track('checkout_start', { slug: p.slug, billing: p.billing_type });
+      const { data } = await api.post('/payments/checkout', {
+        product_slug: p.slug,
+        origin_url: window.location.origin,
+      });
+      window.location.href = data.checkout_url;
+    } catch (er) {
+      toast.error(formatApiError(er));
+      setCheckoutLoading(false);
     }
   };
 
@@ -87,9 +108,10 @@ export default function ProductDetail() {
                   <ExternalLink className="w-4 h-4" /> Docs
                 </a>
               )}
-              {p.status !== 'coming-soon' && p.billing_type !== 'free' && !p.external_url && (
-                <button className="btn-primary" disabled data-testid="product-purchase">
-                  {p.billing_type === 'one-time' ? 'Buy' : 'Subscribe'} · payments coming soon
+              {p.status !== 'coming-soon' && p.billing_type && p.billing_type !== 'free' && (
+                <button onClick={startCheckout} disabled={checkoutLoading} className="btn-primary" data-testid="product-purchase">
+                  <CreditCard className="w-4 h-4" />
+                  {checkoutLoading ? 'Redirecting…' : (p.billing_type === 'one-time' ? `Buy — ${formatPrice(p)}` : `Subscribe — ${formatPrice(p)}`)}
                 </button>
               )}
             </div>

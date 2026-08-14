@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import { api, formatApiError } from '../lib/api';
+import { track } from '../lib/analytics';
 
 const AuthContext = createContext(null);
 
@@ -23,12 +24,14 @@ export function AuthProvider({ children }) {
   const login = async (email, password) => {
     const { data } = await api.post('/auth/login', { email, password });
     setUser({ id: data.id, email: data.email, name: data.name, role: data.role });
+    track('login', { role: data.role });
     return data;
   };
 
   const register = async (name, email, password) => {
     const { data } = await api.post('/auth/register', { name, email, password });
     setUser({ id: data.id, email: data.email, name: data.name, role: data.role });
+    track('signup', {});
     return data;
   };
 

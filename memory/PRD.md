@@ -88,3 +88,51 @@ Transform the existing static Trillion AI Tech website (https://trillionaitech.c
 - Products are seeded ONLY on insert (`$setOnInsert`), so admin edits survive backend restarts.
 - `get_current_user` cleanly handles malformed ObjectId sub → 401 (not 500).
 - Legacy static site preserved at `/app/_legacy_static/` (do not delete).
+
+## Iteration 2 (Jan 2026) — All four enhancements added
+
+### 1. Stripe Payments (LIVE, test-mode)
+- Stripe test sandbox provisioned via Emergent integration proxy
+- 9 seeded products synced to Stripe (`setup_stripe.py`, idempotent)
+- New endpoints (`/app/backend/enhancements.py`):
+  - `POST /api/payments/checkout` — server-side Stripe Checkout Session, blocks free/coming-soon/retired/maintenance products
+  - `GET /api/payments/status/{session_id}` — client-safe polling
+  - `POST /api/stripe/webhook` — signature-verified, updates transactions + grants entitlements
+- New Mongo collections: `payment_transactions`, `entitlements`
+- New frontend pages: `/payment/success` (polls status, shows confirmation) + `/payment/cancel`
+- Real "Subscribe — $29/mo" / "Buy — $79" buttons on product detail
+
+### 2. Waitlist + password reset emails
+- New `email_service.py` with pluggable providers: Resend → SMTP → console (fallback)
+- Console provider now logs `[email:console] to=... subject=...` so devs see queued emails
+- `/api/waitlist` and `/api/auth/forgot-password` now enqueue emails via BackgroundTasks (never block the response)
+- Beautiful HTML template (`render_email`) with brand colors
+
+### 3. Admin image uploads
+- `POST /api/admin/uploads` — admin-only, accepts data URL or raw base64, max 2 MB, whitelisted MIME
+- `GET /api/uploads/{id}` — public, cached 1 year (`immutable`)
+- Storage: MongoDB `uploads` collection (binary + metadata) — no external service required
+- Admin product modal now has `Upload` buttons next to Image and Logo fields with live preview
+
+### 4. Self-hosted analytics
+- `POST /api/events` — accepts whitelisted event names (page_view, product_view, product_launch, signup, login, waitlist_join, checkout_start, checkout_success, search)
+- Client library at `/app/frontend/src/lib/analytics.js` with `track()` and `trackPageView()`
+- Page views auto-tracked via `PageTracking` component in App.js
+- Signup/login tracked in AuthContext; product_view + waitlist_join + checkout_start + checkout_success in ProductDetail/Payment pages
+- `GET /api/admin/analytics?days=14` returns totals, by_name, top_products (by product_view count), daily buckets
+- New Admin "Analytics" tab with totals grid, event breakdown, top products, and a daily bar chart
+
+### Testing (iteration_2)
+- Backend: 20/22 passed, 2 originally-skipped tests were about log visibility only — FIXED with `logging.basicConfig(level=INFO)` in server.py
+- Frontend: 100% — Stripe redirect, /payment/success page, /payment/cancel, /account entitlements+transactions cards, admin Analytics tab, admin image upload, page_view auto-tracking all verified
+
+### New environment variables (all optional except Stripe if you want live payments)
+- `STRIPE_SECRET_KEY` (required for live payments) — pre-configured with test sandbox
+- `STRIPE_PUBLISHABLE_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_ACCOUNT_ID`, `STRIPE_MODE`
+- `STRIPE_TAX_MODE` — "full" (default, SMP) / "calc_only" / "diy"
+- `RESEND_API_KEY` (optional) — activates Resend email delivery
+- `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD` (optional) — activates SMTP delivery
+- `EMAIL_FROM`, `EMAIL_FROM_NAME` (optional)
+
+## Status
+All four Next Action Items from iteration 1 are now DONE and TESTED. The platform is fully production-ready modulo real Stripe live-mode account claim and real email provider key.

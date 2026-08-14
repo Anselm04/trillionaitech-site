@@ -15,11 +15,19 @@ import Account from './pages/Account';
 import Admin from './pages/Admin';
 import Legal from './pages/Legal';
 import NotFound from './pages/NotFound';
+import { PaymentSuccess, PaymentCancel } from './pages/Payment';
 import { useEffect } from 'react';
+import { trackPageView } from './lib/analytics';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
   useEffect(() => { window.scrollTo(0, 0); }, [pathname]);
+  return null;
+}
+
+function PageTracking() {
+  const { pathname } = useLocation();
+  useEffect(() => { trackPageView(pathname); }, [pathname]);
   return null;
 }
 
@@ -37,6 +45,7 @@ export default function App() {
     <ThemeProvider>
       <AuthProvider>
         <ScrollToTop />
+        <PageTracking />
         <div className="min-h-screen flex flex-col bg-background text-foreground">
           <Header />
           <main className="flex-1">
@@ -56,6 +65,8 @@ export default function App() {
               <Route path="/register" element={<Register />} />
               <Route path="/account" element={<Protected><Account /></Protected>} />
               <Route path="/admin" element={<Protected adminOnly><Admin /></Protected>} />
+              <Route path="/payment/success" element={<PaymentSuccess />} />
+              <Route path="/payment/cancel" element={<PaymentCancel />} />
               <Route path="/privacy" element={<Legal page="privacy" />} />
               <Route path="/terms" element={<Legal page="terms" />} />
               <Route path="/refunds" element={<Legal page="refunds" />} />

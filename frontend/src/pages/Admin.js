@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { api, formatApiError } from '../lib/api';
+import { api, formatApiError, API_BASE } from '../lib/api';
 import { toast } from 'sonner';
-import { Pencil, Trash2, Plus, X } from 'lucide-react';
+import { Pencil, Trash2, Plus, X, Upload } from 'lucide-react';
 
 const EMPTY = {
   slug: '', name: '', short_description: '', description: '',
@@ -29,16 +29,18 @@ export default function Admin() {
   const [stats, setStats] = useState(null);
   const [products, setProducts] = useState(null);
   const [audit, setAudit] = useState([]);
+  const [analytics, setAnalytics] = useState(null);
   const [editing, setEditing] = useState(null); // { mode: 'new'|'edit', data }
   const [tab, setTab] = useState('products');
 
   const loadAll = async () => {
-    const [s, p, a] = await Promise.all([
+    const [s, p, a, an] = await Promise.all([
       api.get('/admin/stats'),
       api.get('/products', { params: { limit: 200 } }),
       api.get('/admin/audit-logs', { params: { limit: 50 } }),
+      api.get('/admin/analytics', { params: { days: 14 } }),
     ]);
-    setStats(s.data); setProducts(p.data); setAudit(a.data);
+    setStats(s.data); setProducts(p.data); setAudit(a.data); setAnalytics(an.data);
   };
   useEffect(() => { loadAll().catch(e => toast.error(formatApiError(e))); }, []);
 
@@ -71,7 +73,7 @@ export default function Admin() {
 
       {stats && (
         <div className="grid grid-cols-2 md:grid-cols-5 gap-px bg-border border border-border mt-10" data-testid="admin-stats">
-          {[['users','Users'],['products','Products'],['active_products','Active'],['coming_soon','Coming soon'],['waitlist','Waitlist']].map(([k,l]) => (
+          {[['users','Users'],['products','Products'],['active_products','Active'],['paid_transactions','Paid'],['entitlements','Entitled']].map(([k,l]) => (
             <div key={k} className="card-flat p-5">
               <div className="text-xs text-muted-foreground uppercase tracking-wider">{l}</div>
               <div className="font-display font-bold text-3xl mt-2">{stats[k]}</div>
@@ -81,10 +83,10 @@ export default function Admin() {
       )}
 
       <div className="flex items-center justify-between mt-10">
-        <div className="flex gap-1">
-          {['products','audit'].map(t => (
+        <div className="flex gap-1 flex-wrap">
+          {['products','analytics','audit'].map(t => (
             <button key={t} onClick={() => setTab(t)} className={`text-xs px-3 py-1.5 rounded-full border ${tab === t ? 'bg-foreground text-background border-foreground' : 'border-border text-muted-foreground'}`} data-testid={`admin-tab-${t}`}>
-              {t === 'products' ? 'Products' : 'Audit log'}
+              {t === 'products' ? 'Products' : t === 'analytics' ? 'Analytics' : 'Audit log'}
             </button>
           ))}
         </div>
@@ -128,6 +130,66 @@ export default function Admin() {
         </div>
       )}
 
+      {tab === 'analytics' && (
+        <div className="mt-6" data-testid="admin-analytics">
+          {!analytics ? (
+            <div className="text-sm text-muted-foreground p-6">Loading…</div>
+          ) : (
+            <div className="space-y-6">
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-px bg-border border border-border">
+                {Object.entries(analytics.totals).map(([k,v]) => (
+                  <div key={k} className="card-flat p-5">
+                    <div className="text-[10px] text-muted-foreground uppercase tracking-wider">{k.replace(/_/g,' ')}</div>
+                    <div className="font-display font-bold text-2xl mt-2">{v}</div>
+                  </div>
+                ))}
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-border border border-border">
+                <div className="card-flat p-6">
+                  <div className="overline">Events (14 days)</div>
+                  <ul className="mt-4 space-y-2">
+                    {analytics.by_name.map(e => (
+                      <li key={e.name} className="flex items-center justify-between text-sm border-b border-border pb-2 last:border-0">
+                        <span className="font-mono text-xs">{e.name}</span>
+                        <span className="text-primary font-semibold">{e.count}</span>
+                      </li>
+                    ))}
+                    {analytics.by_name.length === 0 && <li className="text-muted-foreground text-sm">No events yet.</li>}
+                  </ul>
+                </div>
+                <div className="card-flat p-6">
+                  <div className="overline">Top products by views</div>
+                  <ul className="mt-4 space-y-2">
+                    {analytics.top_products.map(p => (
+                      <li key={p.slug} className="flex items-center justify-between text-sm border-b border-border pb-2 last:border-0">
+                        <span className="font-mono text-xs">{p.slug}</span>
+                        <span className="text-primary font-semibold">{p.count}</span>
+                      </li>
+                    ))}
+                    {analytics.top_products.length === 0 && <li className="text-muted-foreground text-sm">No product views yet.</li>}
+                  </ul>
+                </div>
+              </div>
+              <div className="card-flat p-6">
+                <div className="overline">Daily activity</div>
+                <div className="mt-6 flex items-end gap-1.5 h-32">
+                  {analytics.daily.map(d => {
+                    const max = Math.max(...analytics.daily.map(x => x.count), 1);
+                    return (
+                      <div key={d.day} className="flex-1 flex flex-col items-center gap-1.5">
+                        <div className="w-full bg-primary/80 rounded-t" style={{ height: `${(d.count / max) * 100}%`, minHeight: 2 }} title={`${d.day}: ${d.count}`} />
+                        <div className="text-[9px] text-muted-foreground font-mono">{d.day.slice(5)}</div>
+                      </div>
+                    );
+                  })}
+                  {analytics.daily.length === 0 && <div className="text-muted-foreground text-sm">No data.</div>}
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
       {editing && <ProductForm editing={editing} onCancel={() => setEditing(null)} onSave={save} />}
     </div>
   );
@@ -155,10 +217,11 @@ function ProductForm({ editing, onCancel, onSave }) {
           <button onClick={onCancel} className="p-2 hover:bg-secondary rounded-md" data-testid="admin-modal-close"><X className="w-4 h-4" /></button>
         </div>
         <form className="p-5 grid grid-cols-1 md:grid-cols-2 gap-4" onSubmit={e => { e.preventDefault(); onSave(data); }}>
+          <ImageField label="Image" k="image" data={data} setData={setData} />
+          <ImageField label="Logo" k="logo" data={data} setData={setData} />
           {[
             ['slug','Slug (kebab-case)'], ['name','Name'],
             ['short_description','Short description'],
-            ['image','Image URL'], ['logo','Logo URL'],
             ['version','Version'], ['release_date','Release date'],
             ['external_url','Product URL'], ['demo_url','Demo URL'],
             ['documentation_url','Docs URL'], ['github_url','GitHub URL'],
@@ -214,5 +277,51 @@ function ProductForm({ editing, onCancel, onSave }) {
         </form>
       </div>
     </div>
+  );
+}
+
+function ImageField({ label, k, data, setData }) {
+  const [uploading, setUploading] = useState(false);
+  const value = data[k] || '';
+  const onFile = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 2 * 1024 * 1024) { toast.error('Image must be under 2 MB'); return; }
+    setUploading(true);
+    try {
+      const dataUrl = await new Promise((res, rej) => {
+        const r = new FileReader();
+        r.onload = () => res(r.result);
+        r.onerror = rej;
+        r.readAsDataURL(file);
+      });
+      const { data: resp } = await api.post('/admin/uploads', {
+        filename: file.name,
+        content_type: file.type,
+        data_base64: dataUrl,
+      });
+      const url = `${API_BASE}${resp.url}`;
+      setData(d => ({ ...d, [k]: url }));
+      toast.success('Uploaded');
+    } catch (e2) {
+      toast.error(formatApiError(e2));
+    } finally {
+      setUploading(false);
+      e.target.value = '';
+    }
+  };
+  return (
+    <label className="text-xs">
+      <div className="text-muted-foreground uppercase tracking-wider mb-1 flex items-center justify-between">
+        <span>{label}</span>
+        <span className="flex items-center gap-1 text-primary cursor-pointer hover:underline">
+          <Upload className="w-3 h-3" />
+          <span>{uploading ? 'Uploading…' : 'Upload'}</span>
+          <input type="file" accept="image/*" className="hidden" onChange={onFile} data-testid={`admin-upload-${k}`} />
+        </span>
+      </div>
+      <input value={value} onChange={e => setData(d => ({ ...d, [k]: e.target.value }))} placeholder="URL or upload" className="w-full bg-transparent border border-border rounded-md px-3 py-2 outline-none focus:border-primary" data-testid={`admin-field-${k}`} />
+      {value && <div className="mt-2 border border-border rounded p-2 bg-secondary/40"><img src={value} alt="" className="max-h-24 object-contain mx-auto" /></div>}
+    </label>
   );
 }

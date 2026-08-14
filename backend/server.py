@@ -10,12 +10,20 @@ from datetime import datetime, timezone, timedelta
 from typing import Optional, List, Literal
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, APIRouter, Depends, HTTPException, Request, Response, status, Query
+from fastapi import FastAPI, APIRouter, Depends, HTTPException, Request, Response, status, Query, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from motor.motor_asyncio import AsyncIOMotorClient
 from bson import ObjectId
 from pydantic import BaseModel, EmailStr, Field, field_validator
+
+from email_service import send_email, render_email
+from enhancements import (
+    build_payments_router,
+    build_uploads_router,
+    build_public_uploads_router,
+    build_analytics_router,
+)
 
 # ------------------------------------------------------------
 # Configuration
@@ -425,6 +433,13 @@ async def lifespan(app: FastAPI):
     await db.password_reset_tokens.create_index("expires_at", expireAfterSeconds=0)
     await db.waitlist.create_index([("email", 1), ("product_slug", 1)], unique=True)
     await db.audit_logs.create_index("created_at")
+    await db.payment_transactions.create_index("session_id", unique=True)
+    await db.payment_transactions.create_index("user_id")
+    await db.entitlements.create_index([("user_id", 1), ("product_slug", 1), ("session_id", 1)], unique=True)
+    await db.entitlements.create_index("user_id")
+    await db.uploads.create_index("upload_id", unique=True)
+    await db.events.create_index("created_at")
+    await db.events.create_index([("name", 1), ("created_at", -1)])
     await seed_admin()
     await seed_products()
     yield
@@ -451,6 +466,7 @@ async def security_headers(request: Request, call_next):
     return resp
 
 import logging
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
 logger = logging.getLogger("trillion")
 
 @app.exception_handler(Exception)
@@ -545,10 +561,9 @@ async def refresh_token(request: Request, response: Response):
         raise HTTPException(status_code=401, detail="Invalid refresh token")
 
 @api.post("/auth/forgot-password")
-async def forgot_password(payload: ForgotPassword):
+async def forgot_password(payload: ForgotPassword, background: BackgroundTasks):
     email = payload.email.lower().strip()
     user = await db.users.find_one({"email": email})
-    # Do not leak whether email exists
     if user:
         token = secrets.token_urlsafe(32)
         await db.password_reset_tokens.insert_one({
@@ -558,8 +573,19 @@ async def forgot_password(payload: ForgotPassword):
             "expires_at": datetime.now(timezone.utc) + timedelta(hours=1),
             "created_at": datetime.now(timezone.utc),
         })
-        # In production: send email. For now: log to console.
-        print(f"[PASSWORD RESET] {email} -> token: {token}")
+        reset_url = f"{FRONTEND_URL}/reset-password?token={token}"
+        html = render_email(
+            heading="Reset your password",
+            body_html=(
+                "Someone (hopefully you) requested a password reset for your Trillion AI Tech account. "
+                "Click the button below to choose a new password. This link expires in 60 minutes."
+            ),
+            cta_url=reset_url,
+            cta_label="Reset password",
+        )
+        text = f"Reset your Trillion AI Tech password: {reset_url}\nThis link expires in 60 minutes."
+        background.add_task(send_email, email, "Reset your Trillion AI Tech password", html, text)
+        logger.info("[password reset] issued for %s", email)
     return {"ok": True, "message": "If this email exists, a reset link was sent."}
 
 @api.post("/auth/reset-password")
@@ -664,25 +690,51 @@ async def admin_stats(user: dict = Depends(require_admin)):
         "coming_soon": await db.products.count_documents({"status": "coming-soon"}),
         "waitlist": await db.waitlist.count_documents({}),
         "audit_logs": await db.audit_logs.count_documents({}),
+        "paid_transactions": await db.payment_transactions.count_documents({"payment_status": "paid"}),
+        "entitlements": await db.entitlements.count_documents({"active": True}),
+        "events_7d": await db.events.count_documents({"created_at": {"$gte": datetime.now(timezone.utc) - timedelta(days=7)}}),
     }
 
 # ------------------------------------------------------------
 # Waitlist (Coming Soon "Notify me")
 # ------------------------------------------------------------
 @api.post("/waitlist")
-async def join_waitlist(payload: WaitlistIn):
+async def join_waitlist(payload: WaitlistIn, background: BackgroundTasks):
+    email = payload.email.lower().strip()
     doc = {
-        "email": payload.email.lower().strip(),
+        "email": email,
         "product_slug": payload.product_slug,
         "source": payload.source,
         "created_at": datetime.now(timezone.utc),
     }
+    inserted = True
     try:
         await db.waitlist.insert_one(doc)
     except Exception as e:
-        # duplicate index — treat as success; log other errors
-        if "duplicate key" not in str(e).lower():
+        if "duplicate key" in str(e).lower():
+            inserted = False
+        else:
             logger.warning("Waitlist insert failed: %s", e)
+            inserted = False
+    # Only send confirmation on first join for this email+slug
+    if inserted:
+        product_name = "Trillion AI Tech"
+        if payload.product_slug:
+            p = await db.products.find_one({"slug": payload.product_slug}, {"name": 1})
+            if p:
+                product_name = p["name"]
+        subject = f"You're on the waitlist for {product_name}"
+        html = render_email(
+            heading="You're on the list.",
+            body_html=(
+                f"Thanks for joining the <strong>{product_name}</strong> waitlist. "
+                "We'll email you the moment it's ready — no marketing spam, just the launch."
+            ),
+            cta_url="https://trillionaitech.com/products",
+            cta_label="Browse the catalogue",
+        )
+        text = f"You're on the waitlist for {product_name}. We'll email you the moment it's ready."
+        background.add_task(send_email, email, subject, html, text)
     return {"ok": True, "message": "You're on the list. We'll email you when it's ready."}
 
 # ------------------------------------------------------------
@@ -709,3 +761,13 @@ async def search(q: str = Query(..., min_length=1, max_length=100)):
     return [product_out(d) async for d in cursor]
 
 app.include_router(api)
+
+# Mount enhancement routers (Stripe payments, uploads, analytics) under /api
+_payments = build_payments_router(db, get_optional_user, get_current_user, audit)
+_uploads_admin = build_uploads_router(db, require_admin, audit)
+_uploads_public = build_public_uploads_router(db)
+_analytics = build_analytics_router(db, get_optional_user, require_admin)
+app.include_router(_payments, prefix="/api")
+app.include_router(_uploads_admin, prefix="/api")
+app.include_router(_uploads_public, prefix="/api")
+app.include_router(_analytics, prefix="/api")
