@@ -1,0 +1,50 @@
+{
+  "summary": "Session-3 verification complete. Backend: 20/21 pytest tests PASS (session3.py). Frontend: 26/27 checks PASS. One backend bug (old admin not removed), one test-only false alarm on frontend. All headline session-3 features work: master admin god-mode login, 3 AppForge tiers with buy.stripe.com payment_links (starter/builder/studio → eVq.../00w7.../aFa8...), payment_link mode returned by /api/payments/checkout, AppForge access gating (admin=free, anon=signin_required, fresh cust=402 on generate), real Claude Sonnet 4.6 LLM code generation (37s end-to-end, produced >=3 files + valid zip), access codes (universal + product-scoped, TAT-XXXX-XXXX, redeem/revoke/duplicate-409/revoked-404), admin users list+role change+delete (self-demote blocked), 6 admin data endpoints with proper 200/401/403 gating, manual __universal__ entitlement grant unlocks AppForge, admin settings GET/PUT with masked keys + stripe_secret_key sk_ validation. Frontend: 7-language switcher persists to localStorage(tat-lang), /appforge nav link present, pricing $49/$149/$399 with Most-popular badge, buy button redirects to buy.stripe.com/eVq..., admin-only 6 kind buttons + Master-admin banner, /admin sidebar all 11 sections, Overview 9 stat tiles, Users search + role dropdown, Codes create produces TAT- code, Settings form + current-config panel visible, AppForge admin + Audit sections render.",
+  "backend_issues": {
+    "critical": [
+      {
+        "endpoint": "seed_admin / /api/auth/login",
+        "issue": "Old admin admin@trillionaitech.com STILL EXISTS in db.users with role='admin' — login with Admin@Trillion2026 still returns 200. Spec explicitly requires it be REMOVED (agent_to_agent_context_note: 'The old admin (admin@trillionaitech.com) is REMOVED — only anselm.perkins@gmail.com exists as master admin now'). seed_admin() in server.py:459 only ensures the NEW admin exists; it never deletes the old one. This is a real security gap because prior credentials still grant god-mode.",
+        "priority": "HIGH"
+      }
+    ],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_session3.py",
+    "/app/test_reports/pytest/session3.xml",
+    "/app/backend/tests/backend_test.py"
+  ],
+  "action_items": [
+    "In /app/backend/server.py seed_admin(), delete the legacy admin@trillionaitech.com user (and any entitlements bound to its user_id) whenever it differs from the current ADMIN_EMAIL. One-liner fix: `await db.users.delete_one({\"email\": \"admin@trillionaitech.com\", \"_id\": {\"$ne\": <new admin _id>}})` after seeding the master admin. This removes the surviving prior-iteration admin so only anselm.perkins@gmail.com can hold god-mode."
+  ],
+  "critical_code_review_comments": [
+    "server.py seed_admin() upgrades an existing user to admin if email matches new ADMIN_EMAIL, but never removes the previously-seeded admin@trillionaitech.com when the env changes → orphan admin persists (verified in mongo).",
+    "appforge.py enforces max prompt 1000 chars and MAX_FILES=20, MAX_FILE_BYTES=30_000 — good hardening. Timeout 90s + returns 504 on timeout — good.",
+    "access_codes.user_has_access does not require the entitlement to be `active:true` for the __universal__ branch (line 137-140) — currently both $or arms include active:true only on the first. Re-check: the query is `active:true` in only the direct-product arm, missing on __universal__. Practically it still works because entitlements are inserted with active:true, but a revoked universal entitlement wouldn't be honored. Minor.",
+    "appforge._appforge_has_access DOES require active:true (line 175) — inconsistency with access_codes.user_has_access.",
+    "admin_endpoints delete_user hard-deletes the doc but only marks entitlements inactive — audit trail preserved. Good.",
+    "admin_endpoints /admin/settings correctly masks secrets; PUT rejects invalid sk_ prefix. Good.",
+    "enhancements.create_checkout: for payment_link path, `user_id` stored may be None (anon can now start checkout) — matches spec that anon can click buy and be redirected.",
+    "AppForge LLM tests take ~30-60s; keep pytest --timeout=180 handy for CI."
+  ],
+  "updated_files": [
+    "/app/backend/tests/backend_test.py (updated ADMIN_EMAIL/PASSWORD to master admin)",
+    "/app/backend/tests/test_session3.py (new — 21 tests covering all session-3 features)"
+  ],
+  "success_rate": {
+    "backend": "95% (20/21 pass, 1 real bug: old admin persists)",
+    "frontend": "100% functional (26/26 real checks pass; 1 false alarm on locked-selector was tester error since anon sees a different 'sign in' notice — verified working)"
+  },
+  "test_credentials": "Master admin: anselm.perkins@gmail.com / Trillion@Master2026 (verified working, role=admin). Old admin admin@trillionaitech.com / Admin@Trillion2026 also still works — this is the bug reported above. Fresh customers created per-test with TEST_s3_* email prefix.",
+  "seed_data_creation": "Test data: TEST_s3_* customers, TEST_universal_* + TEST_product_* access codes, TEST_UI_code from UI test. All ephemeral, no persistent writes to production tables outside standard collections.",
+  "retest_needed": true,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Run: `REACT_APP_BACKEND_URL=<preview_url> pytest /app/backend/tests/test_session3.py -v`. The 1 failure (test_old_admin_removed) will pass once main agent deletes the orphan admin from db.users. Slow test test_appforge_generate_admin_and_download hits Claude Sonnet 4.6 through Emergent LLM key — ~30-60s. Buy-link redirect fully verified: appforge-starter → buy.stripe.com/eVq14m1x3c1V3oq9ZKcfK03. Frontend tat-lang localStorage key is 'tat-lang' NOT 'lang'. On /appforge anon sees a plain 'Sign in to try the builder' box (no data-testid); appforge-locked testid only appears for logged-in users lacking entitlement.",
+  "rca of the issue": "Symptom: test_old_admin_removed expects login with admin@trillionaitech.com/Admin@Trillion2026 to fail (401) but it returns 200 with role=admin. RCA: seed_admin() in /app/backend/server.py:459-477 only inserts or updates the NEW admin (anselm.perkins@gmail.com) but does not delete the prior admin document that was seeded in an earlier iteration. Verified via mongosh: db.users.find({role:'admin'}) shows TWO admin docs — 6a7e5846...admin@trillionaitech.com AND 6a7e6af0...anselm.perkins@gmail.com. Mitigation: extend seed_admin() to `await db.users.delete_one({\"email\": \"admin@trillionaitech.com\"})` when ADMIN_EMAIL != that legacy email. Optionally revoke any entitlements/audit-log ownership rooted at the old admin's _id."
+}

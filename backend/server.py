@@ -24,6 +24,9 @@ from enhancements import (
     build_public_uploads_router,
     build_analytics_router,
 )
+from access_codes import build_access_codes_router
+from appforge import build_appforge_router
+from admin_endpoints import build_admin_router, load_settings_into_env
 
 # ------------------------------------------------------------
 # Configuration
@@ -158,8 +161,10 @@ class ProductIn(BaseModel):
     billing_type: BillingType = "free"
     price: Optional[float] = None
     currency: str = "USD"
+    trial_days: Optional[int] = None
     stripe_product_id: Optional[str] = None
     stripe_price_id: Optional[str] = None
+    payment_link: Optional[str] = None
     external_url: Optional[str] = None
     demo_url: Optional[str] = None
     documentation_url: Optional[str] = None
@@ -246,19 +251,52 @@ async def clear_failed(identifier: str):
 # ------------------------------------------------------------
 SEED_PRODUCTS = [
     {
-        "slug": "appforge",
-        "name": "AppForge",
-        "short_description": "AI-assisted application development platform with automated deployment pipelines.",
-        "description": "AppForge is a full-stack application platform that blends AI-assisted coding with production-grade deployment pipelines. Ship faster with generated scaffolding, integrated observability, and zero-config infra.",
+        "slug": "appforge-starter",
+        "name": "AppForge Starter",
+        "short_description": "AI-powered app scaffolding for solo builders. Generate starter apps, games and tools from a prompt.",
+        "description": "AppForge Starter is your on-ramp to AI-assisted development. Describe what you want and get a runnable project — webapp, landing page, API, game, CLI or agent — in seconds. Includes 20 generations per month.",
         "category": "apps",
-        "status": "beta",
+        "status": "active",
         "featured": True,
-        "features": ["AI code generation", "One-click deploy", "Integrated observability", "Zero-config databases"],
+        "features": ["20 generations / month", "React + FastAPI + game + CLI scaffolds", "Downloadable zip", "Community support", "7-day free trial"],
         "billing_type": "monthly",
-        "price": 29.0,
-        "tags": ["ai", "development", "platform"],
-        "version": "0.9.0",
-        "image": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?crop=entropy&cs=srgb&fm=jpg&q=85",
+        "price": 49.0,
+        "trial_days": 7,
+        "payment_link": "https://buy.stripe.com/eVq14m1x3c1V3oq9ZKcfK03",
+        "tags": ["ai", "development", "starter", "appforge"],
+        "version": "1.0.0",
+    },
+    {
+        "slug": "appforge-builder",
+        "name": "AppForge Builder",
+        "short_description": "For teams building real products. Unlimited generations, larger projects, priority queue.",
+        "description": "AppForge Builder unlocks unlimited generations, larger project scaffolds, priority processing and team seats. Ideal for freelancers and small teams shipping AI-native software regularly.",
+        "category": "apps",
+        "status": "active",
+        "featured": True,
+        "features": ["Unlimited generations", "Larger scaffolds (up to 40 files)", "Priority queue", "3 team seats", "Email support", "7-day free trial"],
+        "billing_type": "monthly",
+        "price": 149.0,
+        "trial_days": 7,
+        "payment_link": "https://buy.stripe.com/00w7sKcbHfe7cZ0eg0cfK02",
+        "tags": ["ai", "development", "team", "appforge"],
+        "version": "1.0.0",
+    },
+    {
+        "slug": "appforge-studio",
+        "name": "AppForge Studio",
+        "short_description": "Studio-grade: fine-tuned models, private generations, unlimited seats, white-label export.",
+        "description": "AppForge Studio is the top tier — fine-tuned generation models, private generations that never train shared models, unlimited team seats, and white-label zip export with your own branding.",
+        "category": "apps",
+        "status": "active",
+        "featured": True,
+        "features": ["Everything in Builder", "Fine-tuned generation models", "Private mode (no training)", "Unlimited seats", "White-label export", "Priority phone support", "7-day free trial"],
+        "billing_type": "monthly",
+        "price": 399.0,
+        "trial_days": 7,
+        "payment_link": "https://buy.stripe.com/aFa8wOb7Dfe7f781tecfK01",
+        "tags": ["ai", "development", "studio", "appforge"],
+        "version": "1.0.0",
     },
     {
         "slug": "signal-desk",
@@ -380,6 +418,8 @@ SEED_PRODUCTS = [
 ]
 
 async def seed_products():
+    # Remove the old "appforge" single product if it exists (now split into 3 tiers)
+    await db.products.delete_one({"slug": "appforge"})
     for p in SEED_PRODUCTS:
         doc = dict(p)
         doc.setdefault("subcategory", None)
@@ -387,8 +427,10 @@ async def seed_products():
         doc.setdefault("logo", None)
         doc.setdefault("screenshots", [])
         doc.setdefault("currency", "USD")
+        doc.setdefault("trial_days", None)
         doc.setdefault("stripe_product_id", None)
         doc.setdefault("stripe_price_id", None)
+        doc.setdefault("payment_link", None)
         doc.setdefault("external_url", None)
         doc.setdefault("demo_url", None)
         doc.setdefault("documentation_url", None)
@@ -399,28 +441,42 @@ async def seed_products():
         doc.setdefault("seo_description", None)
         doc["updated_at"] = datetime.now(timezone.utc)
         doc["created_at"] = datetime.now(timezone.utc)
-        # Only insert if slug doesn't exist — never overwrite admin edits on restart
-        await db.products.update_one(
-            {"slug": doc["slug"]},
-            {"$setOnInsert": doc},
-            upsert=True,
-        )
+        # For appforge products, always overwrite with latest tier data to keep payment_link fresh
+        if doc["slug"].startswith("appforge-"):
+            created = doc.pop("created_at")
+            await db.products.update_one(
+                {"slug": doc["slug"]},
+                {"$set": doc, "$setOnInsert": {"created_at": created}},
+                upsert=True,
+            )
+        else:
+            await db.products.update_one(
+                {"slug": doc["slug"]},
+                {"$setOnInsert": doc},
+                upsert=True,
+            )
 
 async def seed_admin():
-    existing = await db.users.find_one({"email": ADMIN_EMAIL})
+    admin_email = ADMIN_EMAIL.lower()
+    # Remove any legacy admin left over from a previous ADMIN_EMAIL value
+    await db.users.delete_one({"email": "admin@trillionaitech.com", "role": "admin"})
+    existing = await db.users.find_one({"email": admin_email})
     if existing is None:
         await db.users.insert_one({
-            "email": ADMIN_EMAIL.lower(),
+            "email": admin_email,
             "password_hash": hash_password(ADMIN_PASSWORD),
-            "name": "Admin",
+            "name": "Anselm Perkins",
             "role": "admin",
             "created_at": datetime.now(timezone.utc),
         })
-    elif not verify_password(ADMIN_PASSWORD, existing["password_hash"]):
-        await db.users.update_one(
-            {"email": ADMIN_EMAIL.lower()},
-            {"$set": {"password_hash": hash_password(ADMIN_PASSWORD), "role": "admin"}},
-        )
+        logger.info("Seeded master admin %s", admin_email)
+    else:
+        # Ensure role is admin (in case they signed up first). Don't touch password if it's already set.
+        update = {"role": "admin"}
+        if not verify_password(ADMIN_PASSWORD, existing.get("password_hash", "")):
+            # Only reset password on cold seed — keep it in sync with env
+            update["password_hash"] = hash_password(ADMIN_PASSWORD)
+        await db.users.update_one({"email": admin_email}, {"$set": update})
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -440,6 +496,10 @@ async def lifespan(app: FastAPI):
     await db.uploads.create_index("upload_id", unique=True)
     await db.events.create_index("created_at")
     await db.events.create_index([("name", 1), ("created_at", -1)])
+    await db.access_codes.create_index("code", unique=True)
+    await db.code_redemptions.create_index([("code", 1), ("user_id", 1)], unique=True)
+    await db.appforge_generations.create_index([("user_id", 1), ("created_at", -1)])
+    await load_settings_into_env(db)
     await seed_admin()
     await seed_products()
     yield
@@ -762,12 +822,18 @@ async def search(q: str = Query(..., min_length=1, max_length=100)):
 
 app.include_router(api)
 
-# Mount enhancement routers (Stripe payments, uploads, analytics) under /api
+# Mount enhancement routers (Stripe payments, uploads, analytics, access codes, AppForge) under /api
 _payments = build_payments_router(db, get_optional_user, get_current_user, audit)
 _uploads_admin = build_uploads_router(db, require_admin, audit)
 _uploads_public = build_public_uploads_router(db)
 _analytics = build_analytics_router(db, get_optional_user, require_admin)
+_access = build_access_codes_router(db, get_current_user, require_admin, audit)
+_appforge = build_appforge_router(db, get_current_user, get_optional_user, audit)
+_admin = build_admin_router(db, require_admin, audit)
 app.include_router(_payments, prefix="/api")
 app.include_router(_uploads_admin, prefix="/api")
 app.include_router(_uploads_public, prefix="/api")
 app.include_router(_analytics, prefix="/api")
+app.include_router(_access, prefix="/api")
+app.include_router(_appforge, prefix="/api")
+app.include_router(_admin, prefix="/api")

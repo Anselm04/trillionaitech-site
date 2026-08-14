@@ -59,6 +59,27 @@ def build_payments_router(db, get_optional_user, get_current_user, audit):
         billing = product.get("billing_type") or "free"
         if billing == "free":
             raise HTTPException(400, "Product is free — no checkout required")
+
+        # Prefer Stripe hosted Payment Link if configured (works with any Stripe account, no API key required)
+        payment_link = product.get("payment_link")
+        if payment_link:
+            # Record intent; correlation via webhook when live API key is present, otherwise via manual reconciliation
+            await db.payment_transactions.insert_one({
+                "session_id": f"link_{secrets.token_urlsafe(10)}",
+                "user_id": (user or {}).get("id"),
+                "product_slug": payload.product_slug,
+                "mode": "payment_link",
+                "status": "initiated",
+                "payment_status": "pending",
+                "checkout_url": payment_link,
+                "created_at": datetime.now(timezone.utc),
+                "updated_at": datetime.now(timezone.utc),
+            })
+            await audit((user or {}).get("id"), "payment.link_redirect", payload.product_slug,
+                        {"slug": payload.product_slug})
+            return {"checkout_url": payment_link, "mode": "payment_link"}
+
+        # Fallback: dynamic Stripe Checkout Session (requires our own API key)
         lookup_key = product.get("stripe_lookup_key")
         if not lookup_key:
             raise HTTPException(400, "Product is not yet available for purchase (Stripe not configured)")

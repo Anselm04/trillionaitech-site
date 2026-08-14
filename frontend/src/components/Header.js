@@ -1,21 +1,23 @@
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { Sun, Moon, Menu, X, Search as SearchIcon, User } from 'lucide-react';
+import { Sun, Moon, Menu, X, Search as SearchIcon, User, Globe } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import { useAuth } from '../context/AuthContext';
+import { useI18n, useT } from '../context/I18nContext';
 import { cn } from '../lib/utils';
 
 const NAV_LINKS = [
-  { to: '/', label: 'Home' },
-  { to: '/products', label: 'Products' },
-  { to: '/apps', label: 'Apps' },
-  { to: '/agents', label: 'Agents' },
-  { to: '/tools', label: 'Tools' },
-  { to: '/software', label: 'Software' },
-  { to: '/games', label: 'Games' },
-  { to: '/coming-soon', label: 'Coming Soon' },
-  { to: '/about', label: 'About' },
-  { to: '/contact', label: 'Contact' },
+  { to: '/', key: 'nav.home' },
+  { to: '/products', key: 'nav.products' },
+  { to: '/apps', key: 'nav.apps' },
+  { to: '/agents', key: 'nav.agents' },
+  { to: '/tools', key: 'nav.tools' },
+  { to: '/software', key: 'nav.software' },
+  { to: '/games', key: 'nav.games' },
+  { to: '/appforge', key: 'nav.appforge' },
+  { to: '/coming-soon', key: 'nav.coming_soon' },
+  { to: '/about', key: 'nav.about' },
+  { to: '/contact', key: 'nav.contact' },
 ];
 
 function TLogo({ size = 28 }) {
@@ -35,8 +37,11 @@ function TLogo({ size = 28 }) {
 export default function Header() {
   const { theme, toggle } = useTheme();
   const { user, logout } = useAuth();
+  const { lang, setLang, languages } = useI18n();
+  const t = useT();
   const [open, setOpen] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
+  const [showLang, setShowLang] = useState(false);
   const [q, setQ] = useState('');
   const nav = useNavigate();
 
@@ -70,9 +75,9 @@ export default function Header() {
                 'px-3 py-2 text-sm rounded-md text-muted-foreground hover:text-foreground transition-colors',
                 isActive && 'text-foreground'
               )}
-              data-testid={`nav-link-${l.label.toLowerCase().replace(/\s+/g, '-')}`}
+              data-testid={`nav-link-${l.key.replace('nav.', '')}`}
             >
-              {l.label}
+              {t(l.key)}
             </NavLink>
           ))}
         </nav>
@@ -81,6 +86,27 @@ export default function Header() {
           <button onClick={() => setShowSearch(s => !s)} aria-label="Search" className="p-2 rounded-md hover:bg-secondary focus-ring" data-testid="search-toggle">
             <SearchIcon className="w-4 h-4" />
           </button>
+          <div className="relative">
+            <button onClick={() => setShowLang(s => !s)} aria-label="Language" className="p-2 rounded-md hover:bg-secondary focus-ring flex items-center gap-1" data-testid="lang-toggle">
+              <Globe className="w-4 h-4" />
+              <span className="text-[10px] font-bold">{lang.toUpperCase()}</span>
+            </button>
+            {showLang && (
+              <div className="absolute right-0 top-full mt-1 min-w-[180px] bg-card border border-border rounded-md py-1 z-50" data-testid="lang-menu">
+                {languages.map(l => (
+                  <button
+                    key={l.code}
+                    onClick={() => { setLang(l.code); setShowLang(false); }}
+                    className={cn('w-full px-3 py-2 text-left text-sm hover:bg-secondary flex items-center justify-between', lang === l.code && 'text-primary')}
+                    data-testid={`lang-option-${l.code}`}
+                  >
+                    <span>{l.label}</span>
+                    <span className="text-[10px] text-muted-foreground font-mono">{l.flag}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
           <button onClick={toggle} aria-label="Toggle theme" className="p-2 rounded-md hover:bg-secondary focus-ring" data-testid="theme-toggle">
             {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
           </button>
@@ -88,17 +114,17 @@ export default function Header() {
           {user && user.id ? (
             <div className="hidden md:flex items-center gap-1.5">
               {user.role === 'admin' && (
-                <Link to="/admin" className="btn-ghost text-xs !py-1.5 !px-3" data-testid="nav-admin">Admin</Link>
+                <Link to="/admin" className="btn-ghost text-xs !py-1.5 !px-3" data-testid="nav-admin">{t('nav.admin')}</Link>
               )}
               <Link to="/account" className="btn-ghost text-xs !py-1.5 !px-3" data-testid="nav-account">
-                <User className="w-3.5 h-3.5" /> Account
+                <User className="w-3.5 h-3.5" /> {t('nav.account')}
               </Link>
-              <button onClick={logout} className="text-xs text-muted-foreground hover:text-foreground px-2" data-testid="nav-logout">Sign out</button>
+              <button onClick={logout} className="text-xs text-muted-foreground hover:text-foreground px-2" data-testid="nav-logout">{t('nav.signout')}</button>
             </div>
           ) : (
             <div className="hidden md:flex items-center gap-1.5">
-              <Link to="/login" className="btn-ghost text-xs !py-1.5 !px-3" data-testid="nav-login">Sign in</Link>
-              <Link to="/register" className="btn-primary text-xs !py-1.5 !px-3" data-testid="nav-signup">Sign up</Link>
+              <Link to="/login" className="btn-ghost text-xs !py-1.5 !px-3" data-testid="nav-login">{t('nav.signin')}</Link>
+              <Link to="/register" className="btn-primary text-xs !py-1.5 !px-3" data-testid="nav-signup">{t('nav.signup')}</Link>
             </div>
           )}
 
@@ -117,11 +143,11 @@ export default function Header() {
               type="text"
               value={q}
               onChange={e => setQ(e.target.value)}
-              placeholder="Search products, agents, tools…"
+              placeholder={t('nav.search_ph')}
               className="flex-1 bg-transparent outline-none text-sm"
               data-testid="search-input"
             />
-            <button className="btn-primary text-xs !py-1.5 !px-3" data-testid="search-submit">Search</button>
+            <button className="btn-primary text-xs !py-1.5 !px-3" data-testid="search-submit">{t('common.search')}</button>
           </form>
         </div>
       )}
@@ -139,22 +165,22 @@ export default function Header() {
                   'px-3 py-2.5 rounded-md text-sm text-muted-foreground hover:text-foreground hover:bg-secondary',
                   isActive && 'text-foreground bg-secondary'
                 )}
-                data-testid={`mobile-nav-${l.label.toLowerCase().replace(/\s+/g, '-')}`}
+                data-testid={`mobile-nav-${l.key.replace('nav.', '')}`}
               >
-                {l.label}
+                {t(l.key)}
               </NavLink>
             ))}
             <div className="h-px bg-border my-3" />
             {user && user.id ? (
               <>
-                {user.role === 'admin' && <Link to="/admin" onClick={() => setOpen(false)} className="btn-ghost mx-3" data-testid="mobile-nav-admin">Admin</Link>}
-                <Link to="/account" onClick={() => setOpen(false)} className="btn-ghost mx-3 mt-2" data-testid="mobile-nav-account">Account</Link>
-                <button onClick={() => { logout(); setOpen(false); }} className="text-sm text-muted-foreground px-3 mt-2 text-left" data-testid="mobile-nav-logout">Sign out</button>
+                {user.role === 'admin' && <Link to="/admin" onClick={() => setOpen(false)} className="btn-ghost mx-3" data-testid="mobile-nav-admin">{t('nav.admin')}</Link>}
+                <Link to="/account" onClick={() => setOpen(false)} className="btn-ghost mx-3 mt-2" data-testid="mobile-nav-account">{t('nav.account')}</Link>
+                <button onClick={() => { logout(); setOpen(false); }} className="text-sm text-muted-foreground px-3 mt-2 text-left" data-testid="mobile-nav-logout">{t('nav.signout')}</button>
               </>
             ) : (
               <>
-                <Link to="/login" onClick={() => setOpen(false)} className="btn-ghost mx-3" data-testid="mobile-nav-login">Sign in</Link>
-                <Link to="/register" onClick={() => setOpen(false)} className="btn-primary mx-3 mt-2" data-testid="mobile-nav-signup">Sign up</Link>
+                <Link to="/login" onClick={() => setOpen(false)} className="btn-ghost mx-3" data-testid="mobile-nav-login">{t('nav.signin')}</Link>
+                <Link to="/register" onClick={() => setOpen(false)} className="btn-primary mx-3 mt-2" data-testid="mobile-nav-signup">{t('nav.signup')}</Link>
               </>
             )}
           </nav>

@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Cpu, Bot, Wrench, Package, Gamepad2, Shield, Zap, Layers } from 'lucide-react';
+import { ArrowRight, Cpu, Bot, Wrench, Package, Gamepad2, Shield, Zap, Layers, Sparkles } from 'lucide-react';
 import { api } from '../lib/api';
 import { ProductGrid, ProductSkeleton } from '../components/ProductCard';
+import { useT } from '../context/I18nContext';
 
 const CATS = [
   { key: 'apps', label: 'AI Apps', blurb: 'Applications shipped with intelligence built-in.', Icon: Cpu, path: '/apps' },
@@ -14,6 +15,7 @@ const CATS = [
 
 export default function Home() {
   const [featured, setFeatured] = useState(null);
+  const t = useT();
 
   useEffect(() => {
     api.get('/products', { params: { featured: true, limit: 6 } }).then(r => setFeatured(r.data)).catch(() => setFeatured([]));
@@ -27,21 +29,24 @@ export default function Home() {
         <div className="container-x pt-24 md:pt-32 pb-20 md:pb-32 relative">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-border text-xs text-muted-foreground" data-testid="hero-badge">
             <span className="badge-dot" />
-            <span>In active development · Aotearoa NZ</span>
+            <span>{t('home.hero.badge')}</span>
           </div>
           <h1 className="font-display font-black text-5xl sm:text-6xl md:text-7xl lg:text-8xl tracking-tightest leading-[0.95] mt-6 max-w-5xl text-balance" data-testid="hero-title">
-            Building the future<br />
-            of <span className="text-primary">AI</span> & interactive<br />
-            technology.
+            {t('home.hero.title_1')}<br />
+            {t('home.hero.title_2')} <span className="text-primary">{t('home.hero.title_ai')}</span> {t('home.hero.title_3')}<br />
+            {t('home.hero.title_4')}
           </h1>
           <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mt-8 leading-relaxed">
-            An independent studio shipping AI-native applications, autonomous agents, developer tools, professional software and games — from Aotearoa New Zealand.
+            {t('home.hero.blurb')}
           </p>
           <div className="flex flex-wrap items-center gap-3 mt-10">
             <Link to="/products" className="btn-primary" data-testid="hero-cta-primary">
-              Explore products <ArrowRight className="w-4 h-4" />
+              {t('home.hero.cta_primary')} <ArrowRight className="w-4 h-4" />
             </Link>
-            <Link to="/about" className="btn-ghost" data-testid="hero-cta-secondary">Our vision</Link>
+            <Link to="/appforge" className="btn-ghost" data-testid="hero-cta-appforge">
+              <Sparkles className="w-4 h-4" /> Try AppForge
+            </Link>
+            <Link to="/about" className="btn-ghost" data-testid="hero-cta-secondary">{t('home.hero.cta_secondary')}</Link>
           </div>
 
           {/* stats bar */}

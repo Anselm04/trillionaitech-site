@@ -14,8 +14,8 @@ if not BASE_URL:
                 BASE_URL = line.split("=", 1)[1].strip().rstrip("/")
 
 API = f"{BASE_URL}/api"
-ADMIN_EMAIL = "admin@trillionaitech.com"
-ADMIN_PASSWORD = "Admin@Trillion2026"
+ADMIN_EMAIL = "anselm.perkins@gmail.com"
+ADMIN_PASSWORD = "Trillion@Master2026"
 
 
 # ---------- Fixtures ----------

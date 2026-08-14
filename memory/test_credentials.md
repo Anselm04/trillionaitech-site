@@ -1,18 +1,12 @@
 # Trillion AI Tech — Test Credentials
 
-## Admin
-- Email: `admin@trillionaitech.com`
-- Password: `Admin@Trillion2026`
+## Master Admin (God-mode)
+- Email: `anselm.perkins@gmail.com`
+- Password: `Trillion@Master2026`
 - Role: `admin`
+- Access: Bypasses ALL entitlement checks. Free access to every product, every tier, every feature — including AppForge unlimited generations.
 
-## Test Customer
-- Register a new customer via `POST /api/auth/register` or the `/register` UI.
-
-## Auth endpoints
-- `POST /api/auth/register`
-- `POST /api/auth/login`
-- `POST /api/auth/logout`
-- `GET  /api/auth/me`
-- `POST /api/auth/refresh`
-- `POST /api/auth/forgot-password`
-- `POST /api/auth/reset-password`
+## Notes
+- Change your password after first login (currently on the roadmap: password change UI in `/account`)
+- The `admin@trillionaitech.com` account no longer exists — it was replaced by the master admin above
+- Admin can generate free-access codes for anyone via `/admin` → Access Codes

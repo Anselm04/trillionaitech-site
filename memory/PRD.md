@@ -136,3 +136,77 @@ Transform the existing static Trillion AI Tech website (https://trillionaitech.c
 
 ## Status
 All four Next Action Items from iteration 1 are now DONE and TESTED. The platform is fully production-ready modulo real Stripe live-mode account claim and real email provider key.
+
+## Iteration 3 (Jan 2026) — Master admin, i18n, god-codes, AppForge productized
+
+### 1. Master admin (god-mode)
+- `anselm.perkins@gmail.com` / `Trillion@Master2026` is the sole admin
+- Legacy `admin@trillionaitech.com` account fully removed (login returns 401)
+- Admin bypasses ALL entitlement checks — free access to every product, every tier, every feature
+- Cannot demote or delete self via admin endpoints
+
+### 2. God-mode Access Codes (`/app/backend/access_codes.py`)
+- Codes: `TAT-XXXX-XXXX` format, 12 chars, unambiguous alphabet
+- Two scopes: `universal` (unlocks everything via `__universal__` entitlement) or `product` (unlocks specific slugs)
+- `max_redemptions` (default 1, cap 10000). One redemption per user.
+- Revocable but historical redemptions remain valid.
+- Admin creates codes at `/admin` → Access Codes with copy-to-clipboard button.
+- Customers redeem at `/account` → "Redeem access code" form.
+
+### 3. AppForge productized as 3-tier real product
+- Three tiers seeded: Starter ($49/mo), Builder ($149/mo), Studio ($399/mo) — each 7-day trial
+- Each tier wired to a Stripe hosted Payment Link (buy.stripe.com/*) — no API keys required to accept payments
+- New `payment_link` field on Product model — `POST /api/payments/checkout` prefers it over dynamic Stripe Checkout Session
+- New `/appforge` page: cinematic hero, real working builder form, tier pricing, capability grid
+
+### 4. AppForge AI builder (real, working)
+- Backend `/api/appforge/generate` — uses Claude Sonnet 4.6 via Emergent LLM key
+- 6 project kinds: webapp, landing, api, game, cli, agent
+- Enforces MAX_FILES=20, MAX_FILE_BYTES=30_000, prompt≤1000 chars, 90s timeout
+- Returns validated JSON scaffold; backend serves as downloadable ZIP via `/api/appforge/download/{gen_id}`
+- Each user's history at `/api/appforge/generations`
+- Admin bypasses subscription check (god-mode)
+
+### 5. i18n system (7 languages)
+- English, Te Reo Māori, Español, Français, Deutsch, 日本語, 中文 (Simplified)
+- Language switcher in header (Globe icon + language code badge)
+- Preference persisted to `tat-lang` localStorage
+- `useT()` hook + dictionary in `/app/frontend/src/context/I18nContext.js`
+- Falls back to English for missing keys — never crashes
+
+### 6. Comprehensive Admin Dashboard (11 sections)
+Sidebar-based layout with:
+- **Overview** — 9 stat tiles (users, products, active, coming soon, waitlist, audit, paid txns, entitlements, events 7d)
+- **Products** — full CRUD, image upload, payment_link field, trial_days
+- **Users** — search, role change, delete (self-protection)
+- **Payments** — transactions, entitlements, manual grant form
+- **Access Codes** — create (universal or product-scoped), copy, revoke
+- **Analytics** — 14-day totals, top products, daily activity bar chart
+- **Waitlist** — full signup list
+- **Contact** — messages inbox with delete
+- **AppForge** — every generation across all users
+- **Audit Log** — 200 most recent privileged actions
+- **Settings** — live Stripe key rotation, tax mode, email provider (masked display; no restart required)
+
+### 7. Live settings rotation
+- Backend `/api/admin/settings` GET returns masked configuration + auto-detected stripe_mode (test|live based on `sk_test_` vs `sk_live_` prefix)
+- PUT accepts partial updates — never clobbers unset fields
+- Secrets stored in `settings` singleton doc in MongoDB
+- `load_settings_into_env(db)` runs at startup so DB overrides `.env` values
+- Live-applies to `os.environ` + re-inits Stripe SDK on save
+
+### Testing (iteration_3)
+- Backend: 21/21 pytest passed (after legacy admin fix)
+- Frontend: 100% — sidebar admin, 7-language switcher, AppForge builder + download, payment link redirects, access code redemption end-to-end
+
+### New environment variables (session 3)
+- `EMERGENT_LLM_KEY` — for AppForge Claude Sonnet 4.6 (pre-set in .env)
+- `ADMIN_EMAIL`, `ADMIN_PASSWORD` — master admin credentials (from .env)
+
+### Files added
+- `/app/backend/access_codes.py` — access code CRUD + redemption + user_has_access helper
+- `/app/backend/appforge.py` — LLM-powered scaffold generator + zip download
+- `/app/backend/admin_endpoints.py` — 15+ admin endpoints (users, transactions, entitlements, waitlist, contact, generations, settings)
+- `/app/frontend/src/context/I18nContext.js` — 7-language dictionary + provider
+- `/app/frontend/src/pages/AppForge.js` — hero + builder + pricing
+- `/app/frontend/src/pages/Admin.js` — rewrote as sidebar dashboard with 11 sections
