@@ -1,0 +1,143 @@
+{
+  "theme": "dark_and_light",
+  "primary_mode": "dark",
+  "typography": {
+    "headings": {
+      "family": "Cabinet Grotesk, Outfit, sans-serif",
+      "strategy": "The Anti-Default Rule. Technical and striking. Tight tracking for massive scale.",
+      "weights": ["300", "500", "700", "900"],
+      "sizes": {
+        "h1": "text-5xl sm:text-6xl tracking-tighter leading-none",
+        "h2": "text-4xl sm:text-5xl tracking-tight leading-tight",
+        "h3": "text-2xl sm:text-3xl tracking-tight",
+        "h4": "text-xl sm:text-2xl font-medium"
+      }
+    },
+    "body": {
+      "family": "Manrope, Geist, sans-serif",
+      "strategy": "Geometric and highly legible for data, dashboards, and catalogs.",
+      "weights": ["400", "500", "600"],
+      "sizes": {
+        "base": "text-base leading-relaxed",
+        "small": "text-sm text-muted-foreground",
+        "overline": "text-xs tracking-[0.2em] uppercase font-bold text-primary"
+      }
+    }
+  },
+  "colors": {
+    "strategy": "Swiss & High-Contrast (Archetype 4) meets Modern Developer Tools (Vercel/Linear tier). Dominant structural grayscale with precise, high-visibility orange accent. No muddy gradients.",
+    "brand_color": "#f97316",
+    "dark_mode": {
+      "background": "#050505",
+      "surface": "#0a0a0a",
+      "border": "#1a1a1a",
+      "primary": "#f97316",
+      "primary_foreground": "#ffffff",
+      "secondary": "#141414",
+      "text": "#ffffff",
+      "text_muted": "#888888",
+      "accent": "#ff852e"
+    },
+    "light_mode": {
+      "background": "#ffffff",
+      "surface": "#fafafa",
+      "border": "#e5e5e5",
+      "primary": "#f97316",
+      "primary_foreground": "#ffffff",
+      "secondary": "#f4f4f5",
+      "text": "#09090b",
+      "text_muted": "#71717a",
+      "accent": "#ff852e"
+    }
+  },
+  "visual_enhancers": {
+    "surfaces": "Grid Borders (The Technical Look). Exposed skeletons for feature sections and product catalogs. Use border-collapse styled layouts with 1px solid subtle borders.",
+    "glassmorphism": "Only use for sticky headers (z-50) with heavy blur (backdrop-blur-xl) and high opacity background (bg-black/80 dark, bg-white/80 light) with 1px bottom border. DO NOT use completely transparent backgrounds.",
+    "buttons": "Pill-shaped or sharp rectangular buttons. Primary button uses solid orange with slight inner glow/shadow. Subtle scale down on active.",
+    "borders": "1px solid crisp edges for all cards and widgets. No soft, large, diffuse box-shadows. Use strict geometric borders.",
+    "textures": "Subtle noise overlay (pointer-events-none) across the entire application to reduce digital flatness.",
+    "logo_motif": "The 'T' mosaic logo (7 squares) should be integrated subtly into loading states or background patterns as a brand identifier."
+  },
+  "components": {
+    "strategy": "Hybrid architecture. Marketing sections use raw HTML/Tailwind for artistic asymmetry. Product catalogs and Dashboards use Shadcn UI with severe customizations to match the high-contrast technical aesthetic.",
+    "navigation": "Sticky, glassmorphism header with global navigation (Products, Apps, Agents, Tools, Software, Games, Company, Docs). Always include theme switcher and login/account CTA.",
+    "cards": "Flat background, 1px border. Hover state: border color intensifies (e.g., border-primary/50), subtle translation (-translate-y-1).",
+    "forms": "Strictly Shadcn components (Input, Select, Checkbox). High contrast focus states (focus:ring-2 focus:ring-primary).",
+    "tables_data": "Dense padding (p-2 to p-4). Monospace numerals for tabular data.",
+    "coming_soon": "Sleek, minimalistic email capture with floating placeholder and immediate success state.",
+    "alerts_toasts": "Use Sonner. Dark, high-contrast, technical looking toasts.",
+    "testing": "All interactive and key informational elements MUST include a data-testid attribute in kebab-case."
+  },
+  "grids_layouts": {
+    "spacing": "Generous Spacing (p-8 to p-24) for marketing sections. Tight Density (gap-4) for admin dashboard and product catalog.",
+    "marketing": "Asymmetric Bento Grids (Mode A). Break the standard 2-column layout. Use overlapping elements.",
+    "dashboard_catalog": "High Density Grid (Mode B) for /products, /apps, /agents. Every pixel utilized, structured, and easily scannable.",
+    "mobile": "Mobile-first responsive grids. Images max-h-[80vh] on mobile."
+  },
+  "motion": {
+    "strategy": "Restrained, purposeful motion. Avoid slow fade-ins.",
+    "interactions": "Hover states must have immediate but smooth transitions (transition-colors duration-200).",
+    "entrance": "Staggered micro-animations for product catalog lists (opacity and slight Y-translation).",
+    "parallax": "Subtle parallax on hero sections and large image assets."
+  },
+  "accessibility": {
+    "contrast": "Strict adherence to APCA and WCAG 2.2 AA. Normal text 4.5:1, Large text 3:1.",
+    "focus": "Clear, high-contrast focus rings for all interactive elements.",
+    "motion": "Respect prefers-reduced-motion."
+  },
+  "media_and_icons": {
+    "icons_library": "lucide-react for UI interactions. phosphor-icons for marketing adornments.",
+    "image_urls": {
+      "hero_backgrounds": [
+        {
+          "url": "https://images.unsplash.com/photo-1718844054447-42759fd577e5?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMzN8MHwxfHNlYXJjaHw0fHxhYnN0cmFjdCUyMGZ1dHVyaXN0aWMlMjB0ZWNobm9sb2d5JTIwZGFyayUyMGJhY2tncm91bmR8ZW58MHx8fHwxNzg2NTg2OTIxfDA&ixlib=rb-4.1.0&q=85",
+          "category": "Hero Section",
+          "description": "Abstract black and white dots, useful for technical/data background"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1637166185518-058f5896a2e9?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMzN8MHwxfHNlYXJjaHwyfHxhYnN0cmFjdCUyMGZ1dHVyaXN0aWMlMjB0ZWNobm9sb2d5JTIwZGFyayUyMGJhY2tncm91bmR8ZW58MHx8fHwxNzg2NTg2OTIxfDA&ixlib=rb-4.1.0&q=85",
+          "category": "Hero Section",
+          "description": "Dark hallway with blue/white lights, great for 'future technology' thematic sections"
+        }
+      ],
+      "product_mockups": [
+        {
+          "url": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2ODh8MHwxfHNlYXJjaHwxfHxzb2Z0d2FyZSUyMGRhc2hib2FyZCUyMFVJJTIwbW9ja3VwJTIwY2xlYW58ZW58MHx8fHwxNzg2NjY0ODE3fDA&ixlib=rb-4.1.0&q=85",
+          "category": "Product Showcase",
+          "description": "Dark mode performance analytics dashboard"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1686061592689-312bbfb5c055?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2ODh8MHwxfHNlYXJjaHwyfHxzb2Z0d2FyZSUyMGRhc2hib2FyZCUyMFVJJTIwbW9ja3VwJTIwY2xlYW58ZW58MHx8fHwxNzg2NjY0ODE3fDA&ixlib=rb-4.1.0&q=85",
+          "category": "Product Showcase",
+          "description": "Clean bar chart UI on screen, good for 'SaaS' or 'Tools' category image"
+        }
+      ],
+      "company_vision": [
+        {
+          "url": "https://images.unsplash.com/photo-1784652852605-6945598f2af3?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NzV8MHwxfHNlYXJjaHwzfHxzZXJ2ZXIlMjByb29tJTIwZGF0YSUyMGNlbnRlciUyMG1vZGVybnxlbnwwfHx8fDE3ODY2NjQ4MTd8MA&ixlib=rb-4.1.0&q=85",
+          "category": "About / Infrastructure",
+          "description": "Modern data center, conveys scale and infrastructure capability"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1785682231847-93265d8e633d?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NzV8MHwxfHNlYXJjaHwyfHxzZXJ2ZXIlMjByb29tJTIwZGF0YSUyMGNlbnRlciUyMG1vZGVybnxlbnwwfHx8fDE3ODY2NjQ4MTd8MA&ixlib=rb-4.1.0&q=85",
+          "category": "About / Infrastructure",
+          "description": "Server rack, implies serious tech foundation"
+        }
+      ]
+    }
+  },
+  "3d_and_creative_libraries": {
+    "recommendation": "TSParticles for subtle hero background node/constellation effect to imply 'AI Agents' connecting. Framer Motion for bento grid animations.",
+    "rule": "Avoid heavy WebGL unless specifically rendering a product. Prioritize speed and clarity."
+  },
+  "universal_guidelines_for_main_agent": [
+    "You MUST NOT apply universal transition (e.g., transition: all). Add transitions for specific properties.",
+    "You MUST NOT center align the app container. No '.App { text-align: center; }'. Left align text for readability.",
+    "Avoid generic 'AI slop' gradients. Use solid colors and 1px borders.",
+    "Use glass-morphism effects with backdrop filters for floating elements (navs, dropdowns, toasts).",
+    "Never use AI assistant emoji characters like \ud83e\udd16 or \ud83d\udca1. Use actual SVG icons.",
+    "Ensure all code uses standard JavaScript (JSX) as the project uses .js/.jsx, not TypeScript.",
+    "Never use placeholder image services (via.placeholder.com). Use the provided Unsplash URLs.",
+    "Always provide a full navigation bar with all requested routes, and ensure routing is implemented correctly for the catalog platform."
+  ]
+}
